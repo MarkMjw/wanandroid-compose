@@ -4,4 +4,12 @@
     <style name="Theme.WanAndroid" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/purple_700</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/color_blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/image_holder</item>
+        <item name="windowSplashScreenAnimationDuration">800</item>
+        <item name="postSplashScreenTheme">@style/Theme.WanAndroid</item>
+    </style>
+
 </resources>
