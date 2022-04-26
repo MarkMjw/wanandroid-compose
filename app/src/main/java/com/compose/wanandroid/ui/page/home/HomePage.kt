@@ -1,6 +1,5 @@
 package com.compose.wanandroid.ui.page.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +12,9 @@ import com.compose.wanandroid.ui.theme.AppTheme
 @Composable
 fun HomePage() {
     Column(
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background)
+        modifier = Modifier.fillMaxSize()
     ) {
         Text("首页", color = AppTheme.colors.textPrimary)
         Text("首页", color = AppTheme.colors.textPrimary)

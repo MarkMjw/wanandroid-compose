@@ -35,9 +35,16 @@ fun MainPagePreview() {
 @Composable
 fun MainPage() {
     val navController = rememberNavController()
-    var selectedTab by remember {
-        mutableStateOf(MainTab.TAB_HOME)
+    var selectedTab: Screen by remember {
+        mutableStateOf(Screen.Home)
     }
+
+    val screens = listOf(
+        Screen.Home,
+        Screen.Question,
+        Screen.System,
+        Screen.Profile
+    )
 
     Scaffold(bottomBar = {
         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
@@ -46,7 +53,7 @@ fun MainPage() {
                     .fillMaxWidth()
                     .height(50.dp)
             ) {
-                MainTab.values().forEach { tab ->
+                screens.forEach { tab ->
                     BottomNavigationItem(
                         selected = tab == selectedTab,
                         icon = { Icon(painter = painterResource(id = tab.icon), contentDescription = "") },
@@ -65,12 +72,18 @@ fun MainPage() {
                 }
             }
         }
-    }) {
-        NavHost(navController = navController, startDestination = MainTab.TAB_HOME.route, modifier = Modifier.padding(it)) {
-            composable(MainTab.TAB_HOME.route) { HomePage() }
-            composable(MainTab.TAB_QUESTION.route) { QuestionPage() }
-            composable(MainTab.TAB_SYSTEM.route) { SystemPage() }
-            composable(MainTab.TAB_PROFILE.route) { ProfilePage() }
+    }) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home.route,
+            modifier = Modifier
+                .background(AppTheme.colors.background)
+                .padding(innerPadding)
+        ) {
+            composable(Screen.Home.route) { HomePage() }
+            composable(Screen.Question.route) { QuestionPage() }
+            composable(Screen.System.route) { SystemPage() }
+            composable(Screen.Profile.route) { ProfilePage() }
         }
     }
 }

@@ -1,9 +1,7 @@
 package com.compose.wanandroid.ui.theme
 
-import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.takeOrElse
 
 class AppColors(
     primary: Color,

@@ -1,6 +1,5 @@
 package com.compose.wanandroid.ui.page.question
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,7 @@ fun QuestionPage() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)
+        modifier = Modifier.fillMaxSize()
     ) {
         Text("问答页", color = AppTheme.colors.textPrimary)
     }

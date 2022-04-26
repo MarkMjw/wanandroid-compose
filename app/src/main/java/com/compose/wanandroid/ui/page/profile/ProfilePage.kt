@@ -1,6 +1,5 @@
 package com.compose.wanandroid.ui.page.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +14,7 @@ fun ProfilePage() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background)
+        modifier = Modifier.fillMaxSize()
     ) {
         Text("个人页", color = AppTheme.colors.textPrimary)
     }

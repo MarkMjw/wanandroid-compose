@@ -1,6 +1,5 @@
 package com.compose.wanandroid.ui.page.system
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +14,7 @@ fun SystemPage() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background)
+        modifier = Modifier.fillMaxSize()
     ) {
         Text("体系页", color = AppTheme.colors.textPrimary)
     }

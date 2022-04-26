@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.takeOrElse
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 // material dark
 //val primary: Color = Color(0xFFBB86FC)
@@ -78,9 +77,6 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) DarkColors else LightColors
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(color = colors.background)
-    systemUiController.systemBarsDarkContentEnabled = !darkTheme
 
     // creating a new object for colors to not mutate the initial colors set when updating the values
     val rememberedColors = remember { colors.copy() }.apply { updateColorsFrom(colors) }
