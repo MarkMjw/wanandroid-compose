@@ -10,7 +10,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.compose.wanandroid.ui.page.main.MainPage
 import com.compose.wanandroid.ui.theme.AppSurface
 import com.compose.wanandroid.ui.theme.AppTheme
-import com.google.accompanist.insets.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
@@ -20,14 +19,12 @@ class MainActivity : ComponentActivity() {
 //        WindowCompat.setDecorFitsSystemWindows(window, true)
 //        transparentStatusBar()
         setContent {
-            ProvideWindowInsets {
-                AppTheme {
-                    val systemUiController = rememberSystemUiController()
-                    systemUiController.setSystemBarsColor(color = AppTheme.colors.background)
-                    systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
-                    AppSurface(modifier = Modifier.fillMaxSize()) {
-                        MainPage()
-                    }
+            AppTheme {
+                val systemUiController = rememberSystemUiController()
+                systemUiController.setSystemBarsColor(color = AppTheme.colors.background)
+                systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
+                AppSurface(modifier = Modifier.fillMaxSize()) {
+                    MainPage()
                 }
             }
         }

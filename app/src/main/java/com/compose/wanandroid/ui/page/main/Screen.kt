@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import com.compose.wanandroid.R
 
 sealed class Screen(
-    val title: String,
+    val text: String,
     @DrawableRes val icon: Int,
     val route: String
 ) {
