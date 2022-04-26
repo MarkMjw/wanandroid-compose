@@ -3,7 +3,7 @@ package com.compose.wanandroid.ui.page.main
 import androidx.annotation.DrawableRes
 import com.compose.wanandroid.R
 
-enum class MainTabs(
+enum class MainTab(
     val title: String,
     @DrawableRes val icon: Int,
     val route: String

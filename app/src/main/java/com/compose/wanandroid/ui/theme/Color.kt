@@ -1,21 +1,96 @@
 package com.compose.wanandroid.ui.theme
 
-import androidx.compose.material.Colors
+import androidx.compose.material.LocalContentColor
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.takeOrElse
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+class AppColors(
+    primary: Color,
+    secondary: Color,
+    textPrimary: Color,
+    textSecondary: Color,
+    background: Color,
+    secondaryBackground: Color,
+    highlight: Color,
+    error: Color,
+    onPrimary: Color,
+    onBackground: Color,
+    isLight: Boolean
+) {
 
-val Colors.tab: Color
-    get() = if (isLight) Color(0xff999999) else Color(0x54ffffff)
+    var primary by mutableStateOf(primary)
+        private set
 
-val Colors.icon: Color
-    get() = Color(0x54ffffff)
+    var secondary by mutableStateOf(secondary)
+        private set
 
-val Colors.tabBackground: Color
-    get() = if (isLight) Color.White else Color(0xff181818)
+    var textPrimary by mutableStateOf(textPrimary)
+        private set
 
-val Colors.highlight: Color
-    get() = Color(0xff4282f4)
+    var textSecondary by mutableStateOf(textSecondary)
+        private set
+
+    var background by mutableStateOf(background)
+        private set
+
+    var secondaryBackground by mutableStateOf(secondaryBackground)
+        private set
+
+    var highlight by mutableStateOf(highlight)
+        private set
+
+    var error by mutableStateOf(error)
+        private set
+
+    var onPrimary by mutableStateOf(onPrimary)
+        private set
+
+    var onBackground by mutableStateOf(onBackground)
+        private set
+
+    var isLight by mutableStateOf(isLight)
+        private set
+
+    fun copy(
+        primary: Color = this.primary,
+        secondary: Color = this.secondary,
+        textPrimary: Color = this.textPrimary,
+        textSecondary: Color = this.textSecondary,
+        background: Color = this.background,
+        secondaryBackground: Color = this.secondaryBackground,
+        highlight: Color = this.highlight,
+        error: Color = this.error,
+        onPrimary: Color = this.onPrimary,
+        onBackground: Color = this.onBackground,
+        isLight: Boolean = this.isLight
+    ): AppColors = AppColors(
+        primary,
+        secondary,
+        textPrimary,
+        textSecondary,
+        background,
+        secondaryBackground,
+        highlight,
+        error,
+        onPrimary,
+        onBackground,
+        isLight
+    )
+
+    fun updateColorsFrom(other: AppColors) {
+        primary = other.primary
+        secondary = other.secondary
+        textPrimary = other.textPrimary
+        textSecondary = other.textSecondary
+        background = other.background
+        secondaryBackground = other.secondaryBackground
+        highlight = other.highlight
+        error = other.error
+        onPrimary = other.onPrimary
+        onBackground = other.onBackground
+        isLight = other.isLight
+    }
+}
+
+internal val LocalColors = staticCompositionLocalOf { LightColors }

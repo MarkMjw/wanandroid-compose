@@ -27,7 +27,7 @@ import com.compose.wanandroid.ui.theme.*
 @Preview(showBackground = true)
 @Composable
 fun MainPagePreview() {
-    WanAndroidTheme {
+    AppTheme {
         MainPage()
     }
 }
@@ -36,7 +36,7 @@ fun MainPagePreview() {
 fun MainPage() {
     val navController = rememberNavController()
     var selectedTab by remember {
-        mutableStateOf(MainTabs.TAB_HOME)
+        mutableStateOf(MainTab.TAB_HOME)
     }
 
     Scaffold(bottomBar = {
@@ -46,7 +46,7 @@ fun MainPage() {
                     .fillMaxWidth()
                     .height(50.dp)
             ) {
-                MainTabs.values().forEach { tab ->
+                MainTab.values().forEach { tab ->
                     BottomNavigationItem(
                         selected = tab == selectedTab,
                         icon = { Icon(painter = painterResource(id = tab.icon), contentDescription = "") },
@@ -58,19 +58,19 @@ fun MainPage() {
                             }
                         },
                         alwaysShowLabel = true,
-                        selectedContentColor = MaterialTheme.colors.highlight,
-                        unselectedContentColor = MaterialTheme.colors.tab,
-                        modifier = Modifier.background(MaterialTheme.colors.tabBackground)
+                        selectedContentColor = AppTheme.colors.highlight,
+                        unselectedContentColor = AppTheme.colors.textSecondary,
+                        modifier = Modifier.background(AppTheme.colors.secondaryBackground)
                     )
                 }
             }
         }
     }) {
-        NavHost(navController = navController, startDestination = MainTabs.TAB_HOME.route, modifier = Modifier.padding(it)) {
-            composable(MainTabs.TAB_HOME.route) { HomePage() }
-            composable(MainTabs.TAB_QUESTION.route) { QuestionPage() }
-            composable(MainTabs.TAB_SYSTEM.route) { SystemPage() }
-            composable(MainTabs.TAB_PROFILE.route) { ProfilePage() }
+        NavHost(navController = navController, startDestination = MainTab.TAB_HOME.route, modifier = Modifier.padding(it)) {
+            composable(MainTab.TAB_HOME.route) { HomePage() }
+            composable(MainTab.TAB_QUESTION.route) { QuestionPage() }
+            composable(MainTab.TAB_SYSTEM.route) { SystemPage() }
+            composable(MainTab.TAB_PROFILE.route) { ProfilePage() }
         }
     }
 }
