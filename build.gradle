@@ -1,6 +1,13 @@
 buildscript {
     ext {
         compose_version = '1.1.1'
+        accompanist_version = '0.23.1'
+        retrofit_version = "2.9.0"
+        gson_version = "2.9.0"
+        datastore_version = "1.0.0"
+        paging_version = "3.1.1"
+        paging_compose_version = "1.0.0-alpha14"
+        constraint_compose_version = "1.0.0"
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
