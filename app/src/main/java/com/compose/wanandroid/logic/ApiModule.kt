@@ -21,7 +21,7 @@ val apiModule = module {
 }
 
 val gson: Gson = GsonBuilder()
-    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+//    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
     .disableHtmlEscaping()
     .create()
 

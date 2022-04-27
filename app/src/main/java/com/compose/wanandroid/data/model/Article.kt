@@ -1,6 +1,7 @@
 package com.compose.wanandroid.data.model
 
 import android.os.Parcelable
+import androidx.core.text.HtmlCompat
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -22,8 +23,8 @@ data class Article(
     var link: String = "",
     var niceDate: String = "",
     var niceShareDate: String = "",
-    var origin: String? = "",
-    var prefix: String? = "",
+    var origin: String = "",
+    var prefix: String = "",
     var projectLink: String = "https://www.wanandroid.com",
     var publishTime: Long = 0L,
     var realSuperChapterId: Int = -1,
@@ -42,5 +43,15 @@ data class Article(
 
 val Article.authorName: String
     get() {
-        return shareUser.ifEmpty { author }
+        return when {
+            author.isNotEmpty() -> author
+            shareUser.isNotEmpty() -> shareUser
+            else -> "匿名"
+        }
     }
+
+val Article.fixTitle: String
+    get() = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_COMPACT).toString()
+
+val Article.chapter: String
+    get() = listOf(superChapterName, chapterName).filter { it.isNotEmpty() }.joinToString("·")

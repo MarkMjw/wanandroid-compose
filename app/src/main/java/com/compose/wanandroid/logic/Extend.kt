@@ -12,6 +12,8 @@ import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 fun Activity.transparentStatusBar() {
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -36,4 +38,14 @@ fun CharSequence.toast(context: Context, duration: Int = Toast.LENGTH_SHORT) {
             Handler(context.mainLooper).post { Toast.makeText(context, this@toast, duration).show() }
         }
     }
+}
+
+fun String.removeAllBank(count: Int): String {
+    var s = ""
+    if (isNotEmpty()) {
+        val p = Pattern.compile("\\s{$count,}|\t|\r|\n");
+        val m = p.matcher(this)
+        s = m.replaceAll(" ");
+    }
+    return s
 }

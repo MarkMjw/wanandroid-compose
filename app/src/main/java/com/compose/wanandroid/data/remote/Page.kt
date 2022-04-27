@@ -3,8 +3,7 @@ package com.compose.wanandroid.data.remote
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import com.compose.wanandroid.data.model.ListWrapper
-import com.compose.wanandroid.data.model.Response
+import com.compose.wanandroid.data.model.ListResponse
 import kotlinx.coroutines.flow.Flow
 
 val defaultPage = PagingConfig(
@@ -39,7 +38,7 @@ fun <K : Any, V : Any> ViewModel.page(
 
 fun <T : Any> ViewModel.loadPage(
     config: PagingConfig = defaultPage,
-    block: suspend (page: Int) -> Response<ListWrapper<T>>
+    block: suspend (page: Int) -> ListResponse<T>
 ): Flow<PagingData<T>> {
     return page(config, 0) {
         val page = it.key ?: 0

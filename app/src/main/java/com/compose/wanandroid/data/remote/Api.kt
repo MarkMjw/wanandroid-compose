@@ -1,8 +1,7 @@
 package com.compose.wanandroid.data.remote
 
 import com.compose.wanandroid.data.model.Article
-import com.compose.wanandroid.data.model.ListWrapper
-import com.compose.wanandroid.data.model.Response
+import com.compose.wanandroid.data.model.ListResponse
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
@@ -15,7 +14,7 @@ interface Api {
     }
 
     @GET("/article/list/{page}/json")
-    suspend fun articleList(@Path("page") page: Int): Response<ListWrapper<Article>>
+    suspend fun articleList(@Path("page") page: Int): ListResponse<Article>
 }
 
 object ApiService : KoinComponent {

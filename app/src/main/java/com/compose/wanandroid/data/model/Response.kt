@@ -15,3 +15,5 @@ data class ListWrapper<T>(
     var total: Int,
     var datas: MutableList<T>
 )
+
+typealias ListResponse<T> = Response<ListWrapper<T>>

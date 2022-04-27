@@ -44,14 +44,14 @@ import androidx.compose.ui.graphics.takeOrElse
 val LightColors = AppColors(
     primary = Color(0xff3651f1),
     secondary = Color(0xff4282f4),
-    textPrimary = Color.Black,
-    textSecondary = Color(0xff525151),
+    textPrimary = Color(0xff333333),
+    textSecondary = Color(0xff666666),
     background = Color.White,
     secondaryBackground = Color(0xfff5f5f5),
     highlight = Color(0xff4282f4),
     error = Color(0xffb00020),
     onPrimary = Color.White,
-    onBackground = Color.Black,
+    onBackground = Color(0xff333333),
     isLight = true
 )
 
@@ -59,15 +59,21 @@ val DarkColors = AppColors(
     primary = Color(0xff3651f1),
     secondary = Color(0xff4282f4),
     textPrimary = Color(0xffcfcfd1),
-    textSecondary = Color(0xffa6a6ad),
+    textSecondary = Color(0x88ffffff),
     background = Color(0xff121212),
     secondaryBackground = Color(0xff181818),
     highlight = Color(0xff4282f4),
     error = Color(0xffcf6679),
-    onPrimary = Color.Black,
+    onPrimary = Color(0xff333333),
     onBackground = Color(0xffcfcfd1),
     isLight = false
 )
+
+val AppColors.collectColor: Color
+    get() = if (isLight) Color(0xfff78c65) else Color(0xfff86734)
+
+val AppColors.textThird: Color
+    get() = if (isLight) Color(0xff999999) else Color(0x54ffffff)
 
 @Composable
 fun AppTheme(
