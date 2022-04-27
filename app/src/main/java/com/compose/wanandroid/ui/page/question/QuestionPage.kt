@@ -1,21 +1,28 @@
 package com.compose.wanandroid.ui.page.question
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.compose.wanandroid.ui.theme.AppTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemsIndexed
+import com.compose.wanandroid.data.model.Article
+import com.compose.wanandroid.ui.common.ArticleItem
+import com.compose.wanandroid.ui.common.RefreshList
 
 @Composable
-fun QuestionPage() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text("问答页", color = AppTheme.colors.textPrimary)
-    }
+fun QuestionPage(viewModel: QuestionViewModel = viewModel()) {
+    val pagingItems = viewModel.pager.collectAsLazyPagingItems()
+
+    RefreshList(modifier = Modifier.fillMaxSize(), lazyPagingItems = pagingItems,
+        onRefresh = {
+
+        },
+        itemContent = {
+            itemsIndexed(pagingItems) { _: Int, value: Article? ->
+                if (value != null) {
+                    ArticleItem(data = value)
+                }
+            }
+        })
 }

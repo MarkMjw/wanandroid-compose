@@ -40,17 +40,14 @@ fun <T : Any> RefreshList(
             onRefresh()
             lazyPagingItems.refresh()
         }) {
-        // 刷新状态
         refreshState.isRefreshing = (lazyPagingItems.loadState.refresh is LoadState.Loading) || isRefreshing
 
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             state = listState
         ) {
-            // 列表Item
             itemContent()
 
-            // 结束Item
             if (!refreshState.isRefreshing) {
                 item {
                     lazyPagingItems.loadState.run {
