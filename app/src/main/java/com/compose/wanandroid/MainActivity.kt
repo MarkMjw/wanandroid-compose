@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 val systemUiController = rememberSystemUiController()
-                systemUiController.setSystemBarsColor(color = AppTheme.colors.background)
+                systemUiController.setSystemBarsColor(color = AppTheme.colors.primary)
                 systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
                 AppSurface(modifier = Modifier.fillMaxSize()) {
                     MainPage()

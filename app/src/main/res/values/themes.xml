@@ -6,6 +6,8 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/image_holder</item>
         <item name="windowSplashScreenAnimationDuration">800</item>
         <item name="postSplashScreenTheme">@android:style/Theme.Material.NoActionBar</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
 </resources>

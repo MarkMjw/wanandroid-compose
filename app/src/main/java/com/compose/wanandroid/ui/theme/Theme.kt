@@ -64,7 +64,7 @@ val DarkColors = AppColors(
     secondaryBackground = Color(0xff181818),
     highlight = Color(0xff4282f4),
     error = Color(0xffcf6679),
-    onPrimary = Color(0xff333333),
+    onPrimary = Color.White,
     onBackground = Color(0xffcfcfd1),
     isLight = false
 )

@@ -1,6 +1,7 @@
 package com.compose.wanandroid.ui.page.home
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,13 +9,23 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
@@ -30,6 +41,14 @@ import com.compose.wanandroid.ui.theme.textThird
 import com.compose.wanandroid.ui.widget.Banner
 import com.compose.wanandroid.ui.widget.rememberBannerState
 
+@Preview
+@Composable
+fun HomePagePreview() {
+    AppTheme {
+        HomePage()
+    }
+}
+
 @Composable
 fun HomePage(viewModel: HomeViewModel = viewModel()) {
     val viewState = viewModel.viewState
@@ -39,39 +58,83 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
     val isRefreshing = viewState.isRefreshing
     val listState = if (pagingItems.itemCount > 0) viewState.listState else LazyListState()
 
-    RefreshList(
-        modifier = Modifier.fillMaxSize(),
-        isRefreshing = isRefreshing,
-        lazyPagingItems = pagingItems,
-        listState = listState,
-        onRefresh = {
-            viewModel.refresh()
-        },
-        itemContent = {
-            if (banners.isNotEmpty()) {
-                item {
-                    Banner(banners)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                backgroundColor = AppTheme.colors.primary,
+                navigationIcon = {
+                    Image(
+                        imageVector = Icons.Default.Home,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(50.dp),
+                        colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
+                        contentScale = ContentScale.Inside,
+                        contentDescription = null
+                    )
+                },
+                title = {
+                    Text(
+                        text = "首页",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppTheme.colors.onPrimary
+                    )
+                },
+                actions = {
+                    Image(
+                        imageVector = Icons.Default.Search,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(50.dp),
+                        colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
+                        contentScale = ContentScale.Inside,
+                        contentDescription = null
+                    )
                 }
-            }
-
-            if (tops.isNotEmpty()) {
-                itemsIndexed(tops) { index: Int, value: Article? ->
-                    if (value != null) {
-                        ArticleItem(
-                            data = value,
-                            isTop = true,
-                            modifier = Modifier.padding(top = if (index == 0) 5.dp else 0.dp)
-                        )
+            )
+        },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        RefreshList(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            isRefreshing = isRefreshing,
+            lazyPagingItems = pagingItems,
+            listState = listState,
+            onRefresh = {
+                viewModel.refresh()
+            },
+            itemContent = {
+                if (banners.isNotEmpty()) {
+                    item {
+                        Banner(banners)
                     }
                 }
-            }
 
-            itemsIndexed(pagingItems) { _: Int, value: Article? ->
-                if (value != null) {
-                    ArticleItem(data = value)
+                if (tops.isNotEmpty()) {
+                    itemsIndexed(tops) { index: Int, value: Article? ->
+                        if (value != null) {
+                            ArticleItem(
+                                data = value,
+                                isTop = true,
+                                modifier = Modifier.padding(top = if (index == 0) 5.dp else 0.dp)
+                            )
+                        }
+                    }
                 }
-            }
-        })
+
+                itemsIndexed(pagingItems) { _: Int, value: Article? ->
+                    if (value != null) {
+                        ArticleItem(data = value)
+                    }
+                }
+            })
+    }
 }
 
 @Composable
