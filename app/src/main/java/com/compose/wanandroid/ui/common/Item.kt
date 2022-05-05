@@ -26,7 +26,7 @@ import com.compose.wanandroid.data.model.*
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.collectColor
 import com.compose.wanandroid.ui.theme.textThird
-import com.compose.wanandroid.ui.widget.HtmlText
+import com.compose.wanandroid.ui.widget.html.HtmlText
 
 @Preview(widthDp = 420, heightDp = 720)
 @Composable

@@ -11,10 +11,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,8 +32,11 @@ import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.ui.common.ArticleItem
 import com.compose.wanandroid.ui.common.RefreshList
 import com.compose.wanandroid.ui.theme.AppTheme
+import com.compose.wanandroid.ui.theme.defaultContentColorFor
 import com.compose.wanandroid.ui.theme.textThird
+import com.compose.wanandroid.ui.widget.AppBarHeight
 import com.compose.wanandroid.ui.widget.Banner
+import com.compose.wanandroid.ui.widget.CenterAppBar
 import com.compose.wanandroid.ui.widget.rememberBannerState
 
 @Preview
@@ -60,17 +58,16 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
+            CenterAppBar(
+                modifier = Modifier.fillMaxWidth(),
                 backgroundColor = AppTheme.colors.primary,
-                navigationIcon = {
+                contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.primary),
+                leftActions = {
                     Image(
-                        imageVector = Icons.Default.Home,
+                        painter = painterResource(id = R.drawable.ic_scan),
                         modifier = Modifier
                             .fillMaxHeight()
-                            .width(50.dp),
+                            .width(AppBarHeight),
                         colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                         contentScale = ContentScale.Inside,
                         contentDescription = null
@@ -80,16 +77,15 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
                     Text(
                         text = "首页",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.onPrimary
                     )
                 },
-                actions = {
+                rightActions = {
                     Image(
-                        imageVector = Icons.Default.Search,
+                        painter = painterResource(id = R.drawable.ic_search),
                         modifier = Modifier
                             .fillMaxHeight()
-                            .width(50.dp),
+                            .width(AppBarHeight),
                         colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                         contentScale = ContentScale.Inside,
                         contentDescription = null

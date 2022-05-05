@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.widget
+package com.compose.wanandroid.ui.widget.html
 
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan

@@ -7,15 +7,23 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import com.compose.wanandroid.ui.page.main.MainPage
 import com.compose.wanandroid.ui.theme.AppSurface
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            splash.setKeepOnScreenCondition { true }
+            delay(500)
+            splash.setKeepOnScreenCondition { false }
+        }
 //        WindowCompat.setDecorFitsSystemWindows(window, true)
 //        transparentStatusBar()
         setContent {

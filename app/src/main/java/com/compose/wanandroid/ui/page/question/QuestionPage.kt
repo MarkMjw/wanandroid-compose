@@ -19,20 +19,18 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.ui.common.ArticleItem
 import com.compose.wanandroid.ui.common.RefreshList
 import com.compose.wanandroid.ui.theme.AppTheme
+import com.compose.wanandroid.ui.widget.CenterAppBar
 
 @Composable
 fun QuestionPage(viewModel: QuestionViewModel = viewModel()) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
+            CenterAppBar(
+                modifier = Modifier.fillMaxWidth(),
                 title = {
                     Text(
                         text = "问答",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
                         color = AppTheme.colors.onPrimary
                     )
                 },
@@ -45,7 +43,8 @@ fun QuestionPage(viewModel: QuestionViewModel = viewModel()) {
 
         RefreshList(modifier = Modifier
             .fillMaxSize()
-            .padding(innerPadding), lazyPagingItems = pagingItems,
+            .padding(innerPadding),
+            lazyPagingItems = pagingItems,
             onRefresh = {
 
             },

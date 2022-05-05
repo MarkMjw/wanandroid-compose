@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.widget
+package com.compose.wanandroid.ui.widget.html
 
 import android.graphics.Typeface
 import android.text.style.*
