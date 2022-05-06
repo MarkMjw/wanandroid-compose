@@ -21,7 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.compose.wanandroid.ui.page.home.HomePage
 import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.question.QuestionPage
-import com.compose.wanandroid.ui.page.system.SystemPage
+import com.compose.wanandroid.ui.page.category.CategoryPage
 import com.compose.wanandroid.ui.theme.*
 
 @Preview(showBackground = true)
@@ -51,7 +51,7 @@ private fun NavigationHost(controller: NavHostController, innerPadding: PaddingV
     ) {
         composable(Screen.Home.route) { HomePage() }
         composable(Screen.Question.route) { QuestionPage() }
-        composable(Screen.System.route) { SystemPage() }
+        composable(Screen.System.route) { CategoryPage() }
         composable(Screen.Profile.route) { ProfilePage() }
     }
 }
@@ -70,8 +70,8 @@ private fun BottomNavigation(controller: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
-        backgroundColor = AppTheme.colors.secondaryBackground,
-        contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.secondaryBackground)
+        backgroundColor = AppTheme.colors.tabBackground,
+        contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
     ) {
         screens.forEach { tab ->
             BottomNavigationItem(

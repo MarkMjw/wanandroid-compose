@@ -1,9 +1,6 @@
 package com.compose.wanandroid.ui.common
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -32,28 +29,33 @@ import com.compose.wanandroid.ui.widget.html.HtmlText
 @Composable
 fun ArticleItemPreview() {
     AppTheme {
-        ArticleItem(
-            data = Article().apply {
-                author = "扔物线"
-                title = "属性动画为什么不能移植到 Jetpack Compose？"
-                desc = "基于ViewPager2实现的自动(手动)无限轮播Banner，支持自定义ItemView、横竖滑动、转场动画、配合DiffUtil增量更新等"
-                niceDate = "2020-03-23 16:36"
-                link = "https://rengwuxian.com/jetpack-compose-animation/"
-                publishTime = 1653753600000L
-                chapterName = "干货资源"
-                envelopePic = "https://www.wanandroid.com/resources/image/pc/default_project_img.jpg"
-                fresh = true
-                tags = mutableListOf(ArticleTag("项目", "https://www.wanandroid.com"))
-            },
-            isTop = true,
-        )
+        Column {
+            ArticleItem(
+                data = Article().apply {
+                    author = "扔物线"
+                    title = "属性动画为什么不能移植到 Jetpack Compose？"
+                    desc = "基于ViewPager2实现的自动(手动)无限轮播Banner，支持自定义ItemView、横竖滑动、转场动画、配合DiffUtil增量更新等"
+                    niceDate = "2020-03-23 16:36"
+                    link = "https://rengwuxian.com/jetpack-compose-animation/"
+                    publishTime = 1653753600000L
+                    chapterName = "干货资源"
+                    envelopePic = "https://www.wanandroid.com/resources/image/pc/default_project_img.jpg"
+                    fresh = true
+                    tags = mutableListOf(ArticleTag("项目", "https://www.wanandroid.com"))
+                },
+                isTop = true,
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+            StickyTitle(title = "分类标题")
+        }
     }
 }
 
 @Composable
 fun ArticleItem(
-    modifier: Modifier = Modifier,
     data: Article,
+    modifier: Modifier = Modifier,
     isTop: Boolean = false,
     onSelected: (Link) -> Unit = {},
     onCollectClick: (articleId: Int) -> Unit = {},
@@ -215,3 +217,38 @@ fun ArticleItem(
         }
     }
 }
+
+@Composable
+fun StickyTitle(
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(30.dp)
+            .background(AppTheme.colors.background)
+            .padding(start = 16.dp, end = 16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .width(6.dp)
+                .height(16.dp)
+                .align(Alignment.CenterVertically)
+                .background(shape = RoundedCornerShape(3.dp), color = AppTheme.colors.textPrimary)
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Text(
+            text = title,
+            modifier = Modifier.align(Alignment.CenterVertically),
+            fontSize = 16.sp,
+            color = AppTheme.colors.textPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Start
+        )
+    }
+}
+

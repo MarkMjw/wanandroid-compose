@@ -61,7 +61,7 @@ val DarkColors = AppColors(
     textPrimary = Color(0xffcfcfd1),
     textSecondary = Color(0x88ffffff),
     background = Color(0xff121212),
-    secondaryBackground = Color(0xff181818),
+    secondaryBackground = Color(0xff222226),
     highlight = Color(0xff4282f4),
     error = Color(0xffcf6679),
     onPrimary = Color.White,
@@ -74,6 +74,9 @@ val AppColors.collectColor: Color
 
 val AppColors.textThird: Color
     get() = if (isLight) Color(0xff999999) else Color(0x54ffffff)
+
+val AppColors.tabBackground: Color
+    get() = if (isLight) Color.White else Color(0xff181818)
 
 @Composable
 fun AppTheme(

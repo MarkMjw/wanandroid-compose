@@ -39,7 +39,7 @@ import com.compose.wanandroid.ui.widget.Banner
 import com.compose.wanandroid.ui.widget.CenterAppBar
 import com.compose.wanandroid.ui.widget.rememberBannerState
 
-@Preview
+@Preview(widthDp = 420, heightDp = 720)
 @Composable
 fun HomePagePreview() {
     AppTheme {
@@ -105,7 +105,7 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
             lazyPagingItems = pagingItems,
             listState = listState,
             onRefresh = {
-                viewModel.refresh()
+                viewModel.dispatch(HomeViewAction.Refresh)
             },
             itemContent = {
                 if (banners.isNotEmpty()) {

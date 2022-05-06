@@ -24,10 +24,21 @@ class HomeViewModel : ViewModel() {
         private set
 
     init {
-        refresh()
+        dispatch(HomeViewAction.FetchData)
     }
 
-    fun refresh() {
+    fun dispatch(action: HomeViewAction) {
+        when (action) {
+            is HomeViewAction.FetchData -> fetchData()
+            is HomeViewAction.Refresh -> refresh()
+        }
+    }
+
+    private fun refresh() {
+        fetchData()
+    }
+
+    private fun fetchData() {
         val banners = flow {
             emit(ApiService.api.banners())
         }.map { it.data ?: emptyList() }
@@ -61,3 +72,8 @@ data class HomeViewState(
     val isRefreshing: Boolean = false,
     val listState: LazyListState = LazyListState()
 )
+
+sealed class HomeViewAction {
+    object FetchData : HomeViewAction()
+    object Refresh : HomeViewAction()
+}

@@ -1,9 +1,6 @@
 package com.compose.wanandroid.data.remote
 
-import com.compose.wanandroid.data.model.Article
-import com.compose.wanandroid.data.model.Banner
-import com.compose.wanandroid.data.model.ListResponse
-import com.compose.wanandroid.data.model.Response
+import com.compose.wanandroid.data.model.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
@@ -26,6 +23,12 @@ interface Api {
 
     @GET("/wenda/list/{page}/json")
     suspend fun wendaList(@Path("page") page: Int): ListResponse<Article>
+
+    @GET("/tree/json")
+    suspend fun structList(): Response<MutableList<Struct>>
+
+    @GET("/navi/json")
+    suspend fun navigationList(): Response<MutableList<Navigate>>
 }
 
 object ApiService : KoinComponent {
