@@ -23,6 +23,8 @@ import com.compose.wanandroid.ui.theme.AppTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
+private val ItemHeight = 48.dp
+
 @Composable
 fun <T : Any> RefreshList(
     modifier: Modifier = Modifier,
@@ -72,7 +74,7 @@ fun LoadingItem() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp),
+            .height(ItemHeight),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -100,8 +102,8 @@ fun ErrorItem() {
         text = "加载失败，请重试",
         fontSize = 13.sp,
         modifier = Modifier
-            .height(48.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .height(ItemHeight),
         textAlign = TextAlign.Center,
         color = AppTheme.colors.textSecondary
     )
@@ -113,7 +115,7 @@ fun EndItem() {
         painter = painterResource(id = R.drawable.icon_load_end),
         contentDescription = null,
         modifier = Modifier
-            .height(48.dp)
+            .height(ItemHeight)
             .fillMaxWidth(),
         contentScale = ContentScale.Inside,
         alignment = Alignment.Center

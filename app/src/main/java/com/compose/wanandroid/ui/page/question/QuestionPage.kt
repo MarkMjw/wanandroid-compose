@@ -1,16 +1,10 @@
 package com.compose.wanandroid.ui.page.question
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -19,6 +13,7 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.ui.common.ArticleItem
 import com.compose.wanandroid.ui.common.RefreshList
 import com.compose.wanandroid.ui.theme.AppTheme
+import com.compose.wanandroid.ui.theme.defaultContentColorFor
 import com.compose.wanandroid.ui.widget.CenterAppBar
 
 @Composable
@@ -37,7 +32,9 @@ fun QuestionPage(viewModel: QuestionViewModel = viewModel()) {
                 backgroundColor = AppTheme.colors.primary
             )
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        backgroundColor = AppTheme.colors.background,
+        contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
     ) { innerPadding ->
         val pagingItems = viewModel.pager.collectAsLazyPagingItems()
 

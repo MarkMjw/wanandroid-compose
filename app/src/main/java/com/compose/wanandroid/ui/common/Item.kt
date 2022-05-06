@@ -64,7 +64,6 @@ fun ArticleItem(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(color = AppTheme.colors.background)
             .padding(16.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {

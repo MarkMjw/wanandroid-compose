@@ -93,7 +93,9 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
                 }
             )
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        backgroundColor = AppTheme.colors.background,
+        contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
     ) { innerPadding ->
         RefreshList(
             modifier = Modifier
