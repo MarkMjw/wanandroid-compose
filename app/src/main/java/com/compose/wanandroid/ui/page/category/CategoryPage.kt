@@ -27,9 +27,6 @@ fun CategoryPage(index: Int = 0, viewModel: CategoryViewModel = viewModel()) {
         TextTabBar(
             index = pagerState.currentPage,
             titles = titles,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(AppBarHeight),
             backgroundColor = AppTheme.colors.primary,
             contentColor = AppTheme.colors.onPrimary,
             unselectedContentColor = AppTheme.colors.textThird,

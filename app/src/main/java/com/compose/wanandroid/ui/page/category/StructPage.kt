@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.ui.common.StickyTitle
 import com.compose.wanandroid.ui.theme.AppTheme
+import com.compose.wanandroid.ui.theme.AppThemePreview
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -104,8 +105,8 @@ fun StructItem(
 
 @Preview
 @Composable
-fun ArticleItemPreview() {
-    AppTheme {
+fun StructItemPreview() {
+    AppThemePreview {
         Column {
             StickyTitle(title = "分类标题")
             StructItem(struct = Struct(name = "分类标题").apply {

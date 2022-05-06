@@ -1,6 +1,6 @@
 package com.compose.wanandroid.ui.widget
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.*import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -62,6 +62,7 @@ fun CenterAppBar(
             Modifier
                 .fillMaxWidth()
                 .padding(contentPadding)
+                .statusBarsPadding()
                 .height(AppBarHeight),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically

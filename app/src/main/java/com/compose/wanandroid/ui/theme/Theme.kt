@@ -79,6 +79,14 @@ val AppColors.tabBackground: Color
     get() = if (isLight) Color.White else Color(0xff181818)
 
 @Composable
+fun AppThemePreview(
+    isDark: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    AppTheme(darkTheme = isDark, content = content)
+}
+
+@Composable
 fun AppTheme(
     typography: AppTypography = AppTheme.typography,
     shapes: Shapes = AppTheme.shapes,
@@ -100,8 +108,6 @@ fun AppTheme(
     ) {
         ProvideTextStyle(value = typography.body1, content = content)
     }
-
-    MaterialTheme
 }
 
 @Composable

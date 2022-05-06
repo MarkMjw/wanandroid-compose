@@ -21,34 +21,35 @@ fun TextTabBar(
     index: Int,
     titles: List<TabText>,
     modifier: Modifier = Modifier,
-    contentAlign: Alignment = Alignment.Center,
+    contentAlign: Arrangement.Horizontal = Arrangement.Center,
     backgroundColor: Color = AppTheme.colors.primary,
     contentColor: Color = defaultContentColorFor(backgroundColor),
     unselectedContentColor: Color = defaultContentColorFor(backgroundColor),
     onTabSelected: (index: Int) -> Unit = { }
 ) {
-    Box(
+    Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(AppBarHeight)
             .background(backgroundColor)
             .horizontalScroll(rememberScrollState())
+            .statusBarsPadding()
+            .height(AppBarHeight),
+        horizontalArrangement = contentAlign,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(modifier = Modifier.align(contentAlign)) {
-            titles.forEachIndexed { i, title ->
-                Text(
-                    text = title.text,
-                    fontSize = 15.sp,
-                    fontWeight = if (index == i) FontWeight.SemiBold else FontWeight.Normal,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(horizontal = 10.dp)
-                        .clickable {
-                            onTabSelected(i)
-                        },
-                    color = if (index == i) contentColor else unselectedContentColor
-                )
-            }
+        titles.forEachIndexed { i, title ->
+            Text(
+                text = title.text,
+                fontSize = 15.sp,
+                fontWeight = if (index == i) FontWeight.SemiBold else FontWeight.Normal,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(horizontal = 10.dp)
+                    .clickable {
+                        onTabSelected(i)
+                    },
+                color = if (index == i) contentColor else unselectedContentColor
+            )
         }
     }
 }

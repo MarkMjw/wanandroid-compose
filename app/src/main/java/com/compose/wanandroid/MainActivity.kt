@@ -3,10 +3,12 @@ package com.compose.wanandroid
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.compose.wanandroid.ui.page.main.MainPage
 import com.compose.wanandroid.ui.theme.AppSurface
@@ -24,13 +26,20 @@ class MainActivity : ComponentActivity() {
             delay(500)
             splash.setKeepOnScreenCondition { false }
         }
-//        WindowCompat.setDecorFitsSystemWindows(window, true)
-//        transparentStatusBar()
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             AppTheme {
                 val systemUiController = rememberSystemUiController()
-                systemUiController.setSystemBarsColor(color = AppTheme.colors.primary)
-                systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
+//                systemUiController.setSystemBarsColor(color = AppTheme.colors.primary)
+//                systemUiController.systemBarsDarkContentEnabled = !isSystemInDarkTheme()
+                SideEffect {
+                    systemUiController.setSystemBarsColor(
+                        Color.Transparent,
+                        darkIcons = false
+                    )
+                }
                 AppSurface(modifier = Modifier.fillMaxSize()) {
                     MainPage()
                 }

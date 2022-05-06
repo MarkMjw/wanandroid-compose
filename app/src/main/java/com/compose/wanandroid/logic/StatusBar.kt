@@ -1,284 +1,261 @@
-@file:Suppress("Deprecation", "Unused")
+@file:Suppress("Unchecked_cast", "Deprecation")
 
 package com.compose.wanandroid.logic
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.drawable.ColorDrawable
+import android.graphics.Color
 import android.os.Build
-import android.util.TypedValue
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.RelativeLayout
+import android.util.Size
+import android.view.*
+import android.widget.FrameLayout
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.fragment.app.Fragment
-
-private const val COLOR_TRANSPARENT = 0
-
-/** 设置状态栏颜色 */
-fun Activity.statusBarColor(@ColorInt color: Int) {
-    window?.statusBarColor = color
-}
-
-/** 设置状态栏颜色 */
-fun Fragment.statusBarColor(@ColorInt color: Int) = activity?.statusBarColor(color)
-
-/** 设置状态栏颜色 */
-fun Activity.statusBarColorRes(@ColorRes colorRes: Int) = statusBarColor(resources.getColor(colorRes))
-
-/** 设置状态栏颜色 */
-fun Fragment.statusBarColorRes(@ColorRes colorRes: Int) = activity?.statusBarColorRes(colorRes)
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.compose.wanandroid.R
 
 /**
- * 半透明状态栏
- * 会导致键盘遮挡输入框, 为根布局设置[View.setFitsSystemWindows]为true可以解决
+ * 设置浅色状态栏背景（文字为深色）
  *
- * @param translucent 是否显示透明状态栏
- * @param darkMode 是否显示暗色状态栏文字颜色
+ * @param isLightingColor
  */
-@Deprecated("建议使用immersive取代, 因为该函数会影响键盘遮挡解决方案", ReplaceWith("immersive"), DeprecationLevel.ERROR)
-@JvmOverloads
-fun Activity.translucent(translucent: Boolean = true, darkMode: Boolean? = null) {
-    if (translucent) {
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-    } else {
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-    }
-    if (darkMode != null) {
-        darkMode(darkMode)
-    }
-}
-
-/**
- * 使用视图的背景色作为状态栏颜色
- * @param view 提取该View的背景颜色设置为状态栏颜色, 如果该View没有背景颜色则该函数调用无效
- * @param darkMode 是否显示暗色状态栏文字颜色
- */
-@JvmOverloads
-fun Activity.immersive(view: View, darkMode: Boolean? = null) {
-    val background = view.background
-    if (background is ColorDrawable) {
-        immersive(background.color, darkMode)
-    }
-}
-
-/**
- * 设置透明状态栏或者状态栏颜色, 此函数会导致状态栏覆盖界面,
- * 如果不希望被状态栏遮挡Toolbar请再调用[statusPadding]设置视图的paddingTop 或者 [statusMargin]设置视图的marginTop为状态栏高度
- *
- * 如果不指定状态栏颜色则会应用透明状态栏(全屏属性), 会导致键盘遮挡输入框
- *
- * @param color 状态栏颜色, 不指定则为透明状态栏
- * @param darkMode 是否显示暗色状态栏文字颜色
- */
-@SuppressLint("ObsoleteSdkInt")
-@JvmOverloads
-fun Activity.immersive(@ColorInt color: Int = COLOR_TRANSPARENT, darkMode: Boolean? = null) {
-    when (color) {
-        COLOR_TRANSPARENT -> {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            var systemUiVisibility = window.decorView.systemUiVisibility
-            systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            window.decorView.systemUiVisibility = systemUiVisibility
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = color
-        }
-        else -> {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            var systemUiVisibility = window.decorView.systemUiVisibility
-            systemUiVisibility = systemUiVisibility and View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            systemUiVisibility = systemUiVisibility and View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            window.decorView.systemUiVisibility = systemUiVisibility
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = color
-        }
-    }
-    if (darkMode != null) {
-        darkMode(darkMode)
-    }
-}
-
-/** 退出沉浸式状态栏 */
-fun Activity.immersiveExit() {
-    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-    window.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-}
-
-/**
- * 获取颜色资源值来设置状态栏
- */
-@JvmOverloads
-fun Activity.immersiveRes(@ColorRes color: Int, darkMode: Boolean? = null) =
-    immersive(resources.getColor(color), darkMode)
-
-
-/**
- * 开关状态栏暗色模式, 并不会透明状态栏, 只是单纯的状态栏文字变暗色调.
- *
- * @param darkMode 状态栏文字是否为暗色
- */
-@JvmOverloads
-fun Activity.darkMode(darkMode: Boolean = true) {
+fun Activity.setLightStatusBar(isLightingColor: Boolean) {
+    val window = this.window
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        var systemUiVisibility = window.decorView.systemUiVisibility
-        systemUiVisibility = if (darkMode) {
-            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        if (isLightingColor) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         } else {
-            systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
-        window.decorView.systemUiVisibility = systemUiVisibility
     }
 }
 
 /**
- * 增加View的paddingTop, 增加高度为状态栏高度, 用于防止视图和状态栏重叠
- * 如果是RelativeLayout设置padding值会导致centerInParent等属性无法正常显示
- * @param remove 如果默认paddingTop大于状态栏高度则添加无效, 如果小于状态栏高度则无法删除
- */
-@JvmOverloads
-fun View.statusPadding(remove: Boolean = false) {
-    if (this is RelativeLayout) {
-        throw UnsupportedOperationException("Unsupported set statusPadding for RelativeLayout")
-    }
-    val statusBarHeight = context.statusBarHeight
-    val lp = layoutParams
-    if (lp != null && lp.height > 0) {
-        lp.height += statusBarHeight //增高
-    }
-    if (remove) {
-        if (paddingTop < statusBarHeight) return
-        setPadding(
-            paddingLeft, paddingTop - statusBarHeight,
-            paddingRight, paddingBottom
-        )
-    } else {
-        if (paddingTop >= statusBarHeight) return
-        setPadding(
-            paddingLeft, paddingTop + statusBarHeight,
-            paddingRight, paddingBottom
-        )
-    }
-}
-
-/**
- * 增加View的marginTop值, 增加高度为状态栏高度, 用于防止视图和状态栏重叠
- * @param remove 如果默认marginTop大于状态栏高度则添加无效, 如果小于状态栏高度则无法删除
- */
-@JvmOverloads
-fun View.statusMargin(remove: Boolean = false) {
-    val statusBarHeight = context.statusBarHeight
-    val lp = layoutParams as ViewGroup.MarginLayoutParams
-    if (remove) {
-        if (lp.topMargin < statusBarHeight) return
-        lp.topMargin -= statusBarHeight
-        layoutParams = lp
-    } else {
-        if (lp.topMargin >= statusBarHeight) return
-        lp.topMargin += statusBarHeight
-        layoutParams = lp
-    }
-}
-
-
-/**
- * 创建假的透明栏
- */
-private fun Context.setTranslucentView(container: ViewGroup, color: Int) {
-    var simulateStatusBar: View? = container.findViewById(android.R.id.custom)
-    if (simulateStatusBar == null && color != 0) {
-        simulateStatusBar = View(container.context)
-        simulateStatusBar.id = android.R.id.custom
-        val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight)
-        container.addView(simulateStatusBar, lp)
-    }
-    simulateStatusBar?.setBackgroundColor(color)
-}
-
-/**
- * 显示或隐藏导航栏, 系统开启可以隐藏, 系统未开启不能开启
+ * 设置浅色导航栏背景（文字为深色）
  *
- * @param enabled 是否显示导航栏
+ * @param isLightingColor
  */
-@JvmOverloads
-fun Activity.setNavigationBar(enabled: Boolean = true) {
-    val systemUiVisibility = window.decorView.systemUiVisibility
-    if (enabled) {
+fun Activity.setLightNavigationBar(isLightingColor: Boolean) {
+    val window = this.window
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isLightingColor) {
         window.decorView.systemUiVisibility =
-            systemUiVisibility and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-    } else {
-        window.decorView.systemUiVisibility = systemUiVisibility or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            window.decorView.systemUiVisibility or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR else 0
     }
 }
 
 /**
- * 设置是否全屏
+ * 沉浸式状态栏，必须在Activity的onCreate时调用
+ */
+fun Activity.immersiveStatusBar() {
+    val view = (window.decorView as ViewGroup).getChildAt(0)
+    view.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
+        val lp = view.layoutParams as FrameLayout.LayoutParams
+        if (lp.topMargin > 0) {
+            lp.topMargin = 0
+            v.layoutParams = lp
+        }
+        if (view.paddingTop > 0) {
+            view.setPadding(0, 0, 0, view.paddingBottom)
+            val content = findViewById<View>(android.R.id.content)
+            content.requestLayout()
+        }
+    }
+
+    val content = findViewById<View>(android.R.id.content)
+    content.setPadding(0, 0, 0, content.paddingBottom)
+
+    window.decorView.findViewById(R.id.status_bar_view) ?: View(window.context).apply {
+        id = R.id.status_bar_view
+        val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, statusHeight)
+        params.gravity = Gravity.TOP
+        layoutParams = params
+        (window.decorView as ViewGroup).addView(this)
+
+        (window.decorView as ViewGroup).setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
+            override fun onChildViewAdded(parent: View?, child: View?) {
+                if (child?.id == android.R.id.statusBarBackground) {
+                    child.scaleX = 0f
+                }
+            }
+
+            override fun onChildViewRemoved(parent: View?, child: View?) {
+            }
+        })
+    }
+    setStatusBarColor(Color.TRANSPARENT)
+}
+
+/**
+ * 沉浸式导航栏，必须在Activity的onCreate时调用
  *
- * @param enabled 是否全屏显示
+ * @param callback
  */
-@JvmOverloads
-fun Activity.setFullscreen(enabled: Boolean = true) {
-    val systemUiVisibility = window.decorView.systemUiVisibility
-    window.decorView.systemUiVisibility = if (enabled) {
-        systemUiVisibility or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-    } else {
-        systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_STABLE and View.SYSTEM_UI_FLAG_FULLSCREEN.inv()
+fun Activity.immersiveNavigationBar(callback: (() -> Unit)? = null) {
+    val view = (window.decorView as ViewGroup).getChildAt(0)
+    view.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
+        val lp = view.layoutParams as FrameLayout.LayoutParams
+        if (lp.bottomMargin > 0) {
+            lp.bottomMargin = 0
+            v.layoutParams = lp
+        }
+        if (view.paddingBottom > 0) {
+            view.setPadding(0, view.paddingTop, 0, 0)
+            val content = findViewById<View>(android.R.id.content)
+            content.requestLayout()
+        }
     }
-}
 
-/**
- * 是否有导航栏
- */
-val Activity?.isNavigationBar: Boolean
-    get() {
-        this ?: return false
-        val vp = window.decorView as? ViewGroup
-        if (vp != null) {
-            for (i in 0 until vp.childCount) {
-                vp.getChildAt(i).context.packageName
-                if (vp.getChildAt(i).id != -1 && "navigationBarBackground" ==
-                    resources.getResourceEntryName(vp.getChildAt(i).id)
-                ) return true
+    val content = findViewById<View>(android.R.id.content)
+    content.setPadding(0, content.paddingTop, 0, -1)
+
+    val heightLiveData = MutableLiveData<Int>()
+    heightLiveData.value = 0
+    window.decorView.setTag(R.id.navigation_height_live_data, heightLiveData)
+    callback?.invoke()
+
+    window.decorView.findViewById(R.id.navigation_bar_view) ?: View(window.context).apply {
+        id = R.id.navigation_bar_view
+        val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, heightLiveData.value ?: 0)
+        params.gravity = Gravity.BOTTOM
+        layoutParams = params
+        (window.decorView as ViewGroup).addView(this)
+
+        if (this@immersiveNavigationBar is FragmentActivity) {
+            heightLiveData.observe(this@immersiveNavigationBar) {
+                val lp = layoutParams
+                lp.height = heightLiveData.value ?: 0
+                layoutParams = lp
             }
         }
-        return false
+
+        (window.decorView as ViewGroup).setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
+            override fun onChildViewAdded(parent: View?, child: View?) {
+                if (child?.id == android.R.id.navigationBarBackground) {
+                    child.scaleX = 0f
+                    bringToFront()
+
+                    child.addOnLayoutChangeListener { _, _, top, _, bottom, _, _, _, _ ->
+                        heightLiveData.value = bottom - top
+                    }
+                } else if (child?.id == android.R.id.statusBarBackground) {
+                    child.scaleX = 0f
+                }
+            }
+
+            override fun onChildViewRemoved(parent: View?, child: View?) {
+            }
+        })
     }
+    setNavigationBarColor(Color.TRANSPARENT)
+}
 
 /**
- * 如果当前设备存在导航栏返回导航栏高度, 否则0
+ * 当设置了[immersiveStatusBar]时，如需使用状态栏，可调用该函数
+ *
+ * @param fit
  */
-val Context?.navigationBarHeight: Int
-    get() {
-        this ?: return 0
-        val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        var height = 0
-        if (resourceId > 0) {
-            height = resources.getDimensionPixelSize(resourceId)
+fun Activity.fitStatusBar(fit: Boolean) {
+    val content = findViewById<View>(android.R.id.content)
+    if (fit) {
+        content.setPadding(0, statusHeight, 0, content.paddingBottom)
+    } else {
+        content.setPadding(0, 0, 0, content.paddingBottom)
+    }
+}
+
+/**
+ * 当设置了[immersiveNavigationBar]时，如需使用导航栏，可调用该函数
+ *
+ * @param fit
+ */
+fun Activity.fitNavigationBar(fit: Boolean) {
+    val content = findViewById<View>(android.R.id.content)
+    if (fit) {
+        content.setPadding(0, content.paddingTop, 0, navigationBarHeightLiveData.value ?: 0)
+    } else {
+        content.setPadding(0, content.paddingTop, 0, -1)
+    }
+    if (this is FragmentActivity) {
+        navigationBarHeightLiveData.observe(this) {
+            if (content.paddingBottom != -1) {
+                content.setPadding(0, content.paddingTop, 0, it)
+            }
         }
-        return height
+    }
+}
+
+val Activity.isImmersiveNavigationBar: Boolean
+    get() = window.attributes.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION != 0
+
+val Activity.statusHeight: Int
+    get() {
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else 0
     }
 
+val Activity.navigationHeight: Int
+    get() = navigationBarHeightLiveData.value ?: 0
 
-/**
- * 状态栏高度
- */
-val Context?.statusBarHeight: Int
+val Activity.screenSize: Size
     get() {
-        this ?: return 0
-        var result = 24
-        val resId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        result = if (resId > 0) {
-            resources.getDimensionPixelSize(resId)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Size(windowManager.currentWindowMetrics.bounds.width(), windowManager.currentWindowMetrics.bounds.height())
         } else {
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                result.toFloat(), Resources.getSystem().displayMetrics
-            ).toInt()
+            Size(windowManager.defaultDisplay.width, windowManager.defaultDisplay.height)
         }
-        return result
     }
+
+/**
+ * 设置状态栏背景色
+ *
+ * @param color
+ */
+fun Activity.setStatusBarColor(@ColorInt color: Int) {
+    val statusBarView = window.decorView.findViewById<View?>(R.id.status_bar_view)
+    if (color == 0 && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        statusBarView?.setBackgroundColor(STATUS_BAR_MASK_COLOR)
+    } else {
+        statusBarView?.setBackgroundColor(color)
+    }
+}
+
+/**
+ * 设置导航栏栏背景色
+ *
+ * @param color
+ */
+fun Activity.setNavigationBarColor(@ColorInt color: Int) {
+    val navigationBarView = window.decorView.findViewById<View?>(R.id.navigation_bar_view)
+    if (color == 0 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+        navigationBarView?.setBackgroundColor(STATUS_BAR_MASK_COLOR)
+    } else {
+        navigationBarView?.setBackgroundColor(color)
+    }
+}
+
+val Activity.navigationBarHeightLiveData: LiveData<Int>
+    get() {
+        var liveData = window.decorView.getTag(R.id.navigation_height_live_data) as? LiveData<Int>
+        if (liveData == null) {
+            liveData = MutableLiveData()
+            window.decorView.setTag(R.id.navigation_height_live_data, liveData)
+        }
+        return liveData
+    }
+
+fun Activity.hideStatusBar() {
+    window.setFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+    )
+}
+
+fun Activity.showStatusBar() {
+    window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+}
+
+val Activity.screenWidth: Int get() = screenSize.width
+
+val Activity.screenHeight: Int get() = screenSize.height
+
+internal const val STATUS_BAR_MASK_COLOR = 0x7F000000
