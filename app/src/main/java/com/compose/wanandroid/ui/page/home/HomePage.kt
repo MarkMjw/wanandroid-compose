@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ import com.compose.wanandroid.R
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.model.Banner
 import com.compose.wanandroid.logic.Logger
+import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.ArticleItem
 import com.compose.wanandroid.ui.common.RefreshList
 import com.compose.wanandroid.ui.theme.AppTheme
@@ -97,6 +99,7 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
         backgroundColor = AppTheme.colors.background,
         contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
     ) { innerPadding ->
+        val context = LocalContext.current
         RefreshList(
             modifier = Modifier
                 .fillMaxSize()
@@ -120,7 +123,16 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
                             ArticleItem(
                                 data = value,
                                 isTop = true,
-                                modifier = Modifier.padding(top = if (index == 0) 5.dp else 0.dp)
+                                modifier = Modifier.padding(top = if (index == 0) 5.dp else 0.dp),
+                                onCollectClick = { id ->
+                                    "收藏:$id".toast(context)
+                                },
+                                onUserClick = { id ->
+                                    "用户:$id".toast(context)
+                                },
+                                onSelected = {
+                                    "$it".toast(context)
+                                }
                             )
                         }
                     }

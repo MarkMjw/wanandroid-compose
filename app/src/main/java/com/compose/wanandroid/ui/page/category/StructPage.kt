@@ -4,7 +4,7 @@ package com.compose.wanandroid.ui.page.category
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.compose.wanandroid.ui.widget.StatePage
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.compose.wanandroid.data.model.Struct
+import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.StickyTitle
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.AppThemePreview
@@ -35,6 +37,7 @@ fun StructPage(viewModel: StructViewModel = viewModel()) {
             viewModel.dispatch(StructViewAction.FetchData)
         }
     ) {
+        val context = LocalContext.current
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -46,8 +49,8 @@ fun StructPage(viewModel: StructViewModel = viewModel()) {
             viewState.data.forEachIndexed { position, struct ->
                 stickyHeader { StickyTitle(title = struct.name) }
                 item {
-                    StructItem(struct, onSelect = { parent ->
-
+                    StructItem(struct, onSelect = { struct, index ->
+                        "${struct.name} -> $index".toast(context)
                     })
                     if (position <= viewState.size - 1) {
                         Divider(
@@ -67,27 +70,28 @@ fun StructPage(viewModel: StructViewModel = viewModel()) {
 fun StructItem(
     struct: Struct,
     modifier: Modifier = Modifier,
-    onSelect: (parent: Struct) -> Unit = {},
+    onSelect: (parent: Struct, index: Int) -> Unit = { _, _ -> },
 ) {
     if (struct.children.isNotEmpty()) {
         FlowRow(
             modifier = modifier
                 .fillMaxWidth()
+                .clickable {
+                    onSelect(struct, 0)
+                }
                 .padding(top = 16.dp, bottom = 8.dp, start = 8.dp, end = 16.dp)
         ) {
-            struct.children.forEach { item ->
+            struct.children.forEachIndexed { index, item ->
                 Text(
                     text = item.name,
                     modifier = modifier
                         .padding(start = 8.dp, bottom = 8.dp)
                         .height(25.dp)
-                        .combinedClickable(
-                            onClick = {
-                                onSelect(item)
-                            }
-                        )
+                        .background(color = AppTheme.colors.secondaryBackground, shape = RoundedCornerShape(25.dp / 2))
                         .clip(shape = RoundedCornerShape(25.dp / 2))
-                        .background(color = AppTheme.colors.secondaryBackground)
+                        .clickable {
+                            onSelect(struct, index)
+                        }
                         .padding(
                             horizontal = 10.dp,
                             vertical = 3.dp

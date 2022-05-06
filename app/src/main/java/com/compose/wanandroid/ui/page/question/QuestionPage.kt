@@ -5,11 +5,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.compose.wanandroid.data.model.Article
+import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.ArticleItem
 import com.compose.wanandroid.ui.common.RefreshList
 import com.compose.wanandroid.ui.theme.AppTheme
@@ -38,17 +40,24 @@ fun QuestionPage(viewModel: QuestionViewModel = viewModel()) {
     ) { innerPadding ->
         val pagingItems = viewModel.pager.collectAsLazyPagingItems()
 
+        val context = LocalContext.current
         RefreshList(modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding),
             lazyPagingItems = pagingItems,
-            onRefresh = {
-
-            },
             itemContent = {
                 itemsIndexed(pagingItems) { _: Int, value: Article? ->
                     if (value != null) {
-                        ArticleItem(data = value)
+                        ArticleItem(data = value,
+                            onCollectClick = { id ->
+                            "收藏:$id".toast(context)
+                        },
+                            onUserClick = { id ->
+                                "用户:$id".toast(context)
+                            },
+                            onSelected = {
+                                "$it".toast(context)
+                            })
                     }
                 }
             })

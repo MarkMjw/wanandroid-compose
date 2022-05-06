@@ -8,6 +8,14 @@ import android.net.NetworkInfo
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import java.util.regex.Pattern
 
 fun Context.isNetConnected(): Boolean {
@@ -34,4 +42,27 @@ fun String.removeAllBank(count: Int): String {
         s = m.replaceAll(" ");
     }
     return s
+}
+
+inline fun Modifier.rippleClickable(
+    bounded: Boolean = true,
+    radius: Dp = Dp.Unspecified,
+    color: Color = Color.Unspecified,
+    crossinline onClick: () -> Unit
+): Modifier = composed {
+    clickable(
+        indication = rememberRipple(bounded, radius, color),
+        interactionSource = remember { MutableInteractionSource() }
+    ) {
+        onClick()
+    }
+}
+
+inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
+    clickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() }
+    ) {
+        onClick()
+    }
 }

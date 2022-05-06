@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.compose.wanandroid.R
 import com.compose.wanandroid.data.model.*
+import com.compose.wanandroid.logic.noRippleClickable
+import com.compose.wanandroid.logic.rippleClickable
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.AppThemePreview
 import com.compose.wanandroid.ui.theme.collectColor
@@ -61,12 +63,14 @@ fun ArticleItem(
     onSelected: (Link) -> Unit = {},
     onCollectClick: (articleId: Int) -> Unit = {},
     onUserClick: (userId: Int) -> Unit = {},
-    isLoading: Boolean = false,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .rippleClickable {
+                onSelected(Link(url = data.link, title = data.title))
+            }
             .padding(16.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -93,7 +97,11 @@ fun ArticleItem(
                     color = AppTheme.colors.textSecondary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.wrapContentSize()
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .noRippleClickable {
+                            onUserClick(data.userId)
+                        }
                 )
 
                 val tags = data.tags
@@ -213,6 +221,9 @@ fun ArticleItem(
                         .size(20.dp)
                         .wrapContentWidth(Alignment.End)
                         .weight(1f)
+                        .rippleClickable(bounded = false) {
+                            onCollectClick(data.id)
+                        }
                 )
             }
         }

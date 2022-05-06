@@ -4,7 +4,7 @@ package com.compose.wanandroid.ui.page.category
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.data.model.Navigate
 import com.compose.wanandroid.ui.common.StickyTitle
 import com.compose.wanandroid.ui.theme.AppTheme
@@ -44,7 +45,7 @@ fun NavigatePage(viewModel: NavigateViewModel = viewModel()) {
             viewState.data.forEachIndexed { position, navigate ->
                 stickyHeader { StickyTitle(navigate.name) }
                 item {
-                    NavigateItem(navigate, onSelect = { title, link ->
+                    NavigateItem(navigate, onSelect = {
 
                     })
                     if (position <= viewState.size - 1) {
@@ -65,7 +66,7 @@ fun NavigatePage(viewModel: NavigateViewModel = viewModel()) {
 fun NavigateItem(
     navigate: Navigate,
     modifier: Modifier = Modifier,
-    onSelect: (title: String, link: String) -> Unit = { _, _ -> },
+    onSelect: (Link) -> Unit = { },
 ) {
     if (navigate.articles.isNotEmpty()) {
         FlowRow(
@@ -79,13 +80,11 @@ fun NavigateItem(
                     modifier = modifier
                         .padding(start = 8.dp, bottom = 8.dp)
                         .height(25.dp)
-                        .combinedClickable(
-                            onClick = {
-                                onSelect(item.title, item.link)
-                            }
-                        )
+                        .background(color = AppTheme.colors.secondaryBackground, shape = RoundedCornerShape(25.dp / 2))
                         .clip(shape = RoundedCornerShape(25.dp / 2))
-                        .background(color = AppTheme.colors.secondaryBackground)
+                        .clickable {
+                            onSelect(Link(item.link, item.title))
+                        }
                         .padding(
                             horizontal = 10.dp,
                             vertical = 3.dp
