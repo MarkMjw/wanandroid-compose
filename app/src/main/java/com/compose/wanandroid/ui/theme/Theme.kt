@@ -81,23 +81,47 @@ val AppColors.tabBackground: Color
 val AppColors.progress: Color
     get() = if (isLight) Color(0xff3cdc86) else Color(0xff67db9d)
 
+val AppColors.radioSelected: Color
+    get() = if (isLight) Color(0xff3cdc86) else Color(0xff67db9d)
 
-@Composable
-fun AppThemePreview(
-    isDark: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    AppTheme(darkTheme = isDark, content = content)
+val AppColors.radio: Color
+    get() = if (isLight) Color(0xff666666) else Color(0x88ffffff)
+
+val AppColors.switchThumbUnchecked: Color
+    get() = if (isLight) Color(0xffececec) else Color(0xff3B3B3B)
+
+val AppColors.switchTrackUnchecked: Color
+    get() = if (isLight) Color(0xffb2b2b2) else Color(0xff242424)
+
+
+object ThemeState {
+    var theme: MutableState<Theme> = mutableStateOf(Theme.FollowSystem)
+}
+
+sealed class Theme(val name: String) {
+    object Light : Theme("关闭")
+    object Dark : Theme("打开")
+    object FollowSystem : Theme("跟随系统")
 }
 
 @Composable
 fun AppTheme(
     typography: AppTypography = AppTheme.typography,
     shapes: Shapes = AppTheme.shapes,
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    theme: Theme = ThemeState.theme.value,
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) DarkColors else LightColors
+    val colors = when (theme) {
+        is Theme.Light -> LightColors
+        is Theme.Dark -> DarkColors
+        is Theme.FollowSystem -> {
+            if (isSystemInDarkTheme()) {
+                DarkColors
+            } else {
+                LightColors
+            }
+        }
+    }
 
     // creating a new object for colors to not mutate the initial colors set when updating the values
     val rememberedColors = remember { colors.copy() }.apply { updateColorsFrom(colors) }

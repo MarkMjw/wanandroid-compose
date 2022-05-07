@@ -24,7 +24,6 @@ import com.compose.wanandroid.data.model.*
 import com.compose.wanandroid.logic.noRippleClickable
 import com.compose.wanandroid.logic.rippleClickable
 import com.compose.wanandroid.ui.theme.AppTheme
-import com.compose.wanandroid.ui.theme.AppThemePreview
 import com.compose.wanandroid.ui.theme.collectColor
 import com.compose.wanandroid.ui.theme.textThird
 import com.compose.wanandroid.ui.widget.html.HtmlText
@@ -32,7 +31,7 @@ import com.compose.wanandroid.ui.widget.html.HtmlText
 @Preview
 @Composable
 fun ArticleItemPreview() {
-    AppThemePreview {
+    AppTheme {
         Column {
             ArticleItem(
                 data = Article().apply {

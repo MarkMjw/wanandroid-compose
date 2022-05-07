@@ -27,12 +27,13 @@ import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.question.QuestionPage
 import com.compose.wanandroid.ui.page.category.CategoryPage
 import com.compose.wanandroid.ui.page.detail.WebPage
+import com.compose.wanandroid.ui.page.profile.SettingPage
 import com.compose.wanandroid.ui.theme.*
 
 @Preview
 @Composable
 fun MainPagePreview() {
-    AppThemePreview {
+    AppTheme {
         MainPage()
     }
 }
@@ -68,8 +69,8 @@ private fun NavigationHost(controller: NavHostController, padding: PaddingValues
     ) {
         composable(Screen.Home.route) { HomePage(controller, padding) }
         composable(Screen.Question.route) { QuestionPage(controller, padding) }
-        composable(Screen.Category.route) { CategoryPage(padding) }
-        composable(Screen.Profile.route) { ProfilePage(padding) }
+        composable(Screen.Category.route) { CategoryPage(controller, padding) }
+        composable(Screen.Profile.route) { ProfilePage(controller, padding) }
 
         composable(
             route = Screen.Web.route + "/{link}",
@@ -79,6 +80,10 @@ private fun NavigationHost(controller: NavHostController, padding: PaddingValues
             if (args != null) {
                 WebPage(args, controller)
             }
+        }
+
+        composable(route = Screen.Setting.route) {
+            SettingPage(controller)
         }
     }
 }

@@ -19,22 +19,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.compose.wanandroid.R
+import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
-import com.compose.wanandroid.ui.theme.AppThemePreview
 import com.compose.wanandroid.ui.theme.textThird
 
 @Preview
 @Composable
 fun ProfilePagePreview() {
-    AppThemePreview {
-        ProfilePage()
+    AppTheme {
+        ProfilePage(rememberNavController())
     }
 }
 
 @Composable
 fun ProfilePage(
+    navController: NavController,
     padding: PaddingValues = PaddingValues(),
     viewModel: ProfileViewModel = viewModel()
 ) {
@@ -101,7 +104,9 @@ fun ProfilePage(
         ProfileItem(icon = R.drawable.ic_read_record, text = "阅读历史") { }
         ProfileItem(icon = R.drawable.ic_github, text = "开源项目") { }
         ProfileItem(icon = R.drawable.ic_about, text = "关于作者", subText = "请他喝杯☕️~") { }
-        ProfileItem(icon = R.drawable.ic_setting, text = "系统设置") { }
+        ProfileItem(icon = R.drawable.ic_setting, text = "系统设置") {
+            navController.navigate(Screen.Setting.route)
+        }
     }
 }
 

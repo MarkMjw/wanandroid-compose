@@ -1,6 +1,5 @@
 package com.compose.wanandroid.ui.page.detail
 
-import android.webkit.WebSettings
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -78,7 +77,6 @@ fun WebPage(
                             builtInZoomControls = true
                             displayZoomControls = false
 
-                            cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
                             allowFileAccess = true
                             javaScriptCanOpenWindowsAutomatically = true
                             loadsImagesAutomatically = true

@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.compose.wanandroid.ui.theme.AppTheme
-import com.compose.wanandroid.ui.theme.AppThemePreview
 import com.compose.wanandroid.ui.theme.defaultContentColorFor
 import com.compose.wanandroid.ui.theme.progress
 
@@ -31,7 +30,7 @@ sealed class PageState {
 @Preview
 @Composable
 fun StatePagePreview() {
-    AppThemePreview {
+    AppTheme {
         Column(modifier = Modifier.fillMaxSize()) {
             StatePage(
                 modifier = Modifier

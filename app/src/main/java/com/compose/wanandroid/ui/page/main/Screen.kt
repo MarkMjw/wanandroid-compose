@@ -16,4 +16,5 @@ sealed class Screen(
     object Login : Screen("login", "登录")
     object Search : Screen("search", "搜索")
     object Collect : Screen("collect", "收藏")
+    object Setting : Screen("setting", "设置")
 }
