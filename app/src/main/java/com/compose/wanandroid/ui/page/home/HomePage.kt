@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import coil.compose.AsyncImage
@@ -29,9 +30,11 @@ import com.compose.wanandroid.R
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.model.Banner
 import com.compose.wanandroid.logic.Logger
+import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.ArticleItem
 import com.compose.wanandroid.ui.common.RefreshList
+import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.defaultContentColorFor
 import com.compose.wanandroid.ui.theme.textThird
@@ -41,7 +44,11 @@ import com.compose.wanandroid.ui.widget.CenterAppBar
 import com.compose.wanandroid.ui.widget.rememberBannerState
 
 @Composable
-fun HomePage(viewModel: HomeViewModel = viewModel()) {
+fun HomePage(
+    navController: NavController,
+    padding: PaddingValues = PaddingValues(),
+    viewModel: HomeViewModel = viewModel()
+) {
     val viewState = viewModel.viewState
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
     val banners = viewState.banners
@@ -86,7 +93,9 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
                 }
             )
         },
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
         backgroundColor = AppTheme.colors.background,
         contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
     ) { innerPadding ->
@@ -122,7 +131,7 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
                                     "用户:$id".toast(context)
                                 },
                                 onSelected = {
-                                    "$it".toast(context)
+                                    navController.navigate(Screen.Web.route, it)
                                 }
                             )
                         }
@@ -140,7 +149,7 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
                                 "用户:$id".toast(context)
                             },
                             onSelected = {
-                                "$it".toast(context)
+                                navController.navigate(Screen.Web.route, it)
                             })
                     }
                 }

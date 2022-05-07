@@ -4,29 +4,32 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Device
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.compose.wanandroid.data.model.Link
+import com.compose.wanandroid.logic.fromJson
 import com.compose.wanandroid.ui.page.home.HomePage
 import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.question.QuestionPage
 import com.compose.wanandroid.ui.page.category.CategoryPage
+import com.compose.wanandroid.ui.page.detail.WebPage
 import com.compose.wanandroid.ui.theme.*
 
-@Preview()
+@Preview
 @Composable
 fun MainPagePreview() {
     AppThemePreview {
@@ -37,35 +40,58 @@ fun MainPagePreview() {
 @Composable
 fun MainPage() {
     val controller = rememberNavController()
-    Scaffold(bottomBar = { BottomNavigation(controller) }) { innerPadding ->
-        NavigationHost(controller, innerPadding)
-    }
+    val stackEntry by controller.currentBackStackEntryAsState()
+    val currentRoute = stackEntry?.destination?.route
+
+    Scaffold(
+        bottomBar = {
+            // 仅在主页展示BottomBar
+            when (currentRoute) {
+                null, Screen.Home.route, Screen.Question.route, Screen.Category.route, Screen.Profile.route -> {
+                    BottomNavigation(controller, currentRoute)
+                }
+            }
+        },
+        content = { padding ->
+            NavigationHost(controller, padding)
+        }
+    )
 }
 
 @Composable
-private fun NavigationHost(controller: NavHostController, innerPadding: PaddingValues) {
+private fun NavigationHost(controller: NavHostController, padding: PaddingValues) {
     NavHost(
         navController = controller,
         startDestination = Screen.Home.route,
         modifier = Modifier
             .background(AppTheme.colors.background)
-            .padding(innerPadding)
     ) {
-        composable(Screen.Home.route) { HomePage() }
-        composable(Screen.Question.route) { QuestionPage() }
-        composable(Screen.System.route) { CategoryPage() }
-        composable(Screen.Profile.route) { ProfilePage() }
+        composable(Screen.Home.route) { HomePage(controller, padding) }
+        composable(Screen.Question.route) { QuestionPage(controller, padding) }
+        composable(Screen.Category.route) { CategoryPage(padding) }
+        composable(Screen.Profile.route) { ProfilePage(padding) }
+
+        composable(
+            route = Screen.Web.route + "/{link}",
+            arguments = listOf(navArgument("link") { type = NavType.StringType })
+        ) {
+            val args = it.arguments?.getString("link")?.fromJson<Link>()
+            if (args != null) {
+                WebPage(args, controller)
+            }
+        }
     }
 }
 
 @Composable
-private fun BottomNavigation(controller: NavHostController) {
-    val backStackEntry by controller.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination?.route
+private fun BottomNavigation(
+    controller: NavController,
+    currentRoute: String?
+) {
     val screens = listOf(
         Screen.Home,
         Screen.Question,
-        Screen.System,
+        Screen.Category,
         Screen.Profile
     )
     BottomNavigation(
@@ -98,11 +124,3 @@ private fun BottomNavigation(controller: NavHostController) {
         }
     }
 }
-//    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme)
-//private object NoRippleTheme : RippleTheme {
-//    @Composable
-//    override fun defaultColor() = Color.Unspecified
-//
-//    @Composable
-//    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0.0f, 0.0f, 0.0f, 0.0f)
-//}

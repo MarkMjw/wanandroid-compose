@@ -34,11 +34,16 @@ fun ProfilePagePreview() {
 }
 
 @Composable
-fun ProfilePage(viewModel: ProfileViewModel = viewModel()) {
+fun ProfilePage(
+    padding: PaddingValues = PaddingValues(),
+    viewModel: ProfileViewModel = viewModel()
+) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
     ) {
         Column(
             modifier = Modifier
