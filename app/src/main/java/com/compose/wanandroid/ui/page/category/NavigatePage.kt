@@ -29,6 +29,7 @@ import com.google.accompanist.flowlayout.FlowRow
 fun NavigatePage(viewModel: NavigateViewModel = viewModel()) {
     val viewState = viewModel.viewState
     StatePage(
+        modifier = Modifier.fillMaxSize(),
         state = viewState.pageState,
         onRetry = {
             viewModel.dispatch(NavigateViewAction.FetchData)
@@ -36,8 +37,7 @@ fun NavigatePage(viewModel: NavigateViewModel = viewModel()) {
     ) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxSize()
                 .background(AppTheme.colors.background),
             state = viewState.listState,
             contentPadding = PaddingValues(vertical = 10.dp)

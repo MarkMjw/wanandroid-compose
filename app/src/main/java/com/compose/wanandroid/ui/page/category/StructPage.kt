@@ -32,6 +32,7 @@ import com.google.accompanist.flowlayout.FlowRow
 fun StructPage(viewModel: StructViewModel = viewModel()) {
     val viewState = viewModel.viewState
     StatePage(
+        modifier = Modifier.fillMaxSize(),
         state = viewState.pageState,
         onRetry = {
             viewModel.dispatch(StructViewAction.FetchData)

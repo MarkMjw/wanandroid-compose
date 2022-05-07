@@ -20,7 +20,9 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.R
 import com.compose.wanandroid.ui.theme.AppTheme
+import com.compose.wanandroid.ui.theme.progress
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 private val ItemHeight = 48.dp
@@ -38,6 +40,13 @@ fun <T : Any> RefreshList(
     SwipeRefresh(
         modifier = modifier,
         state = refreshState,
+        indicator = { s, trigger ->
+            SwipeRefreshIndicator(
+                s, trigger,
+                backgroundColor = AppTheme.colors.secondaryBackground,
+                contentColor = AppTheme.colors.progress
+            )
+        },
         onRefresh = {
             onRefresh()
             lazyPagingItems.refresh()
@@ -79,7 +88,7 @@ fun LoadingItem() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         CircularProgressIndicator(
-            color = AppTheme.colors.primary,
+            color = AppTheme.colors.progress,
             modifier = Modifier
                 .size(25.dp)
                 .align(Alignment.CenterVertically)

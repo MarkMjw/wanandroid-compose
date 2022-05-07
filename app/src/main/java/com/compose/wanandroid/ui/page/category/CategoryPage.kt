@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
-import com.compose.wanandroid.ui.widget.AppBarHeight
 import com.compose.wanandroid.ui.widget.TextTabBar
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -16,8 +15,16 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CategoryPage(index: Int = 0, viewModel: CategoryViewModel = viewModel()) {
-    Column(modifier = Modifier.fillMaxSize()) {
+fun CategoryPage(
+    padding: PaddingValues = PaddingValues(),
+    index: Int = 0,
+    viewModel: CategoryViewModel = viewModel()
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+    ) {
         val pagerState = rememberPagerState(
             initialPage = index,
         )

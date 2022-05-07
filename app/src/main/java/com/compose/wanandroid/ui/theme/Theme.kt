@@ -42,13 +42,13 @@ import androidx.compose.ui.graphics.takeOrElse
 //val onError: Color = Color.White
 
 val LightColors = AppColors(
-    primary = Color(0xff3651f1),
-    secondary = Color(0xff4282f4),
+    primary = Color(0xff3cdc86),
+    secondary = Color(0xff67db9d),
     textPrimary = Color(0xff333333),
     textSecondary = Color(0xff666666),
     background = Color.White,
     secondaryBackground = Color(0xfff5f5f5),
-    highlight = Color(0xff4282f4),
+    highlight = Color(0xff67db9d),
     error = Color(0xffb00020),
     onPrimary = Color.White,
     onBackground = Color(0xff333333),
@@ -56,13 +56,13 @@ val LightColors = AppColors(
 )
 
 val DarkColors = AppColors(
-    primary = Color(0xff3651f1),
-    secondary = Color(0xff4282f4),
+    primary = Color(0xff3cdc86),
+    secondary = Color(0xff67db9d),
     textPrimary = Color(0xffcfcfd1),
     textSecondary = Color(0x88ffffff),
     background = Color(0xff121212),
     secondaryBackground = Color(0xff222226),
-    highlight = Color(0xff4282f4),
+    highlight = Color(0xff67db9d),
     error = Color(0xffcf6679),
     onPrimary = Color.White,
     onBackground = Color(0xffcfcfd1),
@@ -78,8 +78,9 @@ val AppColors.textThird: Color
 val AppColors.tabBackground: Color
     get() = if (isLight) Color.White else Color(0xff181818)
 
-val AppColors.profileBackground: Color
-    get() = if (isLight) Color.White else Color(0xff181818)
+val AppColors.progress: Color
+    get() = if (isLight) Color(0xff3cdc86) else Color(0xff67db9d)
+
 
 @Composable
 fun AppThemePreview(
