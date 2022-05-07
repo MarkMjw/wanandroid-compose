@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -164,7 +165,8 @@ fun ArticleItem(
                         color = AppTheme.colors.textPrimary,
                         fontSize = 15.sp,
                         maxLines = 3,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        urlSpanStyle = SpanStyle(textDecoration = null)
                     )
 
                     if (data.desc.isNotEmpty()) {
@@ -176,6 +178,7 @@ fun ArticleItem(
                             fontSize = 13.sp,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
+                            urlSpanStyle = SpanStyle(textDecoration = null)
                         )
                     }
                 }

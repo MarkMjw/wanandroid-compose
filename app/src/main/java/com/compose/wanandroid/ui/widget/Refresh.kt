@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.common
+package com.compose.wanandroid.ui.widget
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

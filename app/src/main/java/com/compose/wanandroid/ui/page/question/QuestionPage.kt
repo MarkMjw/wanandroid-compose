@@ -15,7 +15,7 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.ArticleItem
-import com.compose.wanandroid.ui.common.RefreshList
+import com.compose.wanandroid.ui.widget.RefreshList
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.defaultContentColorFor

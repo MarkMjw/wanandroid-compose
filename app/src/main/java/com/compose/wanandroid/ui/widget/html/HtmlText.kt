@@ -33,12 +33,12 @@ fun HtmlText(
     color: Color = Color.Unspecified,
     fontSize: TextUnit = 14.sp,
     flags: Int = HtmlCompat.FROM_HTML_MODE_COMPACT,
-    URLSpanStyle: SpanStyle = SpanStyle(
+    urlSpanStyle: SpanStyle = SpanStyle(
         color = linkTextColor(),
         textDecoration = TextDecoration.Underline
     )
 ) {
-    val content = text.asHTML(fontSize, flags, URLSpanStyle)
+    val content = text.asHTML(fontSize, flags, urlSpanStyle)
     if (linkClicked != null) {
         ClickableText(
             modifier = modifier,
