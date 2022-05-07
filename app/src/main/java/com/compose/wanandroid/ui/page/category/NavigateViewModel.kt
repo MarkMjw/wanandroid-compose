@@ -6,13 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import com.compose.wanandroid.data.model.Article
-import com.compose.wanandroid.data.model.Banner
 import com.compose.wanandroid.data.model.Navigate
-import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.data.remote.ApiService
-import com.compose.wanandroid.data.remote.loadPage
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

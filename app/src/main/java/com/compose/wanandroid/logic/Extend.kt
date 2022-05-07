@@ -2,11 +2,14 @@
 
 package com.compose.wanandroid.logic
 
+import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.util.Size
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,6 +20,15 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import java.util.regex.Pattern
+
+val Activity.screenSize: Size
+    get() {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Size(windowManager.currentWindowMetrics.bounds.width(), windowManager.currentWindowMetrics.bounds.height())
+        } else {
+            Size(windowManager.defaultDisplay.width, windowManager.defaultDisplay.height)
+        }
+    }
 
 fun Context.isNetConnected(): Boolean {
     val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
