@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,14 +39,6 @@ import com.compose.wanandroid.ui.widget.AppBarHeight
 import com.compose.wanandroid.ui.widget.Banner
 import com.compose.wanandroid.ui.widget.CenterAppBar
 import com.compose.wanandroid.ui.widget.rememberBannerState
-
-@Preview(widthDp = 420, heightDp = 720)
-@Composable
-fun HomePagePreview() {
-    AppTheme {
-        HomePage()
-    }
-}
 
 @Composable
 fun HomePage(viewModel: HomeViewModel = viewModel()) {
@@ -140,7 +131,17 @@ fun HomePage(viewModel: HomeViewModel = viewModel()) {
 
                 itemsIndexed(pagingItems) { _: Int, value: Article? ->
                     if (value != null) {
-                        ArticleItem(data = value)
+                        ArticleItem(
+                            data = value,
+                            onCollectClick = { id ->
+                                "收藏:$id".toast(context)
+                            },
+                            onUserClick = { id ->
+                                "用户:$id".toast(context)
+                            },
+                            onSelected = {
+                                "$it".toast(context)
+                            })
                     }
                 }
             })

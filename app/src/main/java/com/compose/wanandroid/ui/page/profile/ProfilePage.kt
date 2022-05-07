@@ -1,98 +1,156 @@
 package com.compose.wanandroid.ui.page.profile
 
-import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.compose.wanandroid.R
 import com.compose.wanandroid.ui.theme.AppTheme
+import com.compose.wanandroid.ui.theme.AppThemePreview
+import com.compose.wanandroid.ui.theme.textThird
 
-const val TAG = "mjw"
-
+@Preview
 @Composable
-fun ProfilePage() {
-    val viewModel: ProfileViewModel = viewModel()
-    TestScreen(viewModel = viewModel, viewState = viewModel.viewStates)
+fun ProfilePagePreview() {
+    AppThemePreview {
+        ProfilePage()
+    }
 }
 
 @Composable
-fun TestScreen(viewModel: ProfileViewModel, viewState: TestViewState) {
+fun ProfilePage(viewModel: ProfileViewModel = viewModel()) {
     Column(
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        Log.i(TAG, "TestScreen: recompose all1")
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(260.dp)
+                .background(AppTheme.colors.secondary)
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .padding(top = 80.dp)
+                    .size(80.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(CircleShape),
+                model = "",
+                contentDescription = null,
+                error = ColorPainter(Color(0x22000000)),
+                placeholder = ColorPainter(Color(0x22000000))
+            )
 
-        val state1 = remember {
-            mutableStateOf(viewState.state1)
+            Text(
+                text = "未登录",
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .align(Alignment.CenterHorizontally),
+                fontSize = 22.sp,
+                color = Color.White
+            )
+
+            Row(
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .wrapContentSize(Alignment.Center)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = "等级:52",
+                    fontSize = 12.sp,
+                    color = Color(0xaaffffff)
+                )
+
+                Spacer(modifier = Modifier.width(15.dp))
+
+                Text(
+                    text = "排名:15",
+                    fontSize = 12.sp,
+                    color = Color(0xaaffffff)
+                )
+            }
         }
-        val state2 = remember {
-            mutableStateOf(viewState.state2)
-        }
-        val state3 = remember {
-            mutableStateOf(viewState.state3)
-        }
-        Button1(state1.value, viewModel)
-        Button2(state2.value, viewModel)
-        Button3(state3.value, viewModel)
+
+        ProfileItem(icon = R.drawable.ic_coin, text = "我的积分", subText = "520") { }
+        ProfileItem(icon = R.drawable.ic_share_article, text = "我的分享") { }
+        ProfileItem(icon = R.drawable.ic_collect, text = "我的收藏") { }
+        ProfileItem(icon = R.drawable.ic_read_later, text = "我的书签") { }
+        ProfileItem(icon = R.drawable.ic_read_record, text = "阅读历史") { }
+        ProfileItem(icon = R.drawable.ic_github, text = "开源项目") { }
+        ProfileItem(icon = R.drawable.ic_about, text = "关于作者", subText = "请他喝杯☕️~") { }
+        ProfileItem(icon = R.drawable.ic_setting, text = "系统设置") { }
     }
 }
 
 @Composable
-fun Button1(state: String, viewModel: ProfileViewModel) {
-    if (state != "") {
-        Log.i(TAG, "TestScreen: state1 recompose")
-    } else {
-        Log.i(TAG, "TestScreen: state1 recompose2")
-    }
-    Column {
-        Text(text = "state1 $state", color = AppTheme.colors.textPrimary)
-        Button(onClick = {
-            viewModel.dispatch(TestViewAction.ClickBtn1)
-        }) {
-            Text(text = "click1", color = AppTheme.colors.textPrimary)
-        }
-    }
-}
+fun ProfileItem(
+    @DrawableRes icon: Int,
+    text: String,
+    subText: String = "",
+    onClick: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+            .clickable(onClick = onClick)
+            .padding(start = 16.dp, end = 16.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = icon),
+            tint = AppTheme.colors.highlight,
+            contentDescription = null,
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterVertically)
+        )
 
-@Composable
-fun Button2(state: Boolean, viewModel: ProfileViewModel) {
-    if (state) {
-        Log.i(TAG, "TestScreen: state2 recompose")
-    } else {
-        Log.i(TAG, "TestScreen: state2 recompose2")
-    }
-    Column {
-        Text(text = "state2 = $state", color = AppTheme.colors.textPrimary)
-        Button(onClick = {
-            viewModel.dispatch(TestViewAction.ClickBtn2)
-        }) {
-            Text(text = "click2", color = AppTheme.colors.textPrimary)
-        }
-    }
-}
+        Text(
+            text = text,
+            fontSize = 15.sp,
+            color = AppTheme.colors.textPrimary,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(start = 10.dp, end = 10.dp)
+                .weight(1f)
+        )
 
-@Composable
-fun Button3(state: Int, viewModel: ProfileViewModel) {
-    if (state != 0) {
-        Log.i(TAG, "TestScreen: state3 recompose")
-    } else {
-        Log.i(TAG, "TestScreen: state3 recompose2")
-    }
+        Text(
+            text = subText,
+            fontSize = 12.sp,
+            color = AppTheme.colors.textSecondary,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(end = 10.dp)
+        )
 
-    Text(text = "state3 = $state", color = AppTheme.colors.textPrimary)
-
-    Button(onClick = {
-        viewModel.dispatch(TestViewAction.ClickBtn3)
-    }) {
-        Text(text = "click3", color = AppTheme.colors.textPrimary)
+        Icon(
+            painter = painterResource(id = R.drawable.ic_enter),
+            tint = AppTheme.colors.textThird,
+            contentDescription = null,
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterVertically)
+        )
     }
 }

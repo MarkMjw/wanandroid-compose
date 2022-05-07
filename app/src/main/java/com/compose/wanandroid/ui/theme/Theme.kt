@@ -78,6 +78,9 @@ val AppColors.textThird: Color
 val AppColors.tabBackground: Color
     get() = if (isLight) Color.White else Color(0xff181818)
 
+val AppColors.profileBackground: Color
+    get() = if (isLight) Color.White else Color(0xff181818)
+
 @Composable
 fun AppThemePreview(
     isDark: Boolean = true,
