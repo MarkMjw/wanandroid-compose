@@ -18,15 +18,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.data.model.Navigate
+import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.ui.common.StickyTitle
+import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.widget.StatePage
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun NavigatePage(viewModel: NavigateViewModel = viewModel()) {
+fun NavigatePage(
+    navController: NavController,
+    viewModel: NavigateViewModel = viewModel()
+) {
     val viewState = viewModel.viewState
     StatePage(
         modifier = Modifier.fillMaxSize(),
@@ -46,7 +52,7 @@ fun NavigatePage(viewModel: NavigateViewModel = viewModel()) {
                 stickyHeader { StickyTitle(navigate.name) }
                 item {
                     NavigateItem(navigate, onSelect = {
-
+                        navController.navigate(Screen.Web.route, it)
                     })
                     if (position <= viewState.size - 1) {
                         Divider(

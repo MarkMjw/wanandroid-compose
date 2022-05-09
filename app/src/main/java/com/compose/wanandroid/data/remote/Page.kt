@@ -45,12 +45,6 @@ fun <T : Any> ViewModel.loadPage(
         val response = try {
             HttpResult.Success(block(page))
         } catch (e: Exception) {
-//            val context = getApplication<App>()
-//            if (context.isNetConnected()) {
-//                "请求失败，请重试".toast(context)
-//            } else {
-//                "没有网络，请重试".toast(context)
-//            }
             HttpResult.Error(e)
         }
 

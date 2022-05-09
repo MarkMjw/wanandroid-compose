@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.compose.wanandroid.data.model.Link
+import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.logic.fromJson
 import com.compose.wanandroid.ui.page.home.HomePage
 import com.compose.wanandroid.ui.page.profile.ProfilePage
@@ -28,6 +29,7 @@ import com.compose.wanandroid.ui.page.question.QuestionPage
 import com.compose.wanandroid.ui.page.category.CategoryPage
 import com.compose.wanandroid.ui.page.detail.WebPage
 import com.compose.wanandroid.ui.page.profile.SettingPage
+import com.compose.wanandroid.ui.page.struct.CategoryListPage
 import com.compose.wanandroid.ui.theme.*
 
 @Preview
@@ -84,6 +86,20 @@ private fun NavigationHost(controller: NavHostController, padding: PaddingValues
 
         composable(route = Screen.Setting.route) {
             SettingPage(controller)
+        }
+
+        composable(
+            route = Screen.CategoryDetail.route + "/{category}/{index}",
+            arguments = listOf(
+                navArgument("category") { type = NavType.StringType },
+                navArgument("index") { type = NavType.IntType }
+            )
+        ) {
+            val args = it.arguments?.getString("category")?.fromJson<Struct>()
+            val index = it.arguments?.getInt("index", 0) ?: 0
+            if (args != null) {
+                CategoryListPage(struct = args, navController = controller, index = index)
+            }
         }
     }
 }

@@ -19,23 +19,30 @@ inline fun <reified T> String.fromJson(): T? {
 
 fun NavController.navigate(
     route: String,
-    args: Any? = null,
-    backRoute: String? = null,
-    isLaunchSingleTop: Boolean = true,
-    isRestoreState: Boolean = true,
+//    backRoute: String? = null,
+//    isLaunchSingleTop: Boolean = true,
+//    isRestoreState: Boolean = true,
+    vararg args: Any,
 ) {
-    val realRoute = when (args) {
-        null -> route
-        is Parcelable -> "$route/${Uri.encode(args.toJson())}"
-        else -> "$route/$args"
+    val params = if (args.isEmpty()) {
+        route
+    } else {
+        args.joinToString("/") {
+            if (it is Parcelable) {
+                Uri.encode(it.toJson())
+            } else {
+                "$it"
+            }
+        }
     }
+    val realRoute = "$route/$params"
     Logger.i("Navigate", realRoute)
     navigate(realRoute) {
-        if (backRoute != null) {
-            popUpTo(backRoute) { saveState = true }
-        }
-        launchSingleTop = isLaunchSingleTop
-        restoreState = isRestoreState
+//        if (backRoute != null) {
+//            popUpTo(backRoute) { saveState = true }
+//        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 

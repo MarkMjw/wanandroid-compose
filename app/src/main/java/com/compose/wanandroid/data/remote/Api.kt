@@ -6,6 +6,7 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface Api {
     companion object {
@@ -29,6 +30,9 @@ interface Api {
 
     @GET("/navi/json")
     suspend fun navigationList(): Response<MutableList<Navigate>>
+
+    @GET("/article/list/{page}/json")
+    suspend fun structArticles(@Path("page") page: Int, @Query("cid") cid: Int): ListResponse<Article>
 }
 
 object ApiService : KoinComponent {

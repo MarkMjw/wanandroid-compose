@@ -21,14 +21,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.compose.wanandroid.ui.widget.StatePage
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.compose.wanandroid.data.model.Struct
-import com.compose.wanandroid.logic.toast
+import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.ui.common.StickyTitle
+import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun StructPage(viewModel: StructViewModel = viewModel()) {
+fun StructPage(
+    navController: NavController,
+    viewModel: StructViewModel = viewModel()
+) {
     val viewState = viewModel.viewState
     StatePage(
         modifier = Modifier.fillMaxSize(),
@@ -50,7 +55,7 @@ fun StructPage(viewModel: StructViewModel = viewModel()) {
                 stickyHeader { StickyTitle(title = struct.name) }
                 item {
                     StructItem(struct, onSelect = { struct, index ->
-                        "${struct.name} -> $index".toast(context)
+                        navController.navigate(Screen.CategoryDetail.route, struct, index)
                     })
                     if (position <= viewState.size - 1) {
                         Divider(

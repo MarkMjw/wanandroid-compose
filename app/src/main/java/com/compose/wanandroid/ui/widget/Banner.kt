@@ -4,7 +4,7 @@ package com.compose.wanandroid.ui.widget
 
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -17,16 +17,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.VerticalPager
-import com.google.accompanist.pager.rememberPagerState
+import com.compose.wanandroid.ui.theme.AppTheme
+import com.compose.wanandroid.ui.theme.textThird
+import com.google.accompanist.pager.*
 import kotlinx.coroutines.delay
 import kotlin.math.abs
 
@@ -77,61 +76,84 @@ fun Banner(
 
     when (direction) {
         is Direction.Horizontal -> {
-            HorizontalPager(
-                modifier = modifier.pointerInput(pagerState.currentPage) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            // PointerEventPass.Initial - 本控件优先处理手势，处理后再交给子组件
-                            val event = awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Initial)
-                            // 获取到第一根按下的手指
-                            val dragEvent = event.changes.firstOrNull() ?: return@awaitPointerEventScope
-                            when {
-                                // 当前移动手势是否已被消费
-                                dragEvent.isConsumed -> return@awaitPointerEventScope
-                                // 是否已经按下(忽略按下手势已消费标记)
-                                dragEvent.changedToDownIgnoreConsumed() -> {
-                                    // 记录下当前的页面索引值
-                                    currentPageIndex = pagerState.currentPage
-                                }
-                                // 是否已经抬起(忽略按下手势已消费标记)
-                                dragEvent.changedToUpIgnoreConsumed() -> {
-                                    // 当pageCount大于1，且手指抬起时如果页面没有改变，就手动触发动画
-                                    if (currentPageIndex == pagerState.currentPage && pagerState.pageCount > 1) {
-                                        executeChangePage = !executeChangePage
+            Box(modifier = modifier) {
+                HorizontalPager(
+                    modifier = Modifier.pointerInput(pagerState.currentPage) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                // PointerEventPass.Initial - 本控件优先处理手势，处理后再交给子组件
+                                val event = awaitPointerEvent(PointerEventPass.Initial)
+                                // 获取到第一根按下的手指
+                                val dragEvent = event.changes.firstOrNull() ?: return@awaitPointerEventScope
+                                when {
+                                    // 当前移动手势是否已被消费
+                                    dragEvent.isConsumed -> return@awaitPointerEventScope
+                                    // 是否已经按下(忽略按下手势已消费标记)
+                                    dragEvent.changedToDownIgnoreConsumed() -> {
+                                        // 记录下当前的页面索引值
+                                        currentPageIndex = pagerState.currentPage
+                                    }
+                                    // 是否已经抬起(忽略按下手势已消费标记)
+                                    dragEvent.changedToUpIgnoreConsumed() -> {
+                                        // 当pageCount大于1，且手指抬起时如果页面没有改变，就手动触发动画
+                                        if (currentPageIndex == pagerState.currentPage && pagerState.pageCount > 1) {
+                                            executeChangePage = !executeChangePage
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                },
-                count = realCount,
-                state = pagerState,
-                contentPadding = contentPadding,
-                itemSpacing = itemSpacing,
-                reverseLayout = reverseLayout,
-                verticalAlignment = verticalAlignment
-            ) { index ->
-                val page = if (loop) (index - startIndex).floorMod(count) else index
-                bannerScope.content(page)
+                    },
+                    count = realCount,
+                    state = pagerState,
+                    contentPadding = contentPadding,
+                    itemSpacing = itemSpacing,
+                    reverseLayout = reverseLayout,
+                    verticalAlignment = verticalAlignment
+                ) { index ->
+                    val page = if (loop) (index - startIndex).floorMod(count) else index
+                    bannerScope.content(page)
+                }
+
+                HorizontalPagerIndicator(
+                    pagerState = pagerState,
+                    activeColor = AppTheme.colors.secondary,
+                    inactiveColor = AppTheme.colors.textThird,
+                    indicatorWidth = 7.dp,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 10.dp, start = 10.dp, end = 10.dp),
+                )
             }
         }
 
         is Direction.Vertical -> {
-            VerticalPager(
-                count = realCount,
-                state = pagerState,
-                contentPadding = contentPadding,
-                itemSpacing = itemSpacing,
-                reverseLayout = reverseLayout,
-                modifier = modifier,
-                horizontalAlignment = horizontalAlignment
-            ) { index ->
-                val page = if (loop) (index - startIndex).floorMod(count) else index
-                bannerScope.content(page)
+            Box(modifier = modifier) {
+                VerticalPager(
+                    count = realCount,
+                    state = pagerState,
+                    contentPadding = contentPadding,
+                    itemSpacing = itemSpacing,
+                    reverseLayout = reverseLayout,
+                    modifier = modifier,
+                    horizontalAlignment = horizontalAlignment
+                ) { index ->
+                    val page = if (loop) (index - startIndex).floorMod(count) else index
+                    bannerScope.content(page)
+                }
+
+                HorizontalPagerIndicator(
+                    pagerState = pagerState,
+                    activeColor = AppTheme.colors.secondary,
+                    inactiveColor = AppTheme.colors.textThird,
+                    indicatorWidth = 7.dp,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(bottom = 10.dp, top = 10.dp, end = 10.dp),
+                )
             }
         }
     }
-
 }
 
 @Stable

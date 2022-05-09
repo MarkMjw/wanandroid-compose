@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import java.util.regex.Pattern
 
 val Activity.screenSize: Size
@@ -78,3 +80,8 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
         onClick()
     }
 }
+
+inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
+    object : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(aClass: Class<T>): T = f() as T
+    }
