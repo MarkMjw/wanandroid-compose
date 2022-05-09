@@ -23,8 +23,8 @@ import com.compose.wanandroid.ui.theme.progress
 
 sealed class PageState {
     object Loading : PageState()
-    data class Success(val isEmpty: Boolean) : PageState()
-    data class Error(val exception: Throwable) : PageState()
+    data class Success(val isEmpty: Boolean = false) : PageState()
+    data class Error(val exception: Throwable? = null) : PageState()
 }
 
 @Preview

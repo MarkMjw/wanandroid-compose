@@ -20,6 +20,7 @@ import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.defaultContentColorFor
 import com.compose.wanandroid.ui.widget.CenterAppBar
+import com.compose.wanandroid.ui.widget.StatePage
 
 @Composable
 fun QuestionPage(
@@ -47,28 +48,36 @@ fun QuestionPage(
         backgroundColor = AppTheme.colors.background,
         contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
     ) { innerPadding ->
-        val pagingItems = viewModel.pager.collectAsLazyPagingItems()
-
         val context = LocalContext.current
-        RefreshList(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding),
-            lazyPagingItems = pagingItems,
-            itemContent = {
-                itemsIndexed(pagingItems) { _: Int, value: Article? ->
-                    if (value != null) {
-                        ArticleItem(data = value,
-                            onCollectClick = { id ->
-                                "收藏:$id".toast(context)
-                            },
-                            onUserClick = { id ->
-                                "用户:$id".toast(context)
-                            },
-                            onSelected = {
-                                navController.navigate(Screen.Web.route, it)
-                            })
+        val pagingItems = viewModel.pager.collectAsLazyPagingItems()
+        StatePage(
+            modifier = Modifier.fillMaxSize(),
+            state = viewModel.getPageState(pagingItems),
+            onRetry = {
+                pagingItems.retry()
+            }
+        ) {
+            RefreshList(
+                lazyPagingItems = pagingItems,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                itemContent = {
+                    itemsIndexed(pagingItems) { _: Int, value: Article? ->
+                        if (value != null) {
+                            ArticleItem(data = value,
+                                onCollectClick = { id ->
+                                    "收藏:$id".toast(context)
+                                },
+                                onUserClick = { id ->
+                                    "用户:$id".toast(context)
+                                },
+                                onSelected = {
+                                    navController.navigate(Screen.Web.route, it)
+                                })
+                        }
                     }
-                }
-            })
+                })
+        }
     }
 }

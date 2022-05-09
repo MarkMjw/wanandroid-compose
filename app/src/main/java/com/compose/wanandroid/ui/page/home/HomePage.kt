@@ -33,15 +33,11 @@ import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.ArticleItem
-import com.compose.wanandroid.ui.widget.RefreshList
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.defaultContentColorFor
 import com.compose.wanandroid.ui.theme.textThird
-import com.compose.wanandroid.ui.widget.AppBarHeight
-import com.compose.wanandroid.ui.widget.Banner
-import com.compose.wanandroid.ui.widget.CenterAppBar
-import com.compose.wanandroid.ui.widget.rememberBannerState
+import com.compose.wanandroid.ui.widget.*
 
 @Composable
 fun HomePage(
@@ -100,30 +96,56 @@ fun HomePage(
         contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
     ) { innerPadding ->
         val context = LocalContext.current
-        RefreshList(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            isRefreshing = isRefreshing,
-            lazyPagingItems = pagingItems,
-            listState = listState,
-            onRefresh = {
+        StatePage(
+            modifier = Modifier.fillMaxSize(),
+            state = viewState.getPageState(pagingItems),
+            onRetry = {
                 viewModel.dispatch(HomeViewAction.Refresh)
-            },
-            itemContent = {
-                if (banners.isNotEmpty()) {
-                    item {
-                        Banner(banners)
+                pagingItems.retry()
+            }
+        ) {
+            RefreshList(
+                lazyPagingItems = pagingItems,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                isRefreshing = isRefreshing,
+                listState = listState,
+                onRefresh = {
+                    viewModel.dispatch(HomeViewAction.Refresh)
+                },
+                itemContent = {
+                    if (banners.isNotEmpty()) {
+                        item {
+                            Banner(banners)
+                        }
                     }
-                }
 
-                if (tops.isNotEmpty()) {
-                    itemsIndexed(tops) { index: Int, value: Article? ->
+                    if (tops.isNotEmpty()) {
+                        itemsIndexed(tops) { index: Int, value: Article? ->
+                            if (value != null) {
+                                ArticleItem(
+                                    data = value,
+                                    isTop = true,
+                                    modifier = Modifier.padding(top = if (index == 0) 5.dp else 0.dp),
+                                    onCollectClick = { id ->
+                                        "收藏:$id".toast(context)
+                                    },
+                                    onUserClick = { id ->
+                                        "用户:$id".toast(context)
+                                    },
+                                    onSelected = {
+                                        navController.navigate(Screen.Web.route, it)
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    itemsIndexed(pagingItems) { _: Int, value: Article? ->
                         if (value != null) {
                             ArticleItem(
                                 data = value,
-                                isTop = true,
-                                modifier = Modifier.padding(top = if (index == 0) 5.dp else 0.dp),
                                 onCollectClick = { id ->
                                     "收藏:$id".toast(context)
                                 },
@@ -132,28 +154,11 @@ fun HomePage(
                                 },
                                 onSelected = {
                                     navController.navigate(Screen.Web.route, it)
-                                }
-                            )
+                                })
                         }
                     }
-                }
-
-                itemsIndexed(pagingItems) { _: Int, value: Article? ->
-                    if (value != null) {
-                        ArticleItem(
-                            data = value,
-                            onCollectClick = { id ->
-                                "收藏:$id".toast(context)
-                            },
-                            onUserClick = { id ->
-                                "用户:$id".toast(context)
-                            },
-                            onSelected = {
-                                navController.navigate(Screen.Web.route, it)
-                            })
-                    }
-                }
-            })
+                })
+        }
     }
 }
 

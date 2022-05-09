@@ -1,13 +1,17 @@
 package com.compose.wanandroid.ui.widget
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,8 +33,8 @@ private val ItemHeight = 48.dp
 
 @Composable
 fun <T : Any> RefreshList(
-    modifier: Modifier = Modifier,
     lazyPagingItems: LazyPagingItems<T>,
+    modifier: Modifier = Modifier,
     isRefreshing: Boolean = false,
     onRefresh: (() -> Unit) = {},
     listState: LazyListState = rememberLazyListState(),
@@ -64,7 +68,9 @@ fun <T : Any> RefreshList(
                     lazyPagingItems.loadState.run {
                         when (append) {
                             is LoadState.Loading -> LoadingItem()
-                            is LoadState.Error -> ErrorItem()
+                            is LoadState.Error -> ErrorItem {
+                                lazyPagingItems.retry()
+                            }
                             is LoadState.NotLoading -> {
                                 if (append.endOfPaginationReached) {
                                     EndItem()
@@ -89,16 +95,14 @@ fun LoadingItem() {
     ) {
         CircularProgressIndicator(
             color = AppTheme.colors.progress,
-            modifier = Modifier
-                .size(25.dp)
-                .align(Alignment.CenterVertically)
+            strokeWidth = 3.dp,
+            modifier = Modifier.size(25.dp)
         )
         Spacer(modifier = Modifier.size(10.dp))
         Text(
             text = "加载中...",
             fontSize = 13.sp,
-            modifier = Modifier
-                .wrapContentSize(),
+            modifier = Modifier.wrapContentSize(),
             textAlign = TextAlign.Center,
             color = AppTheme.colors.textSecondary
         )
@@ -106,16 +110,30 @@ fun LoadingItem() {
 }
 
 @Composable
-fun ErrorItem() {
-    Text(
-        text = "加载失败，请重试",
-        fontSize = 13.sp,
+fun ErrorItem(retry: () -> Unit = {}) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(ItemHeight),
-        textAlign = TextAlign.Center,
-        color = AppTheme.colors.textSecondary
-    )
+            .height(ItemHeight)
+            .clickable(onClick = retry),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.ErrorOutline,
+            contentDescription = null,
+            modifier = Modifier.size(25.dp),
+            tint = AppTheme.colors.textSecondary
+        )
+        Spacer(modifier = Modifier.size(10.dp))
+        Text(
+            text = "加载失败，请重试",
+            fontSize = 13.sp,
+            modifier = Modifier.wrapContentSize(),
+            textAlign = TextAlign.Center,
+            color = AppTheme.colors.textSecondary
+        )
+    }
 }
 
 @Composable

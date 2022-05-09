@@ -6,11 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.model.Banner
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.data.remote.loadPage
+import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -56,12 +59,6 @@ class HomeViewModel : ViewModel() {
                 viewState = viewState.copy(isRefreshing = false)
             }.collect()
         }
-//        viewModelScope.launch {
-//            viewState = viewState.copy(isRefreshing = true)
-//            val banners = async { ApiService.api.banners().data ?: emptyList() }
-//            val tops = async { ApiService.api.topArticles().data ?: emptyList() }
-//            viewState = viewState.copy(banners = banners.await(), tops = tops.await(), isRefreshing = false)
-//        }
     }
 }
 
@@ -70,8 +67,17 @@ data class HomeViewState(
     val tops: List<Article> = emptyList(),
     val pagingData: Flow<PagingData<Article>>,
     val isRefreshing: Boolean = false,
-    val listState: LazyListState = LazyListState()
-)
+    val listState: LazyListState = LazyListState(),
+) {
+    fun getPageState(pagingItems: LazyPagingItems<*>): PageState {
+        val isEmpty = tops.isEmpty() && banners.isEmpty() && pagingItems.itemCount <= 0
+        return when (pagingItems.loadState.refresh) {
+            is LoadState.Loading -> PageState.Success()
+            is LoadState.NotLoading -> PageState.Success(isEmpty)
+            is LoadState.Error -> if (isEmpty) PageState.Error() else PageState.Success()
+        }
+    }
+}
 
 sealed class HomeViewAction {
     object FetchData : HomeViewAction()
