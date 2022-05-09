@@ -3,7 +3,7 @@ package com.compose.wanandroid.ui.page.category
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +48,7 @@ fun CategoryPage(
             title = {
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    containerColor = Color.Transparent,
+                    backgroundColor = Color.Transparent,
                     indicator = { tabPositions ->
                         TabRowDefaults.Indicator(
                             modifier = Modifier

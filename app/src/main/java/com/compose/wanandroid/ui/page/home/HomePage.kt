@@ -56,7 +56,10 @@ fun HomePage(
                         painter = painterResource(id = R.drawable.ic_scan),
                         modifier = Modifier
                             .fillMaxHeight()
-                            .width(AppBarHeight),
+                            .width(AppBarHeight)
+                            .clickable {
+                                // TODO
+                            },
                         colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                         contentScale = ContentScale.Inside,
                         contentDescription = null
@@ -74,7 +77,10 @@ fun HomePage(
                         painter = painterResource(id = R.drawable.ic_search),
                         modifier = Modifier
                             .fillMaxHeight()
-                            .width(AppBarHeight),
+                            .width(AppBarHeight)
+                            .clickable {
+                                // TODO
+                            },
                         colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                         contentScale = ContentScale.Inside,
                         contentDescription = null

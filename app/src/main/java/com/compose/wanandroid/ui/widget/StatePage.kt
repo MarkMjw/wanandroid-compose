@@ -147,6 +147,7 @@ fun StatePageError(
         Button(
             onClick = { clickState.value() },
             shape = RoundedCornerShape(5.dp),
+            elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
             colors = buttonColors(
                 backgroundColor = AppTheme.colors.secondaryBackground,
                 contentColor = defaultContentColorFor(AppTheme.colors.secondaryBackground),

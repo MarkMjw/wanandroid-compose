@@ -2,10 +2,9 @@ package com.compose.wanandroid.ui.page.profile
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,10 +48,10 @@ fun SettingPage(navController: NavController) {
         CenterAppBar(
             modifier = Modifier.fillMaxWidth(),
             leftActions = {
-                androidx.compose.material.IconButton(onClick = {
+                IconButton(onClick = {
                     navController.back()
                 }) {
-                    androidx.compose.material.Icon(
+                    Icon(
                         imageVector = Icons.Default.ArrowBack,
                         tint = AppTheme.colors.onPrimary,
                         contentDescription = "Back"
@@ -84,7 +83,6 @@ fun SettingPage(navController: NavController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RadioGroup(
     options: List<Theme>,
