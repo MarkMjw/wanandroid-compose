@@ -9,8 +9,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -21,10 +23,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.wanandroid.R
 import com.compose.wanandroid.logic.Logger
+import com.compose.wanandroid.logic.Pref
 import com.compose.wanandroid.logic.back
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.*
 import com.compose.wanandroid.ui.widget.CenterAppBar
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
@@ -36,6 +40,8 @@ fun SettingPagePreview() {
 
 @Composable
 fun SettingPage(navController: NavController) {
+    val pref = Pref(LocalContext.current)
+    val scope = rememberCoroutineScope()
     val darkModes: List<Theme> = listOf(Theme.FollowSystem, Theme.Light, Theme.Dark)
     Column(
         modifier = Modifier.fillMaxSize()
@@ -67,6 +73,9 @@ fun SettingPage(navController: NavController) {
 
         RadioGroup(darkModes, darkModes.indexOf(ThemeState.theme.value), title = "设置暗黑模式") {
             ThemeState.theme.value = it
+            scope.launch {
+                pref.setDarkMode(it.name)
+            }
         }
         SwitchItem(text = "书签提醒", subText = "打开应用时以通知方式提醒最新添加书签") {
             Logger.w("mjw", "switch:$it")

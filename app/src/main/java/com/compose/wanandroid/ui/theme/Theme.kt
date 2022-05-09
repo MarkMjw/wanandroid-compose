@@ -96,12 +96,20 @@ val AppColors.switchTrackUnchecked: Color
 
 object ThemeState {
     var theme: MutableState<Theme> = mutableStateOf(Theme.FollowSystem)
+
+    fun read(name: String) {
+        theme.value = when (name) {
+            Theme.Light.name -> Theme.Light
+            Theme.Dark.name -> Theme.Dark
+            else -> Theme.FollowSystem
+        }
+    }
 }
 
 sealed class Theme(val name: String) {
+    object FollowSystem : Theme("跟随系统")
     object Light : Theme("关闭")
     object Dark : Theme("打开")
-    object FollowSystem : Theme("跟随系统")
 }
 
 @Composable
