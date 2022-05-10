@@ -70,7 +70,8 @@ fun Banner(
         if (pagerState.pageCount > 0) {
             delay(timeMillis)
             // 这里直接+1就可以循环，前提是infiniteLoop == true
-            pagerState.animateScrollToPage((pagerState.currentPage + 1) % (pagerState.pageCount))
+//            pagerState.animateScrollToPage((pagerState.currentPage + 1) % (pagerState.pageCount))
+            pagerState.scrollToPage((pagerState.currentPage + 1) % (pagerState.pageCount))
         }
     }
 
@@ -232,7 +233,7 @@ class BannerState(
             },
             restore = {
                 BannerState(
-                    initialPage = it as Int,
+                    initialPage = it,
                 )
             }
         )

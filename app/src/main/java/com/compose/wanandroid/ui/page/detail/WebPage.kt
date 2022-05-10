@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.compose.wanandroid.data.model.Link
+import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.back
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.progress
@@ -52,7 +53,7 @@ fun WebPage(
             },
             title = {
                 Text(
-                    text = link.title,
+                    text = state.pageTitle ?: link.title,
                     fontSize = 16.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -64,6 +65,7 @@ fun WebPage(
 
         if (link.url.isNotEmpty()) {
             val loadingState = state.loadingState
+            Logger.i("Web", link.url)
             Box(modifier = Modifier.weight(1f)) {
                 WebView(
                     state = state,

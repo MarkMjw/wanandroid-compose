@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             // 读取主题配置
-            ThemeState.read(Pref(this).darkMode.collectAsState("").value)
+            ThemeState.read(Pref.darkMode.collectAsState("").value)
             AppTheme {
                 val systemUiController = rememberSystemUiController()
 //                systemUiController.setSystemBarsColor(color = AppTheme.colors.primary)

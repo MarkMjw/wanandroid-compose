@@ -11,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,7 +38,6 @@ fun SettingPagePreview() {
 
 @Composable
 fun SettingPage(navController: NavController) {
-    val pref = Pref(LocalContext.current)
     val scope = rememberCoroutineScope()
     val darkModes: List<Theme> = listOf(Theme.FollowSystem, Theme.Light, Theme.Dark)
     Column(
@@ -70,10 +68,10 @@ fun SettingPage(navController: NavController) {
             backgroundColor = AppTheme.colors.primary
         )
 
-        RadioGroup(darkModes, darkModes.indexOf(ThemeState.theme.value), title = "设置暗黑模式") {
+        RadioGroup(darkModes, darkModes.indexOf(ThemeState.theme.value), title = "暗黑模式") {
             ThemeState.theme.value = it
             scope.launch {
-                pref.setDarkMode(it.name)
+                Pref.darkMode.update(it.name)
             }
         }
         SwitchItem(text = "书签提醒", subText = "打开应用时以通知方式提醒最新添加书签") {
