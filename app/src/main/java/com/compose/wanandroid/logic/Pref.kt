@@ -19,15 +19,16 @@ abstract class PreferenceItem<T>(flow: Flow<T>) : Flow<T> by flow {
 operator fun <T> DataStore<Preferences>.invoke(
     buildKey: (name: String) -> Preferences.Key<T>,
     defaultValue: T,
+    key: String? = null,
 ) = ReadOnlyProperty<Any?, PreferenceItem<T>> { _, property ->
-    val key = buildKey(property.name)
-    object : PreferenceItem<T>(data.map { it[key] ?: defaultValue }) {
+    val pKey = buildKey(key ?: property.name)
+    object : PreferenceItem<T>(data.map { it[pKey] ?: defaultValue }) {
         override suspend fun update(value: T?) {
             edit { pref ->
                 if (value == null) {
-                    pref -= key
+                    pref -= pKey
                 } else {
-                    pref[key] = value
+                    pref[pKey] = value
                 }
             }
         }
@@ -41,7 +42,7 @@ object Pref : KoinComponent {
         context.dataStore
     }
 
-    val darkMode: PreferenceItem<String> by dataStore(::stringPreferencesKey, "")
+    val darkMode: PreferenceItem<String> by dataStore(::stringPreferencesKey, "", "dark_mode")
 
 //    fun getString(key: String, default: String = ""): Flow<String> {
 //        return dataStore.data.map { it[stringPreferencesKey(key)] ?: default }
