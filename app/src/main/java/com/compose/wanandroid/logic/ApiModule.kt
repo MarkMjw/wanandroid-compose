@@ -2,9 +2,11 @@ package com.compose.wanandroid.logic
 
 import com.compose.wanandroid.BuildConfig
 import com.compose.wanandroid.data.remote.Api
+import com.compose.wanandroid.logic.interceptor.CacheCookieInterceptor
+import com.compose.wanandroid.logic.interceptor.LogInterceptor
+import com.compose.wanandroid.logic.interceptor.SetCookieInterceptor
 import com.compose.wanandroid.logic.ssl.SSLContextFactory
 import com.compose.wanandroid.logic.ssl.SimpleX509TrustManager
-import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.*
@@ -38,8 +40,10 @@ private fun createOkHttpClient(): OkHttpClient {
         readTimeout(20, TimeUnit.SECONDS)
         writeTimeout(20, TimeUnit.SECONDS)
         retryOnConnectionFailure(false)
+        addInterceptor(SetCookieInterceptor())
+        addInterceptor(CacheCookieInterceptor())
         addNetworkInterceptor(LogInterceptor().apply {
-            level = if (BuildConfig.DEBUG) LogInterceptor.Level.BASIC else LogInterceptor.Level.NONE
+            level = if (BuildConfig.DEBUG) LogInterceptor.Level.BODY else LogInterceptor.Level.NONE
         })
 
         try {

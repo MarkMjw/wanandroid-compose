@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import com.compose.wanandroid.logic.Pref
+import com.compose.wanandroid.logic.darkMode
 import com.compose.wanandroid.ui.page.main.MainPage
 import com.compose.wanandroid.ui.theme.AppSurface
 import com.compose.wanandroid.ui.theme.AppTheme
@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             // 读取主题配置
-            ThemeState.read(Pref.darkMode.collectAsState("").value)
+            ThemeState.read(darkMode.collectAsState("").value)
             AppTheme {
                 val systemUiController = rememberSystemUiController()
 //                systemUiController.setSystemBarsColor(color = AppTheme.colors.primary)

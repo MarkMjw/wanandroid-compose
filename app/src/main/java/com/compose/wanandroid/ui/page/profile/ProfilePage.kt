@@ -41,6 +41,10 @@ fun ProfilePage(
     padding: PaddingValues = PaddingValues(),
     viewModel: ProfileViewModel = viewModel()
 ) {
+    val viewState = viewModel.viewState
+    val userInfo = viewState.userInfo
+    val coinInfo = viewState.coinInfo
+
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,53 +55,61 @@ fun ProfilePage(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(260.dp)
-                .background(AppTheme.colors.secondary)
+                .height(250.dp)
+                .background(AppTheme.colors.primary)
         ) {
             AsyncImage(
                 modifier = Modifier
-                    .padding(top = 80.dp)
+                    .padding(top = 70.dp)
                     .size(80.dp)
                     .align(Alignment.CenterHorizontally)
-                    .clip(CircleShape),
-                model = "",
+                    .clip(CircleShape)
+                    .clickable {
+                        navController.navigate(Screen.Login.route)
+                    },
+                model = userInfo?.icon,
                 contentDescription = null,
                 error = ColorPainter(Color(0x22000000)),
                 placeholder = ColorPainter(Color(0x22000000))
             )
 
             Text(
-                text = "未登录",
+                text = userInfo?.nickname ?: "未登录",
                 modifier = Modifier
                     .padding(top = 10.dp)
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.CenterHorizontally)
+                    .clickable {
+                        navController.navigate(Screen.Login.route)
+                    },
                 fontSize = 22.sp,
                 color = Color.White
             )
 
-            Row(
-                modifier = Modifier
-                    .padding(top = 5.dp)
-                    .wrapContentSize(Alignment.Center)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = "等级:52",
-                    fontSize = 12.sp,
-                    color = Color(0xaaffffff)
-                )
+            if (coinInfo != null) {
+                Row(
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                        .wrapContentSize(Alignment.Center)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(
+                        text = "等级:${coinInfo.level}",
+                        fontSize = 12.sp,
+                        color = Color(0xaaffffff)
+                    )
 
-                Spacer(modifier = Modifier.width(15.dp))
+                    Spacer(modifier = Modifier.width(15.dp))
 
-                Text(
-                    text = "排名:15",
-                    fontSize = 12.sp,
-                    color = Color(0xaaffffff)
-                )
+                    Text(
+                        text = "排名:${coinInfo.rank}",
+                        fontSize = 12.sp,
+                        color = Color(0xaaffffff)
+                    )
+                }
             }
         }
 
-        ProfileItem(icon = R.drawable.ic_coin, text = "我的积分", subText = "520") { }
+        ProfileItem(icon = R.drawable.ic_coin, text = "我的积分", subText = "${coinInfo?.coinCount ?: ""}") { }
         ProfileItem(icon = R.drawable.ic_share_article, text = "我的分享") { }
         ProfileItem(icon = R.drawable.ic_collect, text = "我的收藏") { }
         ProfileItem(icon = R.drawable.ic_read_later, text = "我的书签") { }

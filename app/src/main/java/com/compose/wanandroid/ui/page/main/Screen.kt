@@ -13,7 +13,7 @@ sealed class Screen(
     object Category : Screen("category", "分类", R.drawable.ic_bottom_bar_navi)
     object Profile : Screen("profile", "我的", R.drawable.ic_bottom_bar_mine)
     object Web : Screen("web")
-    object Login : Screen("login", "登录")
+    object Login : Screen("login")
     object Search : Screen("search", "搜索")
     object Collect : Screen("collect", "收藏")
     object Setting : Screen("setting", "设置")

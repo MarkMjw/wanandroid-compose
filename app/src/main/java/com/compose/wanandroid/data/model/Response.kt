@@ -4,7 +4,10 @@ data class Response<T>(
     var data: T?,
     var errorCode: Int,
     var errorMsg: String
-)
+) {
+    val isSuccess: Boolean
+        get() = errorCode == 0
+}
 
 data class ListWrapper<T>(
     var curPage: Int,

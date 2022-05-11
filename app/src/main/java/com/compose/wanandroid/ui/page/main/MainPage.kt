@@ -28,6 +28,7 @@ import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.question.QuestionPage
 import com.compose.wanandroid.ui.page.category.CategoryPage
 import com.compose.wanandroid.ui.page.detail.WebPage
+import com.compose.wanandroid.ui.page.login.LoginPage
 import com.compose.wanandroid.ui.page.profile.SettingPage
 import com.compose.wanandroid.ui.page.struct.CategoryListPage
 import com.compose.wanandroid.ui.theme.*
@@ -45,6 +46,7 @@ fun MainPage() {
     val controller = rememberNavController()
     val stackEntry by controller.currentBackStackEntryAsState()
     val currentRoute = stackEntry?.destination?.route
+    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
         bottomBar = {
@@ -56,13 +58,27 @@ fun MainPage() {
             }
         },
         content = { padding ->
-            NavigationHost(controller, padding)
+            NavigationHost(controller, padding, scaffoldState)
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = scaffoldState.snackbarHostState) { msg ->
+                Snackbar(
+                    snackbarData = msg,
+                    backgroundColor = AppTheme.colors.secondaryBackground,
+                    actionColor = AppTheme.colors.onBackground,
+                    contentColor = AppTheme.colors.textPrimary,
+                )
+            }
         }
     )
 }
 
 @Composable
-private fun NavigationHost(controller: NavHostController, padding: PaddingValues) {
+private fun NavigationHost(
+    controller: NavHostController,
+    padding: PaddingValues,
+    scaffoldState: ScaffoldState
+) {
     NavHost(
         navController = controller,
         startDestination = Screen.Home.route,
@@ -86,6 +102,10 @@ private fun NavigationHost(controller: NavHostController, padding: PaddingValues
 
         composable(route = Screen.Setting.route) {
             SettingPage(controller)
+        }
+
+        composable(route = Screen.Login.route) {
+            LoginPage(controller, scaffoldState)
         }
 
         composable(

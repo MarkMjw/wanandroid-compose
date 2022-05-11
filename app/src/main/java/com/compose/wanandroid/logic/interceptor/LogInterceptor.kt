@@ -1,7 +1,8 @@
-package com.compose.wanandroid.logic
+package com.compose.wanandroid.logic.interceptor
 
 import android.net.Uri
 import android.util.Log
+import com.compose.wanandroid.logic.Logger
 import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.Response

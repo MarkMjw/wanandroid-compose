@@ -4,47 +4,85 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.compose.wanandroid.data.model.CoinInfo
+import com.compose.wanandroid.data.model.UserInfo
+import com.compose.wanandroid.data.remote.ApiService
+import com.compose.wanandroid.logic.Logger
+import com.compose.wanandroid.logic.UserStore
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 
 class ProfileViewModel : ViewModel() {
-    var viewStates by mutableStateOf(TestViewState())
+    var viewState by mutableStateOf(ProfileViewState())
         private set
 
-    private val _viewEvents = Channel<TestViewEvent>(Channel.BUFFERED)
+    private val _viewEvents = Channel<ProfileViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
 
-    fun dispatch(action: TestViewAction) {
+    init {
+        UserStore.isLogin.onEach {
+            viewState = viewState.copy(isLogin = it)
+            if (it) {
+                fetchUserInfo()
+            }
+        }.launchIn(viewModelScope)
+
+        UserStore.userInfo.onEach {
+            viewState = viewState.copy(userInfo = it)
+        }.launchIn(viewModelScope)
+    }
+
+    private fun fetchUserInfo() {
+        flow {
+            emit(ApiService.api.userInfo())
+        }.map {
+            if (it.isSuccess) {
+                it.data ?: throw Exception("the result of remote's request is null")
+            } else {
+                throw Exception(it.errorMsg)
+            }
+        }.onEach { res ->
+            viewState = viewState.copy(userInfo = res.userInfo, coinInfo = res.coinInfo)
+            if (res.userInfo != null) {
+                UserStore.update(res.userInfo!!)
+            }
+        }.catch {
+            Logger.w(it.message ?: "")
+        }.launchIn(viewModelScope)
+    }
+
+    fun dispatch(action: ProfileViewAction) {
         when (action) {
-            is TestViewAction.ClickBtn1 -> clickBtn1()
-            is TestViewAction.ClickBtn2 -> clickBtn2()
-            is TestViewAction.ClickBtn3 -> clickBtn3()
+            is ProfileViewAction.ClickBtn1 -> clickBtn1()
+            is ProfileViewAction.ClickBtn2 -> clickBtn2()
+            is ProfileViewAction.ClickBtn3 -> clickBtn3()
         }
     }
 
     private fun clickBtn1() {
-        viewStates = viewStates.copy(state1 = "edit")
+
     }
 
     private fun clickBtn2() {
-        viewStates = viewStates.copy(state2 = !viewStates.state2)
+
     }
 
     private fun clickBtn3() {
-        viewStates = viewStates.copy(state3 = viewStates.state3 + 1)
+
     }
 }
 
-data class TestViewState(
-    val state1: String = "state1",
-    val state2: Boolean = false,
-    val state3: Int = 0
+data class ProfileViewState(
+    val isLogin: Boolean = false,
+    val userInfo: UserInfo? = null,
+    val coinInfo: CoinInfo? = null
 )
 
-sealed class TestViewEvent
+sealed class ProfileViewEvent
 
-sealed class TestViewAction {
-    object ClickBtn1 : TestViewAction()
-    object ClickBtn2 : TestViewAction()
-    object ClickBtn3 : TestViewAction()
+sealed class ProfileViewAction {
+    object ClickBtn1 : ProfileViewAction()
+    object ClickBtn2 : ProfileViewAction()
+    object ClickBtn3 : ProfileViewAction()
 }

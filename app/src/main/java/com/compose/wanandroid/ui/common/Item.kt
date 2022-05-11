@@ -84,7 +84,7 @@ fun ArticleItem(
                 if (data.fresh) {
                     Text(
                         text = "新",
-                        color = AppTheme.colors.secondary,
+                        color = AppTheme.colors.primary,
                         fontSize = 12.sp,
                         modifier = Modifier
                             .wrapContentSize()
@@ -109,11 +109,11 @@ fun ArticleItem(
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = tags[0].name,
-                        color = AppTheme.colors.secondary,
+                        color = AppTheme.colors.primary,
                         fontSize = 11.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
-                            .border(BorderStroke(1.dp, AppTheme.colors.secondary), RoundedCornerShape(4.dp))
+                            .border(BorderStroke(1.dp, AppTheme.colors.primary), RoundedCornerShape(4.dp))
                             .padding(start = 3.dp, end = 3.dp)
                             .wrapContentSize()
                     )

@@ -4,35 +4,43 @@ import com.compose.wanandroid.data.model.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface Api {
     companion object {
-        const val HOST = "https://www.wanandroid.com"
+        const val HOST = "https://www.wanandroid.com/"
     }
 
-    @GET("/banner/json")
+    @GET("banner/json")
     suspend fun banners(): Response<MutableList<Banner>>
 
-    @GET("/article/top/json")
+    @GET("article/top/json")
     suspend fun topArticles(): Response<MutableList<Article>>
 
-    @GET("/article/list/{page}/json")
+    @GET("article/list/{page}/json")
     suspend fun articles(@Path("page") page: Int): ListResponse<Article>
 
-    @GET("/wenda/list/{page}/json")
+    @GET("wenda/list/{page}/json")
     suspend fun wendaList(@Path("page") page: Int): ListResponse<Article>
 
-    @GET("/tree/json")
+    @GET("tree/json")
     suspend fun structList(): Response<MutableList<Struct>>
 
-    @GET("/navi/json")
+    @GET("navi/json")
     suspend fun navigationList(): Response<MutableList<Navigate>>
 
-    @GET("/article/list/{page}/json")
+    @GET("article/list/{page}/json")
     suspend fun structArticles(@Path("page") page: Int, @Query("cid") cid: Int): ListResponse<Article>
+
+    @POST("user/login")
+    @FormUrlEncoded
+    suspend fun login(@Field("username") username: String, @Field("password") password: String): Response<UserInfo>
+
+    @GET("user/logout/json")
+    suspend fun logout(): Response<String>
+
+    @GET("user/lg/userinfo/json")
+    suspend fun userInfo(): Response<UserResponse>
 }
 
 object ApiService : KoinComponent {

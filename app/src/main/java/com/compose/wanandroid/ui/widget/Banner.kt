@@ -118,7 +118,7 @@ fun Banner(
 
                 HorizontalPagerIndicator(
                     pagerState = pagerState,
-                    activeColor = AppTheme.colors.secondary,
+                    activeColor = AppTheme.colors.primary,
                     inactiveColor = AppTheme.colors.textThird,
                     indicatorWidth = 7.dp,
                     modifier = Modifier
@@ -145,7 +145,7 @@ fun Banner(
 
                 HorizontalPagerIndicator(
                     pagerState = pagerState,
-                    activeColor = AppTheme.colors.secondary,
+                    activeColor = AppTheme.colors.primary,
                     inactiveColor = AppTheme.colors.textThird,
                     indicatorWidth = 7.dp,
                     modifier = Modifier

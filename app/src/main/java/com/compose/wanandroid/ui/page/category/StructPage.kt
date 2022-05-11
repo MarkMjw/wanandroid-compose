@@ -11,9 +11,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,7 +42,6 @@ fun StructPage(
             viewModel.dispatch(StructViewAction.FetchData)
         }
     ) {
-        val context = LocalContext.current
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -87,26 +86,29 @@ fun StructItem(
                 .padding(top = 16.dp, bottom = 8.dp, start = 8.dp, end = 16.dp)
         ) {
             struct.children.forEachIndexed { index, item ->
-                Text(
-                    text = item.name,
-                    modifier = modifier
-                        .padding(start = 8.dp, bottom = 8.dp)
-                        .height(25.dp)
-                        .background(color = AppTheme.colors.secondaryBackground, shape = RoundedCornerShape(25.dp / 2))
-                        .clip(shape = RoundedCornerShape(25.dp / 2))
-                        .clickable {
-                            onSelect(struct, index)
-                        }
-                        .padding(
-                            horizontal = 10.dp,
-                            vertical = 3.dp
-                        ),
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center,
-                    color = AppTheme.colors.textSecondary,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                )
+                Box(modifier = modifier
+                    .padding(start = 8.dp, bottom = 8.dp)
+                    .height(25.dp)
+                    .background(color = AppTheme.colors.secondaryBackground, shape = RoundedCornerShape(25.dp / 2))
+                    .clip(shape = RoundedCornerShape(25.dp / 2))
+                    .clickable {
+                        onSelect(struct, index)
+                    }
+                    .padding(
+                        horizontal = 10.dp,
+                        vertical = 3.dp
+                    ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = item.name,
+                        fontSize = 13.sp,
+                        textAlign = TextAlign.Center,
+                        color = AppTheme.colors.textSecondary,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                    )
+                }
             }
         }
     }
