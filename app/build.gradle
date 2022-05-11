@@ -46,6 +46,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'com.compose.wanandroid'
 }
 
 dependencies {
@@ -75,8 +76,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
     implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
 
-    implementation "io.coil-kt:coil-compose:2.0.0-rc03"
-    implementation "io.insert-koin:koin-android:3.1.6"
+    implementation "io.coil-kt:coil-compose:2.0.0"
+    implementation "io.insert-koin:koin-android:3.2.0"
     implementation "com.google.code.gson:gson:2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
