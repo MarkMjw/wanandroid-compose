@@ -40,6 +40,7 @@ import com.compose.wanandroid.logic.noRippleClickable
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
 import com.compose.wanandroid.ui.widget.AppBarHeight
+import com.compose.wanandroid.ui.widget.ProgressDialog
 import kotlinx.coroutines.launch
 
 @Preview
@@ -60,16 +61,33 @@ fun LoginPage(
     val keyboardController = LocalSoftwareKeyboardController.current
     val viewState = viewModel.viewState
     val scope = rememberCoroutineScope()
+    var showDialog by remember { mutableStateOf(false) }
+    var progress by remember { mutableStateOf("加载中...") }
 
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect {
-            if (it is LoginViewEvent.Back) {
-                navController.popBackStack()
-            } else if (it is LoginViewEvent.ErrorTip) {
-                scope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(it.message)
+            when (it) {
+                is LoginViewEvent.Back -> {
+                    showDialog = false
+                    navController.popBackStack()
+                }
+                is LoginViewEvent.ErrorTip -> {
+                    showDialog = false
+                    scope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(it.message)
+                    }
+                }
+                is LoginViewEvent.Progress -> {
+                    progress = it.message
+                    showDialog = it.show
                 }
             }
+        }
+    }
+
+    if (showDialog) {
+        ProgressDialog(progress) {
+            showDialog = false
         }
     }
 

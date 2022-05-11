@@ -28,6 +28,7 @@ import com.compose.wanandroid.logic.darkMode
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.*
 import com.compose.wanandroid.ui.widget.CenterAppBar
+import com.compose.wanandroid.ui.widget.ProgressDialog
 import kotlinx.coroutines.launch
 
 @Preview
@@ -46,14 +47,26 @@ fun SettingPage(
 ) {
     val scope = rememberCoroutineScope()
     val viewState = viewModel.viewState
+    var showDialog by remember { mutableStateOf(false) }
+    var progress by remember { mutableStateOf("加载中...") }
 
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect {
             if (it is SettingViewEvent.ErrorTip) {
+                showDialog = false
                 scope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(it.message)
                 }
+            } else if (it is SettingViewEvent.Progress) {
+                progress = it.message
+                showDialog = it.show
             }
+        }
+    }
+
+    if (showDialog) {
+        ProgressDialog(progress) {
+            showDialog = false
         }
     }
 

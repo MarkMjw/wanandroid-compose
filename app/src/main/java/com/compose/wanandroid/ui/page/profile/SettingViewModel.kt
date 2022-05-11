@@ -37,8 +37,10 @@ class SettingViewModel : ViewModel() {
     private fun logout() {
         viewModelScope.launch {
             try {
+                _viewEvents.send(SettingViewEvent.Progress(true, "退出中..."))
                 val res = ApiService.api.logout()
                 if (res.isSuccess) {
+                    _viewEvents.send(SettingViewEvent.Progress(false))
                     viewState = viewState.copy(isLogin = false)
                     UserStore.logout()
                 } else {
@@ -70,5 +72,6 @@ sealed class SettingViewAction {
 }
 
 sealed class SettingViewEvent {
+    data class Progress(val show: Boolean, val message: String = "") : SettingViewEvent()
     data class ErrorTip(val message: String) : SettingViewEvent()
 }

@@ -30,8 +30,10 @@ class LoginViewModel : ViewModel() {
     private fun login(isRegister: Boolean) {
         viewModelScope.launch {
             try {
+                _viewEvents.send(LoginViewEvent.Progress(true, "登录中..."))
                 val res = ApiService.api.login(viewState.account.trim(), viewState.password.trim())
                 if (res.isSuccess) {
+                    _viewEvents.send(LoginViewEvent.Progress(false))
                     UserStore.login(res.data ?: throw Exception("login failed, please retry later."))
                     _viewEvents.send(LoginViewEvent.Back)
                 } else {
@@ -59,4 +61,5 @@ sealed class LoginViewAction {
 sealed class LoginViewEvent {
     object Back : LoginViewEvent()
     data class ErrorTip(val message: String) : LoginViewEvent()
+    data class Progress(val show: Boolean, val message: String = "") : LoginViewEvent()
 }
