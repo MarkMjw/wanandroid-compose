@@ -9,6 +9,7 @@ import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.logic.UserStore
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
 
@@ -27,20 +28,19 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun login(isRegister: Boolean) {
-        flow {
-            emit(ApiService.api.login(viewState.account.trim(), viewState.password.trim()))
-        }.map {
-            if (it.isSuccess) {
-                it.data ?: throw Exception("the result of remote's request is null")
-            } else {
-                throw Exception(it.errorMsg)
+        viewModelScope.launch {
+            try {
+                val res = ApiService.api.login(viewState.account.trim(), viewState.password.trim())
+                if (res.isSuccess) {
+                    UserStore.login(res.data ?: throw Exception("login failed, please retry later."))
+                    _viewEvents.send(LoginViewEvent.Back)
+                } else {
+                    throw Exception(res.errorMsg)
+                }
+            } catch (e: Throwable) {
+                _viewEvents.send(LoginViewEvent.ErrorTip(e.message ?: "login failed, please retry later."))
             }
-        }.onEach {
-            UserStore.login(it)
-            _viewEvents.send(LoginViewEvent.Back)
-        }.catch {
-            _viewEvents.send(LoginViewEvent.ErrorTip(it.message ?: "login failed, please retry later."))
-        }.launchIn(viewModelScope)
+        }
     }
 }
 

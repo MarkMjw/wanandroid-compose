@@ -6,11 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.wanandroid.data.remote.ApiService
-import com.compose.wanandroid.data.remote.HttpResult
-import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.UserStore
 import com.compose.wanandroid.logic.darkMode
-import com.compose.wanandroid.ui.page.login.LoginViewEvent
 import com.compose.wanandroid.ui.theme.Theme
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -38,20 +35,19 @@ class SettingViewModel : ViewModel() {
     }
 
     private fun logout() {
-        flow {
-            emit(ApiService.api.logout())
-        }.map {
-            if (it.isSuccess) {
-                it.data ?: throw Exception("the result of remote's request is null")
-            } else {
-                throw Exception(it.errorMsg)
+        viewModelScope.launch {
+            try {
+                val res = ApiService.api.logout()
+                if (res.isSuccess) {
+                    viewState = viewState.copy(isLogin = false)
+                    UserStore.logout()
+                } else {
+                    throw Exception(res.errorMsg)
+                }
+            } catch (e: Throwable) {
+                _viewEvents.send(SettingViewEvent.ErrorTip(e.message ?: "logout failed, please retry later."))
             }
-        }.onEach {
-            viewState = viewState.copy(isLogin = false)
-            UserStore.logout()
-        }.catch {
-            _viewEvents.send(SettingViewEvent.ErrorTip(it.message ?: "logout failed, please retry later."))
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun setDark(mode: String) {
