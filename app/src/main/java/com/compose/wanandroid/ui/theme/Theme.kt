@@ -48,7 +48,7 @@ val LightColors = AppColors(
     textSecondary = Color(0xff666666),
     background = Color.White,
     secondaryBackground = Color(0xfff5f5f5),
-    highlight = Color(0xff67db9d),
+    highlight = Color(0xff3cdc86),
     error = Color(0xffb00020),
     onPrimary = Color.White,
     onBackground = Color(0xff333333),
@@ -62,7 +62,7 @@ val DarkColors = AppColors(
     textSecondary = Color(0x88ffffff),
     background = Color(0xff121212),
     secondaryBackground = Color(0xff222226),
-    highlight = Color(0xff67db9d),
+    highlight = Color(0xff3cdc86),
     error = Color(0xffcf6679),
     onPrimary = Color.White,
     onBackground = Color(0xffcfcfd1),
@@ -95,7 +95,7 @@ val AppColors.switchTrackUnchecked: Color
 
 
 object ThemeState {
-    var theme: MutableState<Theme> = mutableStateOf(Theme.FollowSystem)
+    var theme: MutableState<Theme?> = mutableStateOf(null)
 
     fun read(name: String) {
         theme.value = when (name) {
@@ -116,7 +116,7 @@ sealed class Theme(val name: String) {
 fun AppTheme(
     typography: AppTypography = AppTheme.typography,
     shapes: Shapes = AppTheme.shapes,
-    theme: Theme = ThemeState.theme.value,
+    theme: Theme = ThemeState.theme.value ?: Theme.Dark,
     content: @Composable () -> Unit
 ) {
     val colors = when (theme) {

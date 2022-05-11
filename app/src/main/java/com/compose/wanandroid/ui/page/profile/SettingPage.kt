@@ -1,28 +1,30 @@
 package com.compose.wanandroid.ui.page.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.wanandroid.R
 import com.compose.wanandroid.logic.Logger
-import com.compose.wanandroid.logic.Pref
 import com.compose.wanandroid.logic.back
+import com.compose.wanandroid.logic.darkMode
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.*
 import com.compose.wanandroid.ui.widget.CenterAppBar
@@ -37,15 +39,30 @@ fun SettingPagePreview() {
 }
 
 @Composable
-fun SettingPage(navController: NavController) {
+fun SettingPage(
+    navController: NavController,
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    viewModel: SettingViewModel = viewModel()
+) {
     val scope = rememberCoroutineScope()
-    val darkModes: List<Theme> = listOf(Theme.FollowSystem, Theme.Light, Theme.Dark)
+    val viewState = viewModel.viewState
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEvents.collect {
+            if (it is SettingViewEvent.ErrorTip) {
+                scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(it.message)
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         CenterAppBar(
             modifier = Modifier.fillMaxWidth(),
-            leftActions = {
+            leadingActions = {
                 IconButton(onClick = {
                     navController.back()
                 }) {
@@ -68,16 +85,41 @@ fun SettingPage(navController: NavController) {
             backgroundColor = AppTheme.colors.primary
         )
 
-        RadioGroup(darkModes, darkModes.indexOf(ThemeState.theme.value), title = "暗黑模式") {
+        RadioGroup(viewState.darkModes, viewState.darkModes.indexOf(ThemeState.theme.value), title = "暗黑模式") {
             ThemeState.theme.value = it
             scope.launch {
-                Pref.darkMode.update(it.name)
+                darkMode.update(it.name)
             }
         }
         SwitchItem(text = "书签提醒", subText = "打开应用时以通知方式提醒最新添加书签") {
             Logger.w("mjw", "switch:$it")
         }
         SettingItem(text = "关于我们")
+
+        if (viewState.isLogin) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 80.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .width(200.dp)
+                    .height(40.dp)
+                    .background(AppTheme.colors.primary, RoundedCornerShape(20.dp))
+                    .clip(shape = RoundedCornerShape(20.dp))
+                    .clickable {
+                        viewModel.dispatch(SettingViewAction.Logout)
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "退出登录",
+                    color = AppTheme.colors.onPrimary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wrapContentSize(),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
 }
 
@@ -186,7 +228,7 @@ fun SwitchItem(
             colors = SwitchDefaults.colors(
                 checkedThumbColor = AppTheme.colors.primary,
                 uncheckedThumbColor = AppTheme.colors.switchThumbUnchecked,
-                checkedTrackColor = AppTheme.colors.secondary.copy(alpha = 0.35f),
+                checkedTrackColor = AppTheme.colors.primary.copy(alpha = 0.35f),
                 uncheckedTrackColor = AppTheme.colors.switchTrackUnchecked,
             ),
             onCheckedChange = {

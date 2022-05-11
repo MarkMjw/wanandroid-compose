@@ -42,7 +42,7 @@ fun CategoryListPage(
 
         CenterAppBar(
             modifier = Modifier.fillMaxWidth(),
-            leftActions = {
+            leadingActions = {
                 IconButton(onClick = {
                     navController.back()
                 }) {

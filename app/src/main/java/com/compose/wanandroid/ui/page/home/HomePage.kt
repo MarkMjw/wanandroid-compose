@@ -51,7 +51,7 @@ fun HomePage(
                 modifier = Modifier.fillMaxWidth(),
                 backgroundColor = AppTheme.colors.primary,
                 contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.primary),
-                leftActions = {
+                leadingActions = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_scan),
                         modifier = Modifier
@@ -72,7 +72,7 @@ fun HomePage(
                         color = AppTheme.colors.onPrimary
                     )
                 },
-                rightActions = {
+                trailingActions = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_search),
                         modifier = Modifier

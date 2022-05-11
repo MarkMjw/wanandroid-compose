@@ -36,8 +36,8 @@ fun CenterAppBar(
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
     contentPadding: PaddingValues = ContentPadding,
     navController: NavController? = null,
-    leftActions: @Composable (RowScope.() -> Unit)? = null,
-    rightActions: @Composable (RowScope.() -> Unit) = { },
+    leadingActions: @Composable (RowScope.() -> Unit)? = null,
+    trailingActions: @Composable (RowScope.() -> Unit) = { },
     title: @Composable () -> Unit,
 ) {
     Surface(
@@ -83,7 +83,7 @@ fun CenterAppBar(
                             },
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically,
-                        content = leftActions ?: {
+                        content = leadingActions ?: {
                             val previous = navController?.previousBackStackEntry
                             if (previous != null) {
                                 IconButton(onClick = { navController.popBackStack() }) {
@@ -127,7 +127,7 @@ fun CenterAppBar(
                             },
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically,
-                        content = rightActions
+                        content = trailingActions
                     )
                 }
             }

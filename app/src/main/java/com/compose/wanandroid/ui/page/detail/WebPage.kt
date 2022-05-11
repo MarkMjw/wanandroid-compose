@@ -36,7 +36,7 @@ fun WebPage(
     ) {
         CenterAppBar(
             modifier = Modifier.fillMaxWidth(),
-            leftActions = {
+            leadingActions = {
                 IconButton(onClick = {
                     if (navigator.canGoBack) {
                         navigator.navigateBack()
