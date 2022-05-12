@@ -21,26 +21,44 @@ class LoginViewModel : ViewModel() {
 
     fun dispatch(action: LoginViewAction) {
         when (action) {
-            is LoginViewAction.Login -> login(action.isRegister)
+            is LoginViewAction.Login -> if (action.isRegister) register() else login()
             is LoginViewAction.UpdateAccount -> viewState = viewState.copy(account = action.account)
             is LoginViewAction.UpdatePassword -> viewState = viewState.copy(password = action.password)
         }
     }
 
-    private fun login(isRegister: Boolean) {
+    private fun login() {
         viewModelScope.launch {
             try {
                 _viewEvents.send(LoginViewEvent.Progress(true, "登录中..."))
                 val res = ApiService.api.login(viewState.account.trim(), viewState.password.trim())
                 if (res.isSuccess) {
                     _viewEvents.send(LoginViewEvent.Progress(false))
-                    UserStore.login(res.data ?: throw Exception("login failed, please retry later."))
+                    UserStore.login(res.data ?: throw Exception("登录失败，请稍后重试~"))
                     _viewEvents.send(LoginViewEvent.Back)
                 } else {
                     throw Exception(res.errorMsg)
                 }
             } catch (e: Throwable) {
-                _viewEvents.send(LoginViewEvent.ErrorTip(e.message ?: "login failed, please retry later."))
+                _viewEvents.send(LoginViewEvent.ErrorTip(e.message ?: "登录失败，请稍后重试~"))
+            }
+        }
+    }
+
+    private fun register() {
+        viewModelScope.launch {
+            try {
+                _viewEvents.send(LoginViewEvent.Progress(true, "注册中..."))
+                val res = ApiService.api.register(viewState.account.trim(), viewState.password.trim(), viewState.password.trim())
+                if (res.isSuccess) {
+                    _viewEvents.send(LoginViewEvent.Progress(false))
+                    UserStore.login(res.data ?: throw Exception("注册失败，请稍后重试~"))
+                    _viewEvents.send(LoginViewEvent.Back)
+                } else {
+                    throw Exception(res.errorMsg)
+                }
+            } catch (e: Throwable) {
+                _viewEvents.send(LoginViewEvent.ErrorTip(e.message ?: "注册失败，请稍后重试~"))
             }
         }
     }
@@ -49,7 +67,6 @@ class LoginViewModel : ViewModel() {
 data class LoginViewState(
     var account: String = "",
     var password: String = "",
-    var passwordAgain: String = ""
 )
 
 sealed class LoginViewAction {

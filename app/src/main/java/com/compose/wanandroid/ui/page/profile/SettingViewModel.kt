@@ -47,7 +47,7 @@ class SettingViewModel : ViewModel() {
                     throw Exception(res.errorMsg)
                 }
             } catch (e: Throwable) {
-                _viewEvents.send(SettingViewEvent.ErrorTip(e.message ?: "logout failed, please retry later."))
+                _viewEvents.send(SettingViewEvent.ErrorTip(e.message ?: "退出登录失败，请稍后重试~"))
             }
         }
     }

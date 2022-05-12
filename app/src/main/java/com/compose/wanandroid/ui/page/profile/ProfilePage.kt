@@ -65,11 +65,9 @@ fun ProfilePage(
                     .align(Alignment.CenterHorizontally)
                     .background(Color(0x22000000), CircleShape)
                     .clip(CircleShape)
-                    .also {
+                    .clickable {
                         if (!viewState.isLogin) {
-                            it.clickable {
-                                navController.navigate(Screen.Login.route)
-                            }
+                            navController.navigate(Screen.Login.route)
                         }
                     },
                 model = userInfo?.avatar,
@@ -82,11 +80,9 @@ fun ProfilePage(
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally)
-                    .also {
+                    .clickable {
                         if (!viewState.isLogin) {
-                            it.clickable {
-                                navController.navigate(Screen.Login.route)
-                            }
+                            navController.navigate(Screen.Login.route)
                         }
                     },
                 fontSize = 22.sp,

@@ -163,21 +163,48 @@ fun LoginPage(
             viewModel.dispatch(LoginViewAction.UpdatePassword(password))
         }
 
+        Spacer(modifier = Modifier.height(10.dp))
+        var checkedState by remember { mutableStateOf(false) }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 60.dp, end = 60.dp)
+                .wrapContentHeight()
+        ) {
+            Checkbox(
+                checked = checkedState,
+                onCheckedChange = {
+                    checkedState = !checkedState
+                },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = AppTheme.colors.primary,
+                    uncheckedColor = AppTheme.colors.textThird,
+                    checkmarkColor = AppTheme.colors.onPrimary,
+                )
+            )
+            Text(
+                text = "没有账号，注册一个？",
+                fontSize = 12.sp,
+                color = AppTheme.colors.textThird,
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+        }
+
         Box(
             modifier = Modifier
-                .padding(top = 80.dp)
+                .padding(top = 50.dp)
                 .align(Alignment.CenterHorizontally)
                 .width(200.dp)
                 .height(40.dp)
                 .background(AppTheme.colors.primary, RoundedCornerShape(20.dp))
                 .clip(shape = RoundedCornerShape(20.dp))
                 .clickable {
-                    viewModel.dispatch(LoginViewAction.Login(false))
+                    viewModel.dispatch(LoginViewAction.Login(checkedState))
                 },
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "登录",
+                text = if (checkedState) "注册" else "登录",
                 color = AppTheme.colors.onPrimary,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,

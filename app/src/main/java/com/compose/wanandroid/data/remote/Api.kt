@@ -37,6 +37,14 @@ interface Api {
     @FormUrlEncoded
     suspend fun login(@Field("username") username: String, @Field("password") password: String): Response<UserInfo>
 
+    @FormUrlEncoded
+    @POST("user/register")
+    suspend fun register(
+        @Field("username") username: String,
+        @Field("password") password: String,
+        @Field("repassword") repassword: String
+    ): Response<UserInfo>
+
     @GET("user/logout/json")
     suspend fun logout(): Response<String>
 

@@ -40,7 +40,7 @@ class ProfileViewModel : ViewModel() {
     private fun fetchUserInfo() {
         ApiService.api.userInfo().map {
             if (it.isSuccess) {
-                it.data ?: throw Exception("the result of remote's request is null")
+                it.data ?: throw Exception("接口返回数据为空")
             } else {
                 throw Exception(it.errorMsg)
             }
