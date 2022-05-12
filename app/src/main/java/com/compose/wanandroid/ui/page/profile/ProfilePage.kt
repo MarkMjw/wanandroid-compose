@@ -115,7 +115,13 @@ fun ProfilePage(
 
         ProfileItem(icon = R.drawable.ic_coin, text = "我的积分", subText = "${coinInfo?.coinCount ?: ""}") { }
         ProfileItem(icon = R.drawable.ic_share_article, text = "我的分享") { }
-        ProfileItem(icon = R.drawable.ic_collect, text = "我的收藏") { }
+        ProfileItem(icon = R.drawable.ic_collect, text = "我的收藏") {
+            if (viewState.isLogin) {
+                navController.navigate(Screen.Collect.route)
+            } else {
+                navController.navigate(Screen.Login.route)
+            }
+        }
         ProfileItem(icon = R.drawable.ic_read_later, text = "我的书签") { }
         ProfileItem(icon = R.drawable.ic_read_record, text = "阅读历史") { }
         ProfileItem(icon = R.drawable.ic_github, text = "开源项目") { }

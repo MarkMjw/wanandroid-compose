@@ -27,6 +27,7 @@ import com.compose.wanandroid.ui.page.home.HomePage
 import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.question.QuestionPage
 import com.compose.wanandroid.ui.page.category.CategoryPage
+import com.compose.wanandroid.ui.page.collect.CollectPage
 import com.compose.wanandroid.ui.page.detail.WebPage
 import com.compose.wanandroid.ui.page.login.LoginPage
 import com.compose.wanandroid.ui.page.profile.SettingPage
@@ -106,6 +107,10 @@ private fun NavigationHost(
 
         composable(route = Screen.Login.route) {
             LoginPage(controller, scaffoldState)
+        }
+
+        composable(route = Screen.Collect.route) {
+            CollectPage(controller)
         }
 
         composable(

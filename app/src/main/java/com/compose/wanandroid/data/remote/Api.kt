@@ -50,6 +50,58 @@ interface Api {
 
     @GET("user/lg/userinfo/json")
     fun userInfo(): Flow<Response<UserResponse>>
+
+    @GET("lg/collect/list/{page}/json")
+    suspend fun collectArticles(@Path("page") page: Int): ListResponse<Article>
+
+    @GET("lg/collect/usertools/json")
+    suspend fun collectLinks(): ListResponse<CollectLink>
+
+    @POST("lg/collect/{id}/json")
+    suspend fun collectArticle(@Path("id") id: Int): Response<Any>
+
+    @FormUrlEncoded
+    @POST("lg/collect/add/json")
+    suspend fun collectArticle(
+        @Field("title") title: String,
+        @Field("author") author: String,
+        @Field("link") link: String
+    ): Response<Article>
+
+    @FormUrlEncoded
+    @POST("lg/collect/addtool/json")
+    suspend fun collectLink(
+        @Field("name") name: String,
+        @Field("link") link: String
+    ): Response<CollectLink>
+
+    @POST("lg/uncollect_originId/{id}/json")
+    fun unCollectArticle(@Path("id") id: Int): Response<Any>
+
+    @FormUrlEncoded
+    @POST("lg/collect/deletetool/json")
+    fun unCollectLink(@Field("id") id: Int): Response<Any>
+
+    @FormUrlEncoded
+    @POST("lg/uncollect/{id}/json")
+    fun unCollectArticle(
+        @Path("id") id: Int,
+        @Field("originId") originId: Int
+    ): Response<Any>
+
+    /**
+     * 编辑收藏网站
+     * 方法：POST
+     * 参数：
+     * id,name,link
+     */
+    @FormUrlEncoded
+    @POST("lg/collect/updatetool/json")
+    fun updateCollectLink(
+        @Field("id") id: Int,
+        @Field("name") name: String?,
+        @Field("link") link: String?
+    ): Response<CollectLink>
 }
 
 object ApiService : KoinComponent {

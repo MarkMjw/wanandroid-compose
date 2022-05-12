@@ -17,7 +17,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.logic.back
-import com.compose.wanandroid.ui.page.category.pagerTabIndicatorOffset
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.widget.CenterAppBar
 import com.google.accompanist.pager.*
