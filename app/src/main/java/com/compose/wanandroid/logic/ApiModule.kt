@@ -41,11 +41,18 @@ private fun createOkHttpClient(): OkHttpClient {
         connectTimeout(10, TimeUnit.SECONDS)
         readTimeout(20, TimeUnit.SECONDS)
         writeTimeout(20, TimeUnit.SECONDS)
-        retryOnConnectionFailure(false)
+
+        addInterceptor { chain ->
+            // 统一添加header，解决：java.io.IOException: unexpected end of stream on Connection
+            val builder = chain.request().newBuilder()
+            builder.addHeader("Connection", "close")
+            chain.proceed(builder.build())
+        }
+
         addInterceptor(SetCookieInterceptor())
         addInterceptor(CacheCookieInterceptor())
         addNetworkInterceptor(LogInterceptor().apply {
-            level = if (BuildConfig.DEBUG) LogInterceptor.Level.BODY else LogInterceptor.Level.NONE
+            level = if (BuildConfig.DEBUG) LogInterceptor.Level.BASIC else LogInterceptor.Level.NONE
         })
 
         try {
