@@ -55,7 +55,7 @@ interface Api {
     suspend fun collectArticles(@Path("page") page: Int): ListResponse<Article>
 
     @GET("lg/collect/usertools/json")
-    suspend fun collectLinks(): ListResponse<CollectLink>
+    fun collectLinks(): Flow<Response<MutableList<CollectLink>>>
 
     @POST("lg/collect/{id}/json")
     suspend fun collectArticle(@Path("id") id: Int): Response<Any>

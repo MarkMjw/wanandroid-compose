@@ -6,32 +6,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.compose.wanandroid.data.model.Navigate
+import com.compose.wanandroid.data.model.CollectLink
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
-class NavigateViewModel : ViewModel() {
+class CollectLinkViewModel : ViewModel() {
 
-    var viewState by mutableStateOf(NavigateViewState())
+    var viewState by mutableStateOf(CollectLinkViewState())
         private set
 
     init {
-        dispatch(NavigateViewAction.FetchData)
+        dispatch(CollectLinkViewAction.FetchData)
     }
 
-    fun dispatch(action: NavigateViewAction) {
+    fun dispatch(action: CollectLinkViewAction) {
         when (action) {
-            is NavigateViewAction.FetchData -> fetchData()
+            is CollectLinkViewAction.FetchData -> fetchData()
         }
     }
 
     private fun fetchData() {
-        viewModelScope.launch {
-            flow {
-                emit(ApiService.api.navigationList())
-            }.map {
+        ApiService.api.collectLinks()
+            .map {
                 it.data ?: emptyList()
             }.onStart {
                 viewState = viewState.copy(pageState = PageState.Loading)
@@ -42,19 +39,18 @@ class NavigateViewModel : ViewModel() {
                 )
             }.catch {
                 viewState = viewState.copy(pageState = PageState.Error(it))
-            }.collect()
-        }
+            }.launchIn(viewModelScope)
     }
 }
 
-data class NavigateViewState(
-    val data: List<Navigate> = emptyList(),
+data class CollectLinkViewState(
+    val data: List<CollectLink> = emptyList(),
     val pageState: PageState = PageState.Loading,
     val listState: LazyListState = LazyListState()
 ) {
     val size = data.size
 }
 
-sealed class NavigateViewAction {
-    object FetchData : NavigateViewAction()
+sealed class CollectLinkViewAction {
+    object FetchData : CollectLinkViewAction()
 }
