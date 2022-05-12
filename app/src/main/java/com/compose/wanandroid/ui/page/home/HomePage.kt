@@ -6,8 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -15,7 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -26,11 +24,14 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
+import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.common.AppTitleBar
 import com.compose.wanandroid.ui.common.ArticleItem
+import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
-import com.compose.wanandroid.ui.theme.defaultContentColorFor
 import com.compose.wanandroid.ui.widget.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomePage(
@@ -44,13 +45,29 @@ fun HomePage(
     val tops = viewState.tops
     val isRefreshing = viewState.isRefreshing
     val listState = if (pagingItems.itemCount > 0) viewState.listState else LazyListState()
+    val scope = rememberCoroutineScope()
 
-    Scaffold(
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEvents.collect {
+            when (it) {
+                is HomeViewEvent.Error -> {
+                    scope.launch {
+                        scaffoldState.showSnackbar(message = it.message)
+                    }
+                }
+            }
+        }
+    }
+
+    AppScaffold(
+        modifier = Modifier.padding(padding),
+        scaffoldState = scaffoldState,
         topBar = {
-            CenterAppBar(
+            AppTitleBar(
                 modifier = Modifier.fillMaxWidth(),
-                backgroundColor = AppTheme.colors.primary,
-                contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.primary),
+                text = "首页",
                 leadingActions = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_scan),
@@ -63,13 +80,6 @@ fun HomePage(
                         colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                         contentScale = ContentScale.Inside,
                         contentDescription = null
-                    )
-                },
-                title = {
-                    Text(
-                        text = "首页",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.onPrimary
                     )
                 },
                 trailingActions = {
@@ -87,12 +97,7 @@ fun HomePage(
                     )
                 }
             )
-        },
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding),
-        backgroundColor = AppTheme.colors.background,
-        contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
+        }
     ) { innerPadding ->
         val context = LocalContext.current
         StatePage(
@@ -147,8 +152,8 @@ fun HomePage(
                                     data = value,
                                     isTop = true,
                                     modifier = Modifier.padding(top = if (index == 0) 5.dp else 0.dp),
-                                    onCollectClick = { id ->
-                                        "收藏:$id".toast(context)
+                                    onCollectClick = {
+                                        viewModel.dispatch(HomeViewAction.Collect(it))
                                     },
                                     onUserClick = { id ->
                                         "用户:$id".toast(context)
@@ -165,8 +170,8 @@ fun HomePage(
                         if (value != null) {
                             ArticleItem(
                                 data = value,
-                                onCollectClick = { id ->
-                                    "收藏:$id".toast(context)
+                                onCollectClick = {
+                                    viewModel.dispatch(HomeViewAction.Collect(it))
                                 },
                                 onUserClick = { id ->
                                     "用户:$id".toast(context)

@@ -1,12 +1,9 @@
 package com.compose.wanandroid.ui.page.question
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -14,12 +11,11 @@ import androidx.paging.compose.itemsIndexed
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
+import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.common.AppTitleBar
 import com.compose.wanandroid.ui.common.ArticleItem
 import com.compose.wanandroid.ui.widget.RefreshList
 import com.compose.wanandroid.ui.page.main.Screen
-import com.compose.wanandroid.ui.theme.AppTheme
-import com.compose.wanandroid.ui.theme.defaultContentColorFor
-import com.compose.wanandroid.ui.widget.CenterAppBar
 import com.compose.wanandroid.ui.widget.StatePage
 
 @Composable
@@ -28,26 +24,10 @@ fun QuestionPage(
     padding: PaddingValues = PaddingValues(),
     viewModel: QuestionViewModel = viewModel()
 ) {
-    Scaffold(
-        topBar = {
-            CenterAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                title = {
-                    Text(
-                        text = "问答",
-                        fontSize = 16.sp,
-                        color = AppTheme.colors.onPrimary
-                    )
-                },
-                backgroundColor = AppTheme.colors.primary
-            )
-        },
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding),
-        backgroundColor = AppTheme.colors.background,
-        contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
-    ) { innerPadding ->
+    AppScaffold(
+        modifier = Modifier.padding(padding),
+        topBar = { AppTitleBar(text = "问答", leadingActions = {}) }
+    ) {
         val context = LocalContext.current
         val pagingItems = viewModel.pager.collectAsLazyPagingItems()
         StatePage(
@@ -60,14 +40,13 @@ fun QuestionPage(
             RefreshList(
                 lazyPagingItems = pagingItems,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+                    .fillMaxSize(),
                 itemContent = {
                     itemsIndexed(pagingItems) { _: Int, value: Article? ->
                         if (value != null) {
                             ArticleItem(data = value,
-                                onCollectClick = { id ->
-                                    "收藏:$id".toast(context)
+                                onCollectClick = {
+                                    viewModel.dispatch(QuestionViewAction.Collect(it))
                                 },
                                 onUserClick = { id ->
                                     "用户:$id".toast(context)

@@ -12,8 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.common.AppTitleBar
 import com.compose.wanandroid.ui.theme.AppTheme
-import com.compose.wanandroid.ui.widget.CenterAppBar
 import com.compose.wanandroid.ui.widget.TabText
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
@@ -25,68 +26,66 @@ fun CategoryPage(
     padding: PaddingValues = PaddingValues(),
     index: Int = 0
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-    ) {
-        val pagerState = rememberPagerState(
-            initialPage = index,
-        )
-        val scope = rememberCoroutineScope()
-        val titles = listOf(
-            TabText(0, "体系"),
-            TabText(1, "导航"),
-        )
+    val pagerState = rememberPagerState(
+        initialPage = index,
+    )
+    val scope = rememberCoroutineScope()
+    val titles = listOf(
+        TabText(0, "体系"),
+        TabText(1, "导航"),
+    )
 
-        CenterAppBar(
-            modifier = Modifier.fillMaxWidth(),
-            title = {
-                TabRow(
-                    selectedTabIndex = pagerState.currentPage,
-                    backgroundColor = Color.Transparent,
-                    indicator = { tabPositions ->
-                        TabRowDefaults.Indicator(
-                            modifier = Modifier
-                                .pagerTabIndicatorOffset(pagerState, tabPositions)
-                                .clip(RoundedCornerShape(2.dp)),
-                            height = 3.dp,
-                            color = AppTheme.colors.onPrimary
-                        )
-                    },
-                    divider = {},
-                    modifier = Modifier
-                        .width(130.dp)
-                        .fillMaxHeight()
-                ) {
-                    titles.forEachIndexed { index, title ->
-                        Tab(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .fillMaxHeight(),
-                            text = {
-                                Text(
-                                    text = title.text,
-                                    fontSize = 15.sp,
-                                    maxLines = 1,
-                                    fontWeight = if (index == pagerState.currentPage) FontWeight.SemiBold else FontWeight.Normal,
-                                )
-                            },
-                            selectedContentColor = AppTheme.colors.onPrimary,
-                            unselectedContentColor = AppTheme.colors.onPrimary.copy(0.7f),
-                            selected = pagerState.currentPage == index,
-                            onClick = {
-                                scope.launch {
-                                    pagerState.scrollToPage(index)
-                                }
-                            },
-                        )
+    AppScaffold(
+        modifier = Modifier.padding(padding),
+        topBar = {
+            AppTitleBar(
+                title = {
+                    TabRow(
+                        selectedTabIndex = pagerState.currentPage,
+                        backgroundColor = Color.Transparent,
+                        indicator = { tabPositions ->
+                            TabRowDefaults.Indicator(
+                                modifier = Modifier
+                                    .pagerTabIndicatorOffset(pagerState, tabPositions)
+                                    .clip(RoundedCornerShape(2.dp)),
+                                height = 3.dp,
+                                color = AppTheme.colors.onPrimary
+                            )
+                        },
+                        divider = {},
+                        modifier = Modifier
+                            .width(130.dp)
+                            .fillMaxHeight()
+                    ) {
+                        titles.forEachIndexed { index, title ->
+                            Tab(
+                                modifier = Modifier
+                                    .wrapContentWidth()
+                                    .fillMaxHeight(),
+                                text = {
+                                    Text(
+                                        text = title.text,
+                                        fontSize = 15.sp,
+                                        maxLines = 1,
+                                        fontWeight = if (index == pagerState.currentPage) FontWeight.SemiBold else FontWeight.Normal,
+                                    )
+                                },
+                                selectedContentColor = AppTheme.colors.onPrimary,
+                                unselectedContentColor = AppTheme.colors.onPrimary.copy(0.7f),
+                                selected = pagerState.currentPage == index,
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.scrollToPage(index)
+                                    }
+                                },
+                            )
+                        }
                     }
-                }
-            },
-            backgroundColor = AppTheme.colors.primary
-        )
-
+                },
+                leadingActions = {}
+            )
+        }
+    ) {
         HorizontalPager(
             count = titles.size, state = pagerState,
             modifier = Modifier.background(AppTheme.colors.background)

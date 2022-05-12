@@ -2,13 +2,9 @@ package com.compose.wanandroid.ui.page.detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.webkit.WebSettingsCompat
@@ -16,9 +12,9 @@ import androidx.webkit.WebViewFeature
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.back
+import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.progress
-import com.compose.wanandroid.ui.widget.CenterAppBar
 import com.compose.wanandroid.ui.widget.StatePageEmpty
 import com.google.accompanist.web.*
 
@@ -31,42 +27,20 @@ fun WebPage(
     val navigator = rememberWebViewNavigator()
     val isDark = !AppTheme.colors.isLight
 
-    Column(
-        modifier = Modifier.fillMaxSize()
+    AppScaffold(
+        title = state.pageTitle ?: link.title,
+        onBack = {
+            if (navigator.canGoBack) {
+                navigator.navigateBack()
+            } else {
+                navController.back()
+            }
+        }
     ) {
-        CenterAppBar(
-            modifier = Modifier.fillMaxWidth(),
-            leadingActions = {
-                IconButton(onClick = {
-                    if (navigator.canGoBack) {
-                        navigator.navigateBack()
-                    } else {
-                        navController.back()
-                    }
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        tint = AppTheme.colors.onPrimary,
-                        contentDescription = "Back"
-                    )
-                }
-            },
-            title = {
-                Text(
-                    text = state.pageTitle ?: link.title,
-                    fontSize = 16.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = AppTheme.colors.onPrimary
-                )
-            },
-            backgroundColor = AppTheme.colors.primary
-        )
-
         if (link.url.isNotEmpty()) {
             val loadingState = state.loadingState
             Logger.i("Web", link.url)
-            Box(modifier = Modifier.weight(1f)) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 WebView(
                     state = state,
                     onCreated = { webView ->

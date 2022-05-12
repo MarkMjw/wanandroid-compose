@@ -40,6 +40,8 @@ import com.compose.wanandroid.logic.noRippleClickable
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
 import com.compose.wanandroid.ui.widget.AppBarHeight
+import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.widget.ProgressDialog
 import kotlinx.coroutines.launch
 
@@ -55,12 +57,13 @@ fun LoginPagePreview() {
 @Composable
 fun LoginPage(
     navController: NavController = rememberNavController(),
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
     viewModel: LoginViewModel = viewModel()
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val viewState = viewModel.viewState
+    val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val viewState = viewModel.viewState
     var showDialog by remember { mutableStateOf(false) }
     var progress by remember { mutableStateOf("加载中...") }
 
@@ -74,7 +77,7 @@ fun LoginPage(
                 is LoginViewEvent.ErrorTip -> {
                     showDialog = false
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(it.message)
+                        scaffoldState.showSnackbar(it.message)
                     }
                 }
                 is LoginViewEvent.Progress -> {
@@ -91,126 +94,131 @@ fun LoginPage(
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
+    AppScaffold(
+        topBar = {},
+        scaffoldState = scaffoldState,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(AppTheme.colors.primary)
-                .statusBarsPadding()
-                .height(250.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
-            IconButton(
-                modifier = Modifier.size(AppBarHeight),
-                onClick = {
-                    keyboardController?.hide()
-                    navController.back()
-                }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(AppTheme.colors.primary)
+                    .statusBarsPadding()
+                    .height(250.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    tint = AppTheme.colors.onPrimary,
-                    contentDescription = "Close"
+                IconButton(
+                    modifier = Modifier.size(AppBarHeight),
+                    onClick = {
+                        keyboardController?.hide()
+                        navController.back()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        tint = AppTheme.colors.onPrimary,
+                        contentDescription = "Close"
+                    )
+                }
+
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    modifier = Modifier
+                        .size(100.dp)
+                        .align(Alignment.CenterHorizontally),
+                    contentScale = ContentScale.Fit,
+                    contentDescription = null
+                )
+
+                Text(
+                    text = "欢迎使用",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AppTheme.colors.onPrimary,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                )
+
+                Text(
+                    text = "账号服务由WanAndroid提供",
+                    fontSize = 12.sp,
+                    color = AppTheme.colors.onPrimary.copy(0.8f),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 5.dp),
                 )
             }
 
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                modifier = Modifier
-                    .size(100.dp)
-                    .align(Alignment.CenterHorizontally),
-                contentScale = ContentScale.Fit,
-                contentDescription = null
-            )
+            Spacer(modifier = Modifier.height(10.dp))
 
-            Text(
-                text = "欢迎使用",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = AppTheme.colors.onPrimary,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            )
+            Input(
+                text = viewState.account,
+                label = "请输入用户名",
+                leadingIcon = R.drawable.ic_account_normal,
+                keyboardType = KeyboardType.Email
+            ) { account ->
+                viewModel.dispatch(LoginViewAction.UpdateAccount(account))
+            }
 
-            Text(
-                text = "账号服务由WanAndroid提供",
-                fontSize = 12.sp,
-                color = AppTheme.colors.onPrimary.copy(0.8f),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 5.dp),
-            )
-        }
+            Input(
+                text = viewState.password,
+                label = "请输入密码",
+                leadingIcon = R.drawable.ic_password_normal,
+                keyboardType = KeyboardType.Password,
+                isPassword = true
+            ) { password ->
+                viewModel.dispatch(LoginViewAction.UpdatePassword(password))
+            }
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Input(
-            text = viewState.account,
-            label = "请输入用户名",
-            leadingIcon = R.drawable.ic_account_normal,
-            keyboardType = KeyboardType.Email
-        ) { account ->
-            viewModel.dispatch(LoginViewAction.UpdateAccount(account))
-        }
-
-        Input(
-            text = viewState.password,
-            label = "请输入密码",
-            leadingIcon = R.drawable.ic_password_normal,
-            keyboardType = KeyboardType.Password,
-            isPassword = true
-        ) { password ->
-            viewModel.dispatch(LoginViewAction.UpdatePassword(password))
-        }
-
-        Spacer(modifier = Modifier.height(10.dp))
-        var checkedState by remember { mutableStateOf(false) }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(start = 60.dp, end = 60.dp)
-                .wrapContentHeight()
-        ) {
-            Checkbox(
-                checked = checkedState,
-                onCheckedChange = {
-                    checkedState = !checkedState
-                },
-                colors = CheckboxDefaults.colors(
-                    checkedColor = AppTheme.colors.primary,
-                    uncheckedColor = AppTheme.colors.textThird,
-                    checkmarkColor = AppTheme.colors.onPrimary,
+            Spacer(modifier = Modifier.height(10.dp))
+            var checkedState by remember { mutableStateOf(false) }
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 60.dp, end = 60.dp)
+                    .wrapContentHeight()
+            ) {
+                Checkbox(
+                    checked = checkedState,
+                    onCheckedChange = {
+                        checkedState = !checkedState
+                    },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = AppTheme.colors.primary,
+                        uncheckedColor = AppTheme.colors.textThird,
+                        checkmarkColor = AppTheme.colors.onPrimary,
+                    )
                 )
-            )
-            Text(
-                text = "没有账号，注册一个？",
-                fontSize = 12.sp,
-                color = AppTheme.colors.textThird,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-        }
+                Text(
+                    text = "没有账号，注册一个？",
+                    fontSize = 12.sp,
+                    color = AppTheme.colors.textThird,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+            }
 
-        Box(
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .align(Alignment.CenterHorizontally)
-                .width(200.dp)
-                .height(40.dp)
-                .background(AppTheme.colors.primary, RoundedCornerShape(20.dp))
-                .clip(shape = RoundedCornerShape(20.dp))
-                .clickable {
-                    viewModel.dispatch(LoginViewAction.Login(checkedState))
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = if (checkedState) "注册" else "登录",
-                color = AppTheme.colors.onPrimary,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.wrapContentSize(),
-                textAlign = TextAlign.Center
-            )
+            Box(
+                modifier = Modifier
+                    .padding(top = 50.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .width(200.dp)
+                    .height(40.dp)
+                    .background(AppTheme.colors.primary, RoundedCornerShape(20.dp))
+                    .clip(shape = RoundedCornerShape(20.dp))
+                    .clickable {
+                        viewModel.dispatch(LoginViewAction.Login(checkedState))
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (checkedState) "注册" else "登录",
+                    color = AppTheme.colors.onPrimary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wrapContentSize(),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }

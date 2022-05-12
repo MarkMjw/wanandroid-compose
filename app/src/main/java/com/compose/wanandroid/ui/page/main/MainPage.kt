@@ -23,6 +23,7 @@ import androidx.navigation.navArgument
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.logic.fromJson
+import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.page.home.HomePage
 import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.question.QuestionPage
@@ -47,28 +48,16 @@ fun MainPage() {
     val controller = rememberNavController()
     val stackEntry by controller.currentBackStackEntryAsState()
     val currentRoute = stackEntry?.destination?.route
-    val scaffoldState = rememberScaffoldState()
 
-    Scaffold(
+    AppScaffold(
+        topBar = {},
+        content = { NavigationHost(controller, it) },
         bottomBar = {
             // 仅在主页展示BottomBar
             when (currentRoute) {
                 null, Screen.Home.route, Screen.Question.route, Screen.Category.route, Screen.Profile.route -> {
                     BottomNavigation(controller, currentRoute)
                 }
-            }
-        },
-        content = { padding ->
-            NavigationHost(controller, padding, scaffoldState)
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = scaffoldState.snackbarHostState) { msg ->
-                Snackbar(
-                    snackbarData = msg,
-                    backgroundColor = AppTheme.colors.secondaryBackground,
-                    actionColor = AppTheme.colors.onBackground,
-                    contentColor = AppTheme.colors.textPrimary,
-                )
             }
         }
     )
@@ -77,8 +66,7 @@ fun MainPage() {
 @Composable
 private fun NavigationHost(
     controller: NavHostController,
-    padding: PaddingValues,
-    scaffoldState: ScaffoldState
+    padding: PaddingValues
 ) {
     NavHost(
         navController = controller,
@@ -106,7 +94,7 @@ private fun NavigationHost(
         }
 
         composable(route = Screen.Login.route) {
-            LoginPage(controller, scaffoldState)
+            LoginPage(controller)
         }
 
         composable(route = Screen.Collect.route) {
@@ -123,7 +111,7 @@ private fun NavigationHost(
             val args = it.arguments?.getString("category")?.fromJson<Struct>()
             val index = it.arguments?.getInt("index", 0) ?: 0
             if (args != null) {
-                CategoryListPage(struct = args, navController = controller, index = index)
+                CategoryListPage(struct = args, index = index, navController = controller)
             }
         }
     }

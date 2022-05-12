@@ -5,8 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +12,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +24,8 @@ import com.compose.wanandroid.logic.back
 import com.compose.wanandroid.logic.darkMode
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.*
-import com.compose.wanandroid.ui.widget.CenterAppBar
+import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.widget.ProgressDialog
 import kotlinx.coroutines.launch
 
@@ -55,7 +53,7 @@ fun SettingPage(
             if (it is SettingViewEvent.ErrorTip) {
                 showDialog = false
                 scope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(it.message)
+                    scaffoldState.showSnackbar(it.message)
                 }
             } else if (it is SettingViewEvent.Progress) {
                 progress = it.message
@@ -70,67 +68,47 @@ fun SettingPage(
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
+    AppScaffold(
+        title = Screen.Setting.text,
+        onBack = { navController.back() }
     ) {
-        CenterAppBar(
-            modifier = Modifier.fillMaxWidth(),
-            leadingActions = {
-                IconButton(onClick = {
-                    navController.back()
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        tint = AppTheme.colors.onPrimary,
-                        contentDescription = "Back"
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            RadioGroup(viewState.darkModes, viewState.darkModes.indexOf(ThemeState.theme.value), title = "暗黑模式") {
+                ThemeState.theme.value = it
+                scope.launch {
+                    darkMode.update(it.name)
+                }
+            }
+            SwitchItem(text = "书签提醒", subText = "打开应用时以通知方式提醒最新添加书签") {
+                Logger.w("mjw", "switch:$it")
+            }
+            SettingItem(text = "关于我们")
+
+            if (viewState.isLogin) {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 80.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .width(200.dp)
+                        .height(40.dp)
+                        .background(AppTheme.colors.primary, RoundedCornerShape(20.dp))
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .clickable {
+                            viewModel.dispatch(SettingViewAction.Logout)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "退出登录",
+                        color = AppTheme.colors.onPrimary,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.wrapContentSize(),
+                        textAlign = TextAlign.Center
                     )
                 }
-            },
-            title = {
-                Text(
-                    text = Screen.Setting.text,
-                    fontSize = 16.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = AppTheme.colors.onPrimary
-                )
-            },
-            backgroundColor = AppTheme.colors.primary
-        )
-
-        RadioGroup(viewState.darkModes, viewState.darkModes.indexOf(ThemeState.theme.value), title = "暗黑模式") {
-            ThemeState.theme.value = it
-            scope.launch {
-                darkMode.update(it.name)
-            }
-        }
-        SwitchItem(text = "书签提醒", subText = "打开应用时以通知方式提醒最新添加书签") {
-            Logger.w("mjw", "switch:$it")
-        }
-        SettingItem(text = "关于我们")
-
-        if (viewState.isLogin) {
-            Box(
-                modifier = Modifier
-                    .padding(top = 80.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .width(200.dp)
-                    .height(40.dp)
-                    .background(AppTheme.colors.primary, RoundedCornerShape(20.dp))
-                    .clip(shape = RoundedCornerShape(20.dp))
-                    .clickable {
-                        viewModel.dispatch(SettingViewAction.Logout)
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "退出登录",
-                    color = AppTheme.colors.onPrimary,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.wrapContentSize(),
-                    textAlign = TextAlign.Center
-                )
             }
         }
     }
