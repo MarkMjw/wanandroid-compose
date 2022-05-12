@@ -2,6 +2,7 @@ package com.compose.wanandroid.logic
 
 import com.compose.wanandroid.BuildConfig
 import com.compose.wanandroid.data.remote.Api
+import com.compose.wanandroid.logic.flowadapter.FlowCallAdapterFactory
 import com.compose.wanandroid.logic.interceptor.CacheCookieInterceptor
 import com.compose.wanandroid.logic.interceptor.LogInterceptor
 import com.compose.wanandroid.logic.interceptor.SetCookieInterceptor
@@ -31,6 +32,7 @@ private fun createApi(builder: Retrofit.Builder, baseUrl: String) = builder.base
 
 private fun createRetrofitBuilder(okHttpClient: OkHttpClient) = Retrofit.Builder()
     .client(okHttpClient)
+    .addCallAdapterFactory(FlowCallAdapterFactory.create())
     .addConverterFactory(ScalarsConverterFactory.create())
     .addConverterFactory(GsonConverterFactory.create(gson))
 

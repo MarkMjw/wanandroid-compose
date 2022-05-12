@@ -34,9 +34,7 @@ class ProfileViewModel : ViewModel() {
     }
 
     private fun fetchUserInfo() {
-        flow {
-            emit(ApiService.api.userInfo())
-        }.map {
+        ApiService.api.userInfo().map {
             if (it.isSuccess) {
                 it.data ?: throw Exception("the result of remote's request is null")
             } else {

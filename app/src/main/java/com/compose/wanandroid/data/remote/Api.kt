@@ -1,6 +1,7 @@
 package com.compose.wanandroid.data.remote
 
 import com.compose.wanandroid.data.model.*
+import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
@@ -40,7 +41,7 @@ interface Api {
     suspend fun logout(): Response<String>
 
     @GET("user/lg/userinfo/json")
-    suspend fun userInfo(): Response<UserResponse>
+    fun userInfo(): Flow<Response<UserResponse>>
 }
 
 object ApiService : KoinComponent {
