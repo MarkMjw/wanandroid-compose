@@ -72,7 +72,7 @@ fun HomePage(
                             .fillMaxHeight()
                             .width(AppBarHeight)
                             .clickable {
-                                // TODO
+                                // TODO 扫描
                             },
                         colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                         contentScale = ContentScale.Inside,
@@ -86,7 +86,7 @@ fun HomePage(
                             .fillMaxHeight()
                             .width(AppBarHeight)
                             .clickable {
-                                // TODO
+                                // TODO 搜索
                             },
                         colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                         contentScale = ContentScale.Inside,

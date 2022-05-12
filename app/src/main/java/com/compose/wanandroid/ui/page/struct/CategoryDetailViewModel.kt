@@ -9,8 +9,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.filter
-import androidx.paging.map
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.data.remote.loadPage
@@ -21,7 +19,6 @@ import com.compose.wanandroid.ui.common.ViewEvent
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -55,10 +52,11 @@ class CategoryDetailViewModel(
                         ApiService.api.collectArticle(article.id)
                     }
                     if (result.isSuccess) {
-                        viewState.pagingData.collectIndexed { _, value ->
-                            value.filter { it.id == article.id }.map { it.collect = true }
-                        }
-                        viewState = viewState.copy(pagingData = viewState.pagingData)
+                        // TODO 刷新列表
+//                        viewState.pagingData.collectIndexed { _, value ->
+//                            value.filter { it.id == article.id }.map { it.collect = true }
+//                        }
+//                        viewState = viewState.copy(pagingData = viewState.pagingData)
                     } else {
                         _viewEvents.send(SnackViewEvent("收藏失败，请稍后重试~"))
                     }
@@ -73,10 +71,11 @@ class CategoryDetailViewModel(
                         ApiService.api.unCollectArticle(article.id)
                     }
                     if (result.isSuccess) {
-                        viewState.pagingData.collectIndexed { _, value ->
-                            value.filter { it.id == article.id }.map { it.collect = false }
-                        }
-                        viewState = viewState.copy(pagingData = viewState.pagingData)
+                        // TODO 刷新列表
+//                        viewState.pagingData.collectIndexed { _, value ->
+//                            value.filter { it.id == article.id }.map { it.collect = false }
+//                        }
+//                        viewState = viewState.copy(pagingData = viewState.pagingData)
                     } else {
                         _viewEvents.send(SnackViewEvent("取消收藏失败，请稍后重试~"))
                     }

@@ -83,25 +83,18 @@ class HomeViewModel : ViewModel() {
                         if (index >= 0) {
                             article.collect = true
                             Logger.w("mjw", "${article.title} -> ${article.collect}")
-                            _tops[index] = article
+                            _tops.removeAt(index)
+                            _tops.add(index, article)
                         }
                         _viewEvents.send(SnackViewEvent("恭喜你：收藏成功~"))
-
-//                        _tops.filter { it.id == article.id }.forEach {
-//                            it.collect = true
-//                            Logger.w("mjw", "${it.title} -> ${it.collect}")
-//                        }
-
-//                        viewState.tops.filter { it.id == article.id }.map { it.collect = true }
+                        // TODO 刷新列表
 //                        viewState.pagingData.collectIndexed { _, value ->
 //                            value.filter { it.id == article.id }.map { it.collect = true }
 //                        }
-//                        viewState = viewState.copy(tops = viewState.tops, pagingData = viewState.pagingData)
                     } else {
                         _viewEvents.send(SnackViewEvent("收藏失败，请稍后重试~"))
                     }
                 } catch (e: Throwable) {
-                    Logger.e("mjw", e)
                     _viewEvents.send(SnackViewEvent("收藏失败，请稍后重试~"))
                 }
             } else {
@@ -116,26 +109,18 @@ class HomeViewModel : ViewModel() {
                         if (index >= 0) {
                             article.collect = false
                             Logger.i("mjw", "${article.title} -> ${article.collect}")
-                            _tops[index] = article
+                            _tops.removeAt(index)
+                            _tops.add(index, article)
                         }
-
                         _viewEvents.send(SnackViewEvent("恭喜你：取消收藏成功~"))
-
-//                        _tops.filter { it.id == article.id }.forEach {
-//                            it.collect = false
-//                            Logger.i("mjw", "${it.title} -> ${it.collect}")
-//                        }
-
-//                        viewState.tops.filter { it.id == article.id }.map { it.collect = false }
+                        // TODO 刷新列表
 //                        viewState.pagingData.collectIndexed { _, value ->
 //                            value.filter { it.id == article.id }.map { it.collect = false }
 //                        }
-//                        viewState = viewState.copy(tops = viewState.tops, pagingData = viewState.pagingData)
                     } else {
                         _viewEvents.send(SnackViewEvent("取消收藏失败，请稍后重试~"))
                     }
                 } catch (e: Throwable) {
-                    Logger.e("mjw", e)
                     _viewEvents.send(SnackViewEvent("取消收藏失败，请稍后重试~"))
                 }
             }
