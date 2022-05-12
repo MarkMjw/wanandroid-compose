@@ -31,6 +31,10 @@ class ProfileViewModel : ViewModel() {
         UserStore.userInfo.onEach {
             viewState = viewState.copy(userInfo = it)
         }.launchIn(viewModelScope)
+
+        UserStore.coinInfo.onEach {
+            viewState = viewState.copy(coinInfo = it)
+        }.launchIn(viewModelScope)
     }
 
     private fun fetchUserInfo() {
@@ -42,8 +46,8 @@ class ProfileViewModel : ViewModel() {
             }
         }.onEach { res ->
             viewState = viewState.copy(userInfo = res.userInfo, coinInfo = res.coinInfo)
-            if (res.userInfo != null) {
-                UserStore.update(res.userInfo!!)
+            if (res.userInfo != null && res.coinInfo != null) {
+                UserStore.update(res.userInfo, res.coinInfo)
             }
         }.catch {
             Logger.w(it.message ?: "")

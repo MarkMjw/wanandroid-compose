@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,14 +63,18 @@ fun ProfilePage(
                     .padding(top = 70.dp)
                     .size(80.dp)
                     .align(Alignment.CenterHorizontally)
+                    .background(Color(0x22000000), CircleShape)
                     .clip(CircleShape)
-                    .clickable {
-                        navController.navigate(Screen.Login.route)
+                    .also {
+                        if (!viewState.isLogin) {
+                            it.clickable {
+                                navController.navigate(Screen.Login.route)
+                            }
+                        }
                     },
-                model = userInfo?.icon,
+                model = userInfo?.avatar,
                 contentDescription = null,
-                error = ColorPainter(Color(0x22000000)),
-                placeholder = ColorPainter(Color(0x22000000))
+                contentScale = ContentScale.Crop
             )
 
             Text(
@@ -78,8 +82,12 @@ fun ProfilePage(
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally)
-                    .clickable {
-                        navController.navigate(Screen.Login.route)
+                    .also {
+                        if (!viewState.isLogin) {
+                            it.clickable {
+                                navController.navigate(Screen.Login.route)
+                            }
+                        }
                     },
                 fontSize = 22.sp,
                 color = Color.White

@@ -17,8 +17,12 @@ data class UserInfo(
     var token: String,
     var type: Int,
     var username: String,
-) : Parcelable
+) : Parcelable {
+    val avatar: String // 找个默认的头像
+        get() = icon.ifEmpty { "https://tva1.sinaimg.cn/large/e6c9d24egy1h25egcfp3aj20yq0nvq7i.jpg" }
+}
 
+@Parcelize
 data class CoinInfo(
     var coinCount: Int = 0,
     var level: Int = 0,
@@ -26,7 +30,7 @@ data class CoinInfo(
     var userId: Int = 0,
     var username: String = "",
     var nickname: String = ""
-)
+) : Parcelable
 
 data class UserResponse(
     var userInfo: UserInfo? = null,

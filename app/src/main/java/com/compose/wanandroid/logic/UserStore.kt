@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.compose.wanandroid.data.model.CoinInfo
 import com.compose.wanandroid.data.model.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -25,22 +26,27 @@ object UserStore : KoinComponent {
 
     private val user: PreferenceItem<String> by userStore(::stringPreferencesKey, "", "user_info")
 
+    private val coin: PreferenceItem<String> by userStore(::stringPreferencesKey, "", "coin_info")
+
     val userInfo: Flow<UserInfo?>
         get() = user.map { it.fromJson<UserInfo>() }
+
+    val coinInfo: Flow<CoinInfo?>
+        get() = user.map { it.fromJson<CoinInfo>() }
 
     suspend fun login(userInfo: UserInfo) {
         isLogin.update(true)
         user.update(userInfo.toJson())
     }
 
-    suspend fun update(userInfo: UserInfo) {
-        user.update(userInfo.toJson())
+    suspend fun update(userInfo: UserInfo?, coinInfo: CoinInfo?) {
+        user.update(userInfo?.toJson() ?: "")
+        coin.update(coinInfo?.toJson() ?: "")
     }
 
     suspend fun logout() {
-//        isLogin.update(false)
-//        user.update("")
-        clear()
+        isLogin.update(false)
+        user.update("")
     }
 
     suspend fun clear() {
