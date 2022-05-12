@@ -74,7 +74,7 @@ fun LoginPage(
                     showDialog = false
                     navController.popBackStack()
                 }
-                is LoginViewEvent.ErrorTip -> {
+                is LoginViewEvent.Tip -> {
                     showDialog = false
                     scope.launch {
                         scaffoldState.showSnackbar(it.message)

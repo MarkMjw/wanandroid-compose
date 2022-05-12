@@ -50,7 +50,7 @@ fun SettingPage(
 
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect {
-            if (it is SettingViewEvent.ErrorTip) {
+            if (it is SettingViewEvent.Tip) {
                 showDialog = false
                 scope.launch {
                     scaffoldState.showSnackbar(it.message)

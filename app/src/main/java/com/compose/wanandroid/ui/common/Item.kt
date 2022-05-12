@@ -61,7 +61,7 @@ fun ArticleItem(
     modifier: Modifier = Modifier,
     isTop: Boolean = false,
     onSelected: (Link) -> Unit = {},
-    onCollectClick: (articleId: Int) -> Unit = {},
+    onCollectClick: (article: Article) -> Unit = {},
     onUserClick: (userId: Int) -> Unit = {},
 ) {
     Box(
@@ -224,7 +224,7 @@ fun ArticleItem(
                         .wrapContentWidth(Alignment.End)
                         .weight(1f)
                         .rippleClickable(bounded = false) {
-                            onCollectClick(data.id)
+                            onCollectClick(data)
                         }
                 )
             }

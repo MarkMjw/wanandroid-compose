@@ -31,11 +31,17 @@ interface Api {
     suspend fun navigationList(): Response<MutableList<Navigate>>
 
     @GET("article/list/{page}/json")
-    suspend fun structArticles(@Path("page") page: Int, @Query("cid") cid: Int): ListResponse<Article>
+    suspend fun structArticles(
+        @Path("page") page: Int,
+        @Query("cid") cid: Int
+    ): ListResponse<Article>
 
     @POST("user/login")
     @FormUrlEncoded
-    suspend fun login(@Field("username") username: String, @Field("password") password: String): Response<UserInfo>
+    suspend fun login(
+        @Field("username") username: String,
+        @Field("password") password: String
+    ): Response<UserInfo>
 
     @FormUrlEncoded
     @POST("user/register")
@@ -76,28 +82,22 @@ interface Api {
     ): Response<CollectLink>
 
     @POST("lg/uncollect_originId/{id}/json")
-    fun unCollectArticle(@Path("id") id: Int): Response<Any>
+    suspend fun unCollectArticle(@Path("id") id: Int): Response<Any>
 
     @FormUrlEncoded
     @POST("lg/collect/deletetool/json")
-    fun unCollectLink(@Field("id") id: Int): Response<Any>
+    suspend fun unCollectLink(@Field("id") id: Int): Response<Any>
 
     @FormUrlEncoded
     @POST("lg/uncollect/{id}/json")
-    fun unCollectArticle(
+    suspend fun unCollectArticle(
         @Path("id") id: Int,
         @Field("originId") originId: Int
     ): Response<Any>
 
-    /**
-     * 编辑收藏网站
-     * 方法：POST
-     * 参数：
-     * id,name,link
-     */
     @FormUrlEncoded
     @POST("lg/collect/updatetool/json")
-    fun updateCollectLink(
+    suspend fun updateCollectLink(
         @Field("id") id: Int,
         @Field("name") name: String?,
         @Field("link") link: String?

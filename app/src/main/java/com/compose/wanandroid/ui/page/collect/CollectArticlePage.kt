@@ -1,7 +1,10 @@
 package com.compose.wanandroid.ui.page.collect
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.compose.wanandroid.ui.widget.StatePage
@@ -13,16 +16,34 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.ArticleItem
+import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.widget.RefreshList
+import kotlinx.coroutines.launch
 
 @Composable
 fun CollectArticlePage(
     navController: NavController,
+    scaffoldState: ScaffoldState,
     viewModel: CollectArticleViewModel = viewModel()
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     val pagingItems = viewModel.pager.collectAsLazyPagingItems()
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEvents.collect {
+            when (it) {
+                is CollectArticleViewEvent.Tip -> {
+                    scope.launch {
+                        scaffoldState.showSnackbar(message = it.message)
+                    }
+                }
+            }
+        }
+    }
+
     StatePage(
         modifier = Modifier.fillMaxSize(),
         state = viewModel.getPageState(pagingItems),
@@ -37,8 +58,8 @@ fun CollectArticlePage(
                 itemsIndexed(pagingItems) { _: Int, value: Article? ->
                     if (value != null) {
                         ArticleItem(data = value,
-                            onCollectClick = { id ->
-                                "收藏:$id".toast(context)
+                            onCollectClick = {
+                                viewModel.dispatch(CollectArticleViewAction.UnCollect(it.id))
                             },
                             onUserClick = { id ->
                                 "用户:$id".toast(context)

@@ -47,7 +47,7 @@ class SettingViewModel : ViewModel() {
                     throw Exception(res.errorMsg)
                 }
             } catch (e: Throwable) {
-                _viewEvents.send(SettingViewEvent.ErrorTip(e.message ?: "退出登录失败，请稍后重试~"))
+                _viewEvents.send(SettingViewEvent.Tip(e.message ?: "退出登录失败，请稍后重试~"))
             }
         }
     }
@@ -73,5 +73,5 @@ sealed class SettingViewAction {
 
 sealed class SettingViewEvent {
     data class Progress(val show: Boolean, val message: String = "") : SettingViewEvent()
-    data class ErrorTip(val message: String) : SettingViewEvent()
+    data class Tip(val message: String) : SettingViewEvent()
 }

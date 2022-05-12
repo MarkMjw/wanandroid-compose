@@ -40,7 +40,7 @@ class LoginViewModel : ViewModel() {
                     throw Exception(res.errorMsg)
                 }
             } catch (e: Throwable) {
-                _viewEvents.send(LoginViewEvent.ErrorTip(e.message ?: "登录失败，请稍后重试~"))
+                _viewEvents.send(LoginViewEvent.Tip(e.message ?: "登录失败，请稍后重试~"))
             }
         }
     }
@@ -58,7 +58,7 @@ class LoginViewModel : ViewModel() {
                     throw Exception(res.errorMsg)
                 }
             } catch (e: Throwable) {
-                _viewEvents.send(LoginViewEvent.ErrorTip(e.message ?: "注册失败，请稍后重试~"))
+                _viewEvents.send(LoginViewEvent.Tip(e.message ?: "注册失败，请稍后重试~"))
             }
         }
     }
@@ -77,6 +77,6 @@ sealed class LoginViewAction {
 
 sealed class LoginViewEvent {
     object Back : LoginViewEvent()
-    data class ErrorTip(val message: String) : LoginViewEvent()
+    data class Tip(val message: String) : LoginViewEvent()
     data class Progress(val show: Boolean, val message: String = "") : LoginViewEvent()
 }

@@ -25,10 +25,11 @@ import kotlinx.coroutines.launch
 fun CollectPage(
     navController: NavController,
 ) {
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(
         initialPage = 0,
     )
-    val scope = rememberCoroutineScope()
 
     val titles = listOf(
         TabText(0, "文章"),
@@ -36,6 +37,7 @@ fun CollectPage(
     )
 
     AppScaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             AppTitleBar(
                 onBack = { navController.back() },
@@ -90,8 +92,8 @@ fun CollectPage(
             modifier = Modifier.background(AppTheme.colors.background)
         ) { page ->
             when (page) {
-                0 -> CollectArticlePage(navController)
-                1 -> CollectLinkPage(navController)
+                0 -> CollectArticlePage(navController, scaffoldState)
+                1 -> CollectLinkPage(navController, scaffoldState)
             }
         }
     }

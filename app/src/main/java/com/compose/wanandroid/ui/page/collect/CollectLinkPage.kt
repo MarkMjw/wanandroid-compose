@@ -5,8 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -17,18 +20,35 @@ import androidx.navigation.NavController
 import com.compose.wanandroid.data.model.CollectLink
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.navigate
+import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
 import com.compose.wanandroid.ui.widget.StatePage
 import com.compose.wanandroid.ui.widget.html.HtmlText
+import kotlinx.coroutines.launch
 
 @Composable
 fun CollectLinkPage(
     navController: NavController,
+    scaffoldState: ScaffoldState,
     viewModel: CollectLinkViewModel = viewModel()
 ) {
+    val scope = rememberCoroutineScope()
     val viewState = viewModel.viewState
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEvents.collect {
+            when (it) {
+                is CollectArticleViewEvent.Tip -> {
+                    scope.launch {
+                        scaffoldState.showSnackbar(message = it.message)
+                    }
+                }
+            }
+        }
+    }
+
     StatePage(
         modifier = Modifier.fillMaxSize(),
         state = viewState.pageState,

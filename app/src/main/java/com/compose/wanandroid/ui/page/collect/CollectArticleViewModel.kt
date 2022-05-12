@@ -8,6 +8,7 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.data.remote.loadPage
 import com.compose.wanandroid.ui.widget.PageState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
 class CollectArticleViewModel : ViewModel() {
@@ -20,6 +21,9 @@ class CollectArticleViewModel : ViewModel() {
         }
     }
 
+    private val _viewEvents = Channel<CollectArticleViewEvent>(Channel.BUFFERED)
+    val viewEvents = _viewEvents.receiveAsFlow()
+
     fun getPageState(pagingItems: LazyPagingItems<*>): PageState {
         val isEmpty = pagingItems.itemCount <= 0
         return when (pagingItems.loadState.refresh) {
@@ -31,15 +35,19 @@ class CollectArticleViewModel : ViewModel() {
 
     fun dispatch(action: CollectArticleViewAction) {
         when (action) {
-            is CollectArticleViewAction.UnCollect -> unCollect(action.id)
+            is CollectArticleViewAction.UnCollect -> unCollect(action.article)
         }
     }
 
-    private fun unCollect(id: Int) {
-
+    private fun unCollect(article: Article) {
+        // TODO 取消收藏
     }
 }
 
 sealed class CollectArticleViewAction {
-    data class UnCollect(val id: Int) : CollectArticleViewAction()
+    data class UnCollect(val article: Article) : CollectArticleViewAction()
+}
+
+sealed class CollectArticleViewEvent {
+    data class Tip(val message: String) : CollectArticleViewEvent()
 }
