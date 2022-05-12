@@ -25,6 +25,8 @@ import com.compose.wanandroid.logic.darkMode
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.*
 import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.common.ProgressViewEvent
+import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.widget.ProgressDialog
 import kotlinx.coroutines.launch
@@ -50,14 +52,17 @@ fun SettingPage(
 
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect {
-            if (it is SettingViewEvent.Tip) {
-                showDialog = false
-                scope.launch {
-                    scaffoldState.showSnackbar(it.message)
+            when (it) {
+                is SnackViewEvent -> {
+                    showDialog = false
+                    scope.launch {
+                        scaffoldState.showSnackbar(it.message)
+                    }
                 }
-            } else if (it is SettingViewEvent.Progress) {
-                progress = it.message
-                showDialog = it.show
+                is ProgressViewEvent -> {
+                    progress = it.message
+                    showDialog = it.show
+                }
             }
         }
     }

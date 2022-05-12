@@ -20,6 +20,8 @@ import androidx.navigation.NavController
 import com.compose.wanandroid.data.model.CollectLink
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.navigate
+import com.compose.wanandroid.ui.common.RefreshViewAction
+import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
@@ -40,7 +42,7 @@ fun CollectLinkPage(
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect {
             when (it) {
-                is CollectArticleViewEvent.Tip -> {
+                is SnackViewEvent -> {
                     scope.launch {
                         scaffoldState.showSnackbar(message = it.message)
                     }
@@ -53,7 +55,7 @@ fun CollectLinkPage(
         modifier = Modifier.fillMaxSize(),
         state = viewState.pageState,
         onRetry = {
-            viewModel.dispatch(CollectLinkViewAction.FetchData)
+            viewModel.dispatch(RefreshViewAction.FetchData)
         }
     ) {
         LazyColumn(

@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.logic.UserStore
+import com.compose.wanandroid.ui.common.ProgressViewEvent
+import com.compose.wanandroid.ui.common.SnackViewEvent
+import com.compose.wanandroid.ui.common.ViewEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -16,7 +19,7 @@ class LoginViewModel : ViewModel() {
     var viewState by mutableStateOf(LoginViewState())
         private set
 
-    private val _viewEvents = Channel<LoginViewEvent>(Channel.BUFFERED)
+    private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
 
     fun dispatch(action: LoginViewAction) {
@@ -30,17 +33,17 @@ class LoginViewModel : ViewModel() {
     private fun login() {
         viewModelScope.launch {
             try {
-                _viewEvents.send(LoginViewEvent.Progress(true, "登录中..."))
+                _viewEvents.send(ProgressViewEvent(true, "登录中..."))
                 val res = ApiService.api.login(viewState.account.trim(), viewState.password.trim())
                 if (res.isSuccess) {
-                    _viewEvents.send(LoginViewEvent.Progress(false))
+                    _viewEvents.send(ProgressViewEvent(false))
                     UserStore.login(res.data ?: throw Exception("登录失败，请稍后重试~"))
                     _viewEvents.send(LoginViewEvent.Back)
                 } else {
                     throw Exception(res.errorMsg)
                 }
             } catch (e: Throwable) {
-                _viewEvents.send(LoginViewEvent.Tip(e.message ?: "登录失败，请稍后重试~"))
+                _viewEvents.send(SnackViewEvent(e.message ?: "登录失败，请稍后重试~"))
             }
         }
     }
@@ -48,17 +51,17 @@ class LoginViewModel : ViewModel() {
     private fun register() {
         viewModelScope.launch {
             try {
-                _viewEvents.send(LoginViewEvent.Progress(true, "注册中..."))
+                _viewEvents.send(ProgressViewEvent(true, "注册中..."))
                 val res = ApiService.api.register(viewState.account.trim(), viewState.password.trim(), viewState.password.trim())
                 if (res.isSuccess) {
-                    _viewEvents.send(LoginViewEvent.Progress(false))
+                    _viewEvents.send(ProgressViewEvent(false))
                     UserStore.login(res.data ?: throw Exception("注册失败，请稍后重试~"))
                     _viewEvents.send(LoginViewEvent.Back)
                 } else {
                     throw Exception(res.errorMsg)
                 }
             } catch (e: Throwable) {
-                _viewEvents.send(LoginViewEvent.Tip(e.message ?: "注册失败，请稍后重试~"))
+                _viewEvents.send(SnackViewEvent(e.message ?: "注册失败，请稍后重试~"))
             }
         }
     }
@@ -75,8 +78,6 @@ sealed class LoginViewAction {
     data class UpdatePassword(val password: String) : LoginViewAction()
 }
 
-sealed class LoginViewEvent {
+sealed class LoginViewEvent : ViewEvent {
     object Back : LoginViewEvent()
-    data class Tip(val message: String) : LoginViewEvent()
-    data class Progress(val show: Boolean, val message: String = "") : LoginViewEvent()
 }

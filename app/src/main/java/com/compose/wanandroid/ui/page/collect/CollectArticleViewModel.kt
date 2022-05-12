@@ -7,6 +7,9 @@ import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.data.remote.loadPage
+import com.compose.wanandroid.ui.common.ViewAction
+import com.compose.wanandroid.ui.common.CollectViewAction
+import com.compose.wanandroid.ui.common.ViewEvent
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -21,7 +24,7 @@ class CollectArticleViewModel : ViewModel() {
         }
     }
 
-    private val _viewEvents = Channel<CollectArticleViewEvent>(Channel.BUFFERED)
+    private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
 
     fun getPageState(pagingItems: LazyPagingItems<*>): PageState {
@@ -33,9 +36,9 @@ class CollectArticleViewModel : ViewModel() {
         }
     }
 
-    fun dispatch(action: CollectArticleViewAction) {
+    fun dispatch(action: ViewAction) {
         when (action) {
-            is CollectArticleViewAction.UnCollect -> unCollect(action.article)
+            is CollectViewAction.UnCollect -> unCollect(action.article)
         }
     }
 
@@ -46,8 +49,4 @@ class CollectArticleViewModel : ViewModel() {
 
 sealed class CollectArticleViewAction {
     data class UnCollect(val article: Article) : CollectArticleViewAction()
-}
-
-sealed class CollectArticleViewEvent {
-    data class Tip(val message: String) : CollectArticleViewEvent()
 }

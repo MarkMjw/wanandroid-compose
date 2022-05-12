@@ -41,6 +41,8 @@ import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
 import com.compose.wanandroid.ui.widget.AppBarHeight
 import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.common.ProgressViewEvent
+import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.widget.ProgressDialog
 import kotlinx.coroutines.launch
@@ -74,13 +76,13 @@ fun LoginPage(
                     showDialog = false
                     navController.popBackStack()
                 }
-                is LoginViewEvent.Tip -> {
+                is SnackViewEvent -> {
                     showDialog = false
                     scope.launch {
                         scaffoldState.showSnackbar(it.message)
                     }
                 }
-                is LoginViewEvent.Progress -> {
+                is ProgressViewEvent -> {
                     progress = it.message
                     showDialog = it.show
                 }

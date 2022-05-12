@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.wanandroid.data.model.CollectLink
 import com.compose.wanandroid.data.remote.ApiService
+import com.compose.wanandroid.ui.common.ViewAction
+import com.compose.wanandroid.ui.common.RefreshViewAction
+import com.compose.wanandroid.ui.common.ViewEvent
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -18,17 +21,17 @@ class CollectLinkViewModel : ViewModel() {
     var viewState by mutableStateOf(CollectLinkViewState())
         private set
 
-    private val _viewEvents = Channel<CollectArticleViewEvent>(Channel.BUFFERED)
+    private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
 
     init {
-        dispatch(CollectLinkViewAction.FetchData)
+        dispatch(RefreshViewAction.FetchData)
     }
 
-    fun dispatch(action: CollectLinkViewAction) {
+    fun dispatch(action: ViewAction) {
         when (action) {
             is CollectLinkViewAction.UnCollect -> unCollect(action.link)
-            is CollectLinkViewAction.FetchData -> fetchData()
+            is RefreshViewAction.FetchData -> fetchData()
         }
     }
 
@@ -62,11 +65,6 @@ data class CollectLinkViewState(
     val size = data.size
 }
 
-sealed class CollectLinkViewAction {
-    object FetchData : CollectLinkViewAction()
+sealed class CollectLinkViewAction : ViewAction {
     data class UnCollect(val link: CollectLink) : CollectLinkViewAction()
-}
-
-sealed class CollectLinkViewEvent {
-    data class Tip(val message: String) : CollectLinkViewEvent()
 }

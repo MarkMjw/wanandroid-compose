@@ -10,6 +10,7 @@ import com.compose.wanandroid.data.model.UserInfo
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.UserStore
+import com.compose.wanandroid.ui.common.ViewEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
@@ -17,7 +18,7 @@ class ProfileViewModel : ViewModel() {
     var viewState by mutableStateOf(ProfileViewState())
         private set
 
-    private val _viewEvents = Channel<ProfileViewEvent>(Channel.BUFFERED)
+    private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
 
     init {
@@ -53,26 +54,6 @@ class ProfileViewModel : ViewModel() {
             Logger.w(it.message ?: "")
         }.launchIn(viewModelScope)
     }
-
-    fun dispatch(action: ProfileViewAction) {
-        when (action) {
-            is ProfileViewAction.ClickBtn1 -> clickBtn1()
-            is ProfileViewAction.ClickBtn2 -> clickBtn2()
-            is ProfileViewAction.ClickBtn3 -> clickBtn3()
-        }
-    }
-
-    private fun clickBtn1() {
-
-    }
-
-    private fun clickBtn2() {
-
-    }
-
-    private fun clickBtn3() {
-
-    }
 }
 
 data class ProfileViewState(
@@ -80,11 +61,3 @@ data class ProfileViewState(
     val userInfo: UserInfo? = null,
     val coinInfo: CoinInfo? = null
 )
-
-sealed class ProfileViewEvent
-
-sealed class ProfileViewAction {
-    object ClickBtn1 : ProfileViewAction()
-    object ClickBtn2 : ProfileViewAction()
-    object ClickBtn3 : ProfileViewAction()
-}

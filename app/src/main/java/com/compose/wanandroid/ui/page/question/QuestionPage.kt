@@ -1,6 +1,7 @@
 package com.compose.wanandroid.ui.page.question
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -11,12 +12,11 @@ import androidx.paging.compose.itemsIndexed
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
-import com.compose.wanandroid.ui.common.AppScaffold
-import com.compose.wanandroid.ui.common.AppTitleBar
-import com.compose.wanandroid.ui.common.ArticleItem
+import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.widget.RefreshList
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.widget.StatePage
+import kotlinx.coroutines.launch
 
 @Composable
 fun QuestionPage(
@@ -24,8 +24,24 @@ fun QuestionPage(
     padding: PaddingValues = PaddingValues(),
     viewModel: QuestionViewModel = viewModel()
 ) {
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEvents.collect {
+            when (it) {
+                is SnackViewEvent -> {
+                    scope.launch {
+                        scaffoldState.showSnackbar(it.message)
+                    }
+                }
+            }
+        }
+    }
+
     AppScaffold(
         modifier = Modifier.padding(padding),
+        scaffoldState = scaffoldState,
         topBar = { AppTitleBar(text = "问答", leadingActions = {}) }
     ) {
         val context = LocalContext.current
@@ -46,7 +62,7 @@ fun QuestionPage(
                         if (value != null) {
                             ArticleItem(data = value,
                                 onCollectClick = {
-                                    viewModel.dispatch(QuestionViewAction.Collect(it))
+                                    viewModel.dispatch(CollectViewAction.Collect(it))
                                 },
                                 onUserClick = { id ->
                                     "用户:$id".toast(context)

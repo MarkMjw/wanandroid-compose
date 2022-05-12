@@ -2,7 +2,10 @@ package com.compose.wanandroid.ui.page.struct
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
@@ -12,14 +15,19 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.ArticleItem
+import com.compose.wanandroid.ui.common.CollectViewAction
+import com.compose.wanandroid.ui.common.SnackViewEvent
+import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.widget.RefreshList
 import com.compose.wanandroid.ui.widget.StatePage
+import kotlinx.coroutines.launch
 
 @Composable
 fun CategoryDetailPage(
     navController: NavController,
-    viewModel: CategoryDetailViewModel
+    viewModel: CategoryDetailViewModel,
+    scaffoldState: ScaffoldState
 ) {
     val viewState = viewModel.viewState
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
@@ -27,6 +35,19 @@ fun CategoryDetailPage(
     val listState = if (pagingItems.itemCount > 0) viewState.listState else LazyListState()
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEvents.collect {
+            when (it) {
+                is SnackViewEvent -> {
+                    scope.launch {
+                        scaffoldState.showSnackbar(it.message)
+                    }
+                }
+            }
+        }
+    }
 
     StatePage(
         modifier = Modifier.fillMaxSize(),
@@ -48,8 +69,8 @@ fun CategoryDetailPage(
                     if (value != null) {
                         ArticleItem(
                             data = value,
-                            onCollectClick = { id ->
-                                "收藏:$id".toast(context)
+                            onCollectClick = {
+                                viewModel.dispatch(CollectViewAction.Collect(it))
                             },
                             onUserClick = { id ->
                                 "用户:$id".toast(context)

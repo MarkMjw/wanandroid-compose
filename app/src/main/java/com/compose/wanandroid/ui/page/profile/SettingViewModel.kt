@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.logic.UserStore
 import com.compose.wanandroid.logic.darkMode
+import com.compose.wanandroid.ui.common.ProgressViewEvent
+import com.compose.wanandroid.ui.common.SnackViewEvent
+import com.compose.wanandroid.ui.common.ViewEvent
 import com.compose.wanandroid.ui.theme.Theme
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -18,7 +21,7 @@ class SettingViewModel : ViewModel() {
     var viewState by mutableStateOf(SettingViewState())
         private set
 
-    private val _viewEvents = Channel<SettingViewEvent>(Channel.BUFFERED)
+    private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
 
     init {
@@ -37,17 +40,17 @@ class SettingViewModel : ViewModel() {
     private fun logout() {
         viewModelScope.launch {
             try {
-                _viewEvents.send(SettingViewEvent.Progress(true, "退出中..."))
+                _viewEvents.send(ProgressViewEvent(true, "退出中..."))
                 val res = ApiService.api.logout()
                 if (res.isSuccess) {
-                    _viewEvents.send(SettingViewEvent.Progress(false))
+                    _viewEvents.send(ProgressViewEvent(false))
                     viewState = viewState.copy(isLogin = false)
                     UserStore.logout()
                 } else {
                     throw Exception(res.errorMsg)
                 }
             } catch (e: Throwable) {
-                _viewEvents.send(SettingViewEvent.Tip(e.message ?: "退出登录失败，请稍后重试~"))
+                _viewEvents.send(SnackViewEvent(e.message ?: "退出登录失败，请稍后重试~"))
             }
         }
     }
@@ -69,9 +72,4 @@ data class SettingViewState(
 sealed class SettingViewAction {
     object Logout : SettingViewAction()
     data class Dark(val mode: String) : SettingViewAction()
-}
-
-sealed class SettingViewEvent {
-    data class Progress(val show: Boolean, val message: String = "") : SettingViewEvent()
-    data class Tip(val message: String) : SettingViewEvent()
 }

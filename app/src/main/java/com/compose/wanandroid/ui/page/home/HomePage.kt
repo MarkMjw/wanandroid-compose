@@ -24,10 +24,7 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
-import com.compose.wanandroid.ui.common.AppScaffold
-import com.compose.wanandroid.ui.common.AppTitleBar
-import com.compose.wanandroid.ui.common.ArticleItem
-import com.compose.wanandroid.ui.common.showSnackbar
+import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.widget.*
@@ -52,7 +49,7 @@ fun HomePage(
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect {
             when (it) {
-                is HomeViewEvent.Error -> {
+                is SnackViewEvent -> {
                     scope.launch {
                         scaffoldState.showSnackbar(message = it.message)
                     }
@@ -104,7 +101,7 @@ fun HomePage(
             modifier = Modifier.fillMaxSize(),
             state = viewState.getPageState(pagingItems),
             onRetry = {
-                viewModel.dispatch(HomeViewAction.Refresh)
+                viewModel.dispatch(RefreshViewAction.Refresh)
                 pagingItems.retry()
             }
         ) {
@@ -116,7 +113,7 @@ fun HomePage(
                 isRefreshing = isRefreshing,
                 listState = listState,
                 onRefresh = {
-                    viewModel.dispatch(HomeViewAction.Refresh)
+                    viewModel.dispatch(RefreshViewAction.Refresh)
                 },
                 itemContent = {
                     if (banners.isNotEmpty()) {
@@ -153,7 +150,7 @@ fun HomePage(
                                     isTop = true,
                                     modifier = Modifier.padding(top = if (index == 0) 5.dp else 0.dp),
                                     onCollectClick = {
-                                        viewModel.dispatch(HomeViewAction.Collect(it))
+                                        viewModel.dispatch(CollectViewAction.Collect(it))
                                     },
                                     onUserClick = { id ->
                                         "用户:$id".toast(context)
@@ -171,7 +168,7 @@ fun HomePage(
                             ArticleItem(
                                 data = value,
                                 onCollectClick = {
-                                    viewModel.dispatch(HomeViewAction.Collect(it))
+                                    viewModel.dispatch(CollectViewAction.Collect(it))
                                 },
                                 onUserClick = { id ->
                                     "用户:$id".toast(context)

@@ -16,6 +16,8 @@ import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.ArticleItem
+import com.compose.wanandroid.ui.common.CollectViewAction
+import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.showSnackbar
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.widget.RefreshList
@@ -35,7 +37,7 @@ fun CollectArticlePage(
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect {
             when (it) {
-                is CollectArticleViewEvent.Tip -> {
+                is SnackViewEvent -> {
                     scope.launch {
                         scaffoldState.showSnackbar(message = it.message)
                     }
@@ -59,7 +61,7 @@ fun CollectArticlePage(
                     if (value != null) {
                         ArticleItem(data = value,
                             onCollectClick = {
-                                viewModel.dispatch(CollectArticleViewAction.UnCollect(it.id))
+                                viewModel.dispatch(CollectViewAction.UnCollect(it))
                             },
                             onUserClick = { id ->
                                 "用户:$id".toast(context)
