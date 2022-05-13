@@ -26,14 +26,16 @@ private fun AppIcon() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Transparent)
-            .background(LightColors.primary, RoundedCornerShape(50.dp))
+            .background(LightColors.primary, RoundedCornerShape(40.dp))
     ) {
 
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = null,
             contentScale = ContentScale.Fit,
-            modifier = Modifier.fillMaxSize().padding(30.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(30.dp)
         )
     }
 }
