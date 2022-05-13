@@ -12,6 +12,10 @@ class CategoryArticleListRepository(private val cid: Int) : ArticleListRepositor
     override suspend fun getArticleList(page: Int): ListResponse<Article> = ApiService.api.structArticles(page, cid)
 }
 
+class WxArticleListRepository(private val cid: Int) : ArticleListRepository {
+    override suspend fun getArticleList(page: Int): ListResponse<Article> = ApiService.api.wxArticles(page, cid)
+}
+
 class ProjectArticleListRepository(private val cid: Int) : ArticleListRepository {
     override suspend fun getArticleList(page: Int): ListResponse<Article> = ApiService.api.projectArticles(page, cid)
 }

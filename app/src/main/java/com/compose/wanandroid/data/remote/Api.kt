@@ -36,6 +36,9 @@ interface Api {
     @GET("project/tree/json")
     suspend fun projectList(): Response<MutableList<Struct>>
 
+    @GET("wxarticle/chapters/json")
+    suspend fun wxAccountList(): Response<MutableList<Struct>>
+
     @GET("article/list/{page}/json")
     suspend fun structArticles(
         @Path("page") page: Int,
@@ -44,6 +47,12 @@ interface Api {
 
     @GET("project/list/{page}/json")
     suspend fun projectArticles(
+        @Path("page") page: Int,
+        @Query("cid") cid: Int
+    ): ListResponse<Article>
+
+    @GET("wxarticle/list/{cid}/{page}/json")
+    suspend fun wxArticles(
         @Path("page") page: Int,
         @Query("cid") cid: Int
     ): ListResponse<Article>

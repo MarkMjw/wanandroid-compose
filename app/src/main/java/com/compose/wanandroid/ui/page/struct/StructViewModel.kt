@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.data.remote.ApiService
+import com.compose.wanandroid.logic.zips
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -28,6 +29,10 @@ class StructViewModel : ViewModel() {
     }
 
     private fun fetchData() {
+        val accounts = flow {
+            emit(ApiService.api.wxAccountList())
+        }.map { it.data ?: emptyList() }
+
         val projects = flow {
             emit(ApiService.api.projectList())
         }.map { it.data ?: emptyList() }
@@ -37,17 +42,20 @@ class StructViewModel : ViewModel() {
         }.map { it.data ?: emptyList() }
 
         viewModelScope.launch {
-            structs.zip(projects) { structs, projects ->
-                val data = if (projects.isNotEmpty()) {
-                    // 项目当做一个特殊的类型
-                    val project = Struct(name = "项目", children = projects.toMutableList(), type = Struct.TYPE_PROJECT)
-                    listOf(project) + structs
-                } else {
-                    structs
+            structs.zips(accounts, projects) { structs, accounts, projects ->
+                val list = mutableListOf<Struct>()
+                if (accounts.isNotEmpty()) {
+                    // 公众号当做一个特殊的类型
+                    list.add(Struct(name = "公众号", children = accounts.toMutableList(), type = Struct.TYPE_ACCOUNT))
                 }
+                if (projects.isNotEmpty()) {
+                    // 项目当做一个特殊的类型
+                    list.add(Struct(name = "项目", children = projects.toMutableList(), type = Struct.TYPE_PROJECT))
+                }
+                list.addAll(structs)
                 viewState = viewState.copy(
-                    data = data,
-                    pageState = PageState.Success(data.isEmpty())
+                    data = list,
+                    pageState = PageState.Success(list.isEmpty())
                 )
             }.onStart {
                 viewState = viewState.copy(pageState = PageState.Loading)

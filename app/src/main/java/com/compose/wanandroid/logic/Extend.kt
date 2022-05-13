@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.zip
 import java.util.regex.Pattern
 
 val Activity.screenSize: Size
@@ -85,3 +87,9 @@ inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
     object : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(aClass: Class<T>): T = f() as T
     }
+
+inline fun <A, B, C, D> Flow<A>.zips(
+    flowB: Flow<B>,
+    flowC: Flow<C>,
+    crossinline f: (A, B, C) -> D
+): Flow<D> = zip(flowB, ::Pair).zip(flowC) { (a, b), c -> f(a, b, c) }

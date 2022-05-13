@@ -43,7 +43,8 @@ data class Struct(
 ) : Parcelable {
     companion object {
         const val TYPE_STRUCT = 0
-        const val TYPE_PROJECT = 1
+        const val TYPE_ACCOUNT = 1
+        const val TYPE_PROJECT = 2
     }
 }
 
