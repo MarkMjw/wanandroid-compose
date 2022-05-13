@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomePage(
-    navController: NavController,
+    controller: NavController,
     padding: PaddingValues = PaddingValues(),
     viewModel: HomeViewModel = viewModel()
 ) {
@@ -66,18 +66,18 @@ fun HomePage(
                 modifier = Modifier.fillMaxWidth(),
                 text = "首页",
                 leadingActions = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_scan),
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(AppBarHeight)
-                            .clickable {
-                                // TODO 扫描
-                            },
-                        colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
-                        contentScale = ContentScale.Inside,
-                        contentDescription = null
-                    )
+//                    Image(
+//                        painter = painterResource(id = R.drawable.ic_scan),
+//                        modifier = Modifier
+//                            .fillMaxHeight()
+//                            .width(AppBarHeight)
+//                            .clickable {
+//                                // TODO 扫描
+//                            },
+//                        colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
+//                        contentScale = ContentScale.Inside,
+//                        contentDescription = null
+//                    )
                 },
                 trailingActions = {
                     Image(
@@ -86,7 +86,7 @@ fun HomePage(
                             .fillMaxHeight()
                             .width(AppBarHeight)
                             .clickable {
-                                // TODO 搜索
+                                controller.navigate(Page.Search.route)
                             },
                         colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                         contentScale = ContentScale.Inside,
@@ -132,7 +132,7 @@ fun HomePage(
                                         .background(AppTheme.colors.secondaryBackground)
                                         .clickable {
                                             with(banners[page]) {
-                                                navController.navigate(Page.Web.route, Link(title = title, url = url))
+                                                controller.navigate(Page.Web.route, Link(title = title, url = url))
                                             }
                                         },
                                     contentDescription = null,
@@ -156,7 +156,7 @@ fun HomePage(
                                         "用户:$id".toast(context)
                                     },
                                     onSelected = {
-                                        navController.navigate(Page.Web.route, it)
+                                        controller.navigate(Page.Web.route, it)
                                     }
                                 )
                             }
@@ -174,7 +174,7 @@ fun HomePage(
                                     "用户:$id".toast(context)
                                 },
                                 onSelected = {
-                                    navController.navigate(Page.Web.route, it)
+                                    controller.navigate(Page.Web.route, it)
                                 })
                         }
                     }

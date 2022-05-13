@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CollectLinkPage(
-    navController: NavController,
+    controller: NavController,
     scaffoldState: ScaffoldState,
     viewModel: CollectLinkViewModel = viewModel()
 ) {
@@ -68,7 +68,7 @@ fun CollectLinkPage(
                     LinkItem(
                         link = link,
                         modifier = Modifier.clickable {
-                            navController.navigate(Page.Web.route, Link(title = link.name, url = link.link))
+                            controller.navigate(Page.Web.route, Link(title = link.name, url = link.link))
                         })
 
                     if (position <= viewState.size - 1) {

@@ -37,7 +37,7 @@ fun ProfilePagePreview() {
 
 @Composable
 fun ProfilePage(
-    navController: NavController,
+    controller: NavController,
     padding: PaddingValues = PaddingValues(),
     viewModel: ProfileViewModel = viewModel()
 ) {
@@ -67,7 +67,7 @@ fun ProfilePage(
                     .clip(CircleShape)
                     .clickable {
                         if (!viewState.isLogin) {
-                            navController.navigate(Page.Login.route)
+                            controller.navigate(Page.Login.route)
                         }
                     },
                 model = userInfo?.avatar,
@@ -82,7 +82,7 @@ fun ProfilePage(
                     .align(Alignment.CenterHorizontally)
                     .clickable {
                         if (!viewState.isLogin) {
-                            navController.navigate(Page.Login.route)
+                            controller.navigate(Page.Login.route)
                         }
                     },
                 fontSize = 22.sp,
@@ -117,9 +117,9 @@ fun ProfilePage(
         ProfileItem(icon = R.drawable.ic_share_article, text = "我的分享") { }
         ProfileItem(icon = R.drawable.ic_collect, text = "我的收藏") {
             if (viewState.isLogin) {
-                navController.navigate(Page.Collect.route)
+                controller.navigate(Page.Collect.route)
             } else {
-                navController.navigate(Page.Login.route)
+                controller.navigate(Page.Login.route)
             }
         }
         ProfileItem(icon = R.drawable.ic_read_later, text = "我的书签") { }
@@ -127,7 +127,7 @@ fun ProfilePage(
         ProfileItem(icon = R.drawable.ic_github, text = "开源项目") { }
         ProfileItem(icon = R.drawable.ic_about, text = "关于作者", subText = "请他喝杯☕️~") { }
         ProfileItem(icon = R.drawable.ic_setting, text = "系统设置") {
-            navController.navigate(Page.Setting.route)
+            controller.navigate(Page.Setting.route)
         }
     }
 }

@@ -30,7 +30,7 @@ import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun NavigatePage(
-    navController: NavController,
+    controller: NavController,
     viewModel: NavigateViewModel = viewModel()
 ) {
     val viewState = viewModel.viewState
@@ -52,7 +52,7 @@ fun NavigatePage(
                 stickyHeader { StickyTitle(navigate.name) }
                 item {
                     NavigateItem(navigate, onSelect = {
-                        navController.navigate(Page.Web.route, it)
+                        controller.navigate(Page.Web.route, it)
                     })
                     if (position <= viewState.size - 1) {
                         Divider(

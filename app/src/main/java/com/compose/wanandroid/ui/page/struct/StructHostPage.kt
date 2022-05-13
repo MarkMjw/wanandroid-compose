@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun StructHostPage(
-    navController: NavController,
+    controller: NavController,
     padding: PaddingValues = PaddingValues(),
     index: Int = 0
 ) {
@@ -91,8 +91,8 @@ fun StructHostPage(
             modifier = Modifier.background(AppTheme.colors.background)
         ) { page ->
             when (page) {
-                0 -> StructPage(navController)
-                1 -> NavigatePage(navController)
+                0 -> StructPage(controller)
+                1 -> NavigatePage(controller)
             }
         }
     }

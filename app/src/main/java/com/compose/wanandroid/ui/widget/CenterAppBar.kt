@@ -35,7 +35,7 @@ fun CenterAppBar(
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
     contentPadding: PaddingValues = ContentPadding,
-    navController: NavController? = null,
+    controller: NavController? = null,
     leadingActions: @Composable (RowScope.() -> Unit)? = null,
     trailingActions: @Composable (RowScope.() -> Unit) = { },
     title: @Composable () -> Unit,
@@ -84,9 +84,9 @@ fun CenterAppBar(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically,
                         content = leadingActions ?: {
-                            val previous = navController?.previousBackStackEntry
+                            val previous = controller?.previousBackStackEntry
                             if (previous != null) {
-                                IconButton(onClick = { navController.popBackStack() }) {
+                                IconButton(onClick = { controller.popBackStack() }) {
                                     Icon(Icons.Filled.ArrowBack, null)
                                 }
                             }

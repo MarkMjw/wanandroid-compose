@@ -29,6 +29,7 @@ import com.compose.wanandroid.ui.page.detail.webGraph
 import com.compose.wanandroid.ui.page.login.loginGraph
 import com.compose.wanandroid.ui.page.profile.settingGraph
 import com.compose.wanandroid.ui.page.category.categoryGraph
+import com.compose.wanandroid.ui.page.search.searchGraph
 import com.compose.wanandroid.ui.page.square.SquareHostPage
 import com.compose.wanandroid.ui.theme.*
 
@@ -80,6 +81,7 @@ private fun NavigationHost(
         webGraph { controller.back() }
         collectGraph(controller)
         categoryGraph(controller)
+        searchGraph(controller)
     }
 }
 

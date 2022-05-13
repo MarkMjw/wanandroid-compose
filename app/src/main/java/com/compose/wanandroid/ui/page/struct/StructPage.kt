@@ -32,7 +32,7 @@ import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun StructPage(
-    navController: NavController,
+    controller: NavController,
     viewModel: StructViewModel = viewModel()
 ) {
     val viewState = viewModel.viewState
@@ -55,7 +55,7 @@ fun StructPage(
                 stickyHeader { StickyTitle(title = struct.name) }
                 item {
                     StructItem(struct, onSelect = { struct, index ->
-                        navController.navigate(Page.Category.route, struct, index)
+                        controller.navigate(Page.Category.route, struct, index)
                     })
 
                     if (position < viewState.size - 1) {
