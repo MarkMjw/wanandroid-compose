@@ -68,7 +68,7 @@ fun SearchPage(controller: NavController) {
                         onValueChanged = {
                             text = it
                         },
-                        hint = "用空格分开多个关键词"
+                        hint = "支持多个关键词，用空格隔开"
                     )
                 },
                 trailingActions = {

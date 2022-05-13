@@ -49,14 +49,8 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun fetchData() {
-        val banners = flow {
-            emit(ApiService.api.banners())
-        }.map { it.data ?: emptyList() }
-
-        val tops = flow {
-            emit(ApiService.api.topArticles())
-        }.map { it.data ?: emptyList() }
-
+        val banners = ApiService.api.banners().map { it.data ?: emptyList() }
+        val tops = ApiService.api.topArticles().map { it.data ?: emptyList() }
         viewModelScope.launch {
             banners.zip(tops) { banners, tops ->
                 _tops = tops.toMutableStateList()

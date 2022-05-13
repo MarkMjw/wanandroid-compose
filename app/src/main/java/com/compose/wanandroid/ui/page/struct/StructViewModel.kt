@@ -29,18 +29,9 @@ class StructViewModel : ViewModel() {
     }
 
     private fun fetchData() {
-        val accounts = flow {
-            emit(ApiService.api.wxAccountList())
-        }.map { it.data ?: emptyList() }
-
-        val projects = flow {
-            emit(ApiService.api.projectList())
-        }.map { it.data ?: emptyList() }
-
-        val structs = flow {
-            emit(ApiService.api.structList())
-        }.map { it.data ?: emptyList() }
-
+        val accounts = ApiService.api.wxAccountList().map { it.data ?: emptyList() }
+        val projects = ApiService.api.projectList().map { it.data ?: emptyList() }
+        val structs = ApiService.api.structList().map { it.data ?: emptyList() }
         viewModelScope.launch {
             structs.zips(accounts, projects) { structs, accounts, projects ->
                 val list = mutableListOf<Struct>()

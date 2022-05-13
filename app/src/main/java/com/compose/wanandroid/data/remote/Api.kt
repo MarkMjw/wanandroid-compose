@@ -13,10 +13,10 @@ interface Api {
     }
 
     @GET("banner/json")
-    suspend fun banners(): Response<MutableList<Banner>>
+    fun banners(): Flow<Response<MutableList<Banner>>>
 
     @GET("article/top/json")
-    suspend fun topArticles(): Response<MutableList<Article>>
+    fun topArticles(): Flow<Response<MutableList<Article>>>
 
     @GET("article/list/{page}/json")
     suspend fun articles(@Path("page") page: Int): ListResponse<Article>
@@ -28,16 +28,16 @@ interface Api {
     suspend fun wendaList(@Path("page") page: Int): ListResponse<Article>
 
     @GET("tree/json")
-    suspend fun structList(): Response<MutableList<Struct>>
+    fun structList(): Flow<Response<MutableList<Struct>>>
 
     @GET("navi/json")
     suspend fun navigationList(): Response<MutableList<Navigate>>
 
     @GET("project/tree/json")
-    suspend fun projectList(): Response<MutableList<Struct>>
+    fun projectList(): Flow<Response<MutableList<Struct>>>
 
     @GET("wxarticle/chapters/json")
-    suspend fun wxAccountList(): Response<MutableList<Struct>>
+    fun wxAccountList(): Flow<Response<MutableList<Struct>>>
 
     @GET("article/list/{page}/json")
     suspend fun structArticles(
