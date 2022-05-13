@@ -32,9 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.compose.wanandroid.logic.back
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import com.compose.wanandroid.R
 import com.compose.wanandroid.logic.noRippleClickable
 import com.compose.wanandroid.ui.theme.AppTheme
@@ -44,6 +43,7 @@ import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.common.ProgressViewEvent
 import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.showSnackbar
+import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.widget.ProgressDialog
 import kotlinx.coroutines.launch
 
@@ -55,11 +55,19 @@ fun LoginPagePreview() {
     }
 }
 
+fun NavGraphBuilder.loginGraph(
+    onBack: () -> Unit
+) {
+    composable(route = Screen.Login.route) {
+        LoginPage(onBack = onBack)
+    }
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginPage(
-    navController: NavController = rememberNavController(),
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = viewModel(),
+    onBack: () -> Unit = {}
 ) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -74,7 +82,7 @@ fun LoginPage(
             when (it) {
                 is LoginViewEvent.Back -> {
                     showDialog = false
-                    navController.popBackStack()
+                    onBack()
                 }
                 is SnackViewEvent -> {
                     showDialog = false
@@ -114,7 +122,7 @@ fun LoginPage(
                     modifier = Modifier.size(AppBarHeight),
                     onClick = {
                         keyboardController?.hide()
-                        navController.back()
+                        onBack()
                     }
                 ) {
                     Icon(

@@ -12,25 +12,47 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.logic.back
+import com.compose.wanandroid.logic.fromJson
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.common.AppTitleBar
+import com.compose.wanandroid.ui.page.main.Screen
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
+
+fun NavGraphBuilder.categoryGraph(controller: NavController) {
+    composable(
+        route = Screen.CategoryDetail.route + "/{category}/{index}",
+        arguments = listOf(
+            navArgument("category") { type = NavType.StringType },
+            navArgument("index") { type = NavType.IntType }
+        )
+    ) {
+        val args = it.arguments?.getString("category")?.fromJson<Struct>()
+        val index = it.arguments?.getInt("index", 0) ?: 0
+        if (args != null) {
+            CategoryListPage(struct = args, index = index, controller = controller)
+        }
+    }
+}
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CategoryListPage(
     struct: Struct,
     index: Int = 0,
-    navController: NavController,
+    controller: NavController,
     viewModel: CategoryListViewModel = viewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
     AppScaffold(
-        topBar = { AppTitleBar(text = struct.name, onBack = { navController.back() }, elevation = 0.dp) },
+        topBar = { AppTitleBar(text = struct.name, onBack = { controller.back() }, elevation = 0.dp) },
         scaffoldState = scaffoldState
     ) { padding ->
         Column(
@@ -91,7 +113,7 @@ fun CategoryListPage(
                 modifier = Modifier.background(AppTheme.colors.background)
             ) { page ->
                 // Pager子页无法区分ViewModel，父页面统一创建和管理
-                CategoryDetailPage(navController, viewModel.getChildViewModel(structs[page].id), scaffoldState)
+                CategoryDetailPage(controller, viewModel.getChildViewModel(structs[page].id), scaffoldState)
             }
         }
     }

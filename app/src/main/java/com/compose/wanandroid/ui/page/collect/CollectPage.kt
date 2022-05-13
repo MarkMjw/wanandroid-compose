@@ -12,18 +12,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import com.compose.wanandroid.logic.back
 import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.common.AppTitleBar
+import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.widget.TabText
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
+fun NavGraphBuilder.collectGraph(controller: NavController) {
+    composable(route = Screen.Collect.route) {
+        CollectPage(controller)
+    }
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CollectPage(
-    navController: NavController,
+    controller: NavController,
 ) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -40,7 +49,7 @@ fun CollectPage(
         scaffoldState = scaffoldState,
         topBar = {
             AppTitleBar(
-                onBack = { navController.back() },
+                onBack = { controller.back() },
                 title = {
                     TabRow(
                         selectedTabIndex = pagerState.currentPage,
@@ -92,8 +101,8 @@ fun CollectPage(
             modifier = Modifier.background(AppTheme.colors.background)
         ) { page ->
             when (page) {
-                0 -> CollectArticlePage(navController, scaffoldState)
-                1 -> CollectLinkPage(navController, scaffoldState)
+                0 -> CollectArticlePage(controller, scaffoldState)
+                1 -> CollectLinkPage(controller, scaffoldState)
             }
         }
     }

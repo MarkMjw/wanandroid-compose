@@ -16,11 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import com.compose.wanandroid.R
 import com.compose.wanandroid.logic.Logger
-import com.compose.wanandroid.logic.back
 import com.compose.wanandroid.logic.darkMode
 import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.*
@@ -35,20 +34,28 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingPagePreview() {
     AppTheme {
-        SettingPage(rememberNavController())
+        SettingPage()
+    }
+}
+
+fun NavGraphBuilder.settingGraph(
+    onBack: () -> Unit
+) {
+    composable(route = Screen.Setting.route) {
+        SettingPage(onBack = onBack)
     }
 }
 
 @Composable
 fun SettingPage(
-    navController: NavController,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    viewModel: SettingViewModel = viewModel()
+    viewModel: SettingViewModel = viewModel(),
+    onBack: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
     val viewState = viewModel.viewState
     var showDialog by remember { mutableStateOf(false) }
     var progress by remember { mutableStateOf("加载中...") }
+    val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect {
@@ -75,7 +82,7 @@ fun SettingPage(
 
     AppScaffold(
         title = Screen.Setting.text,
-        onBack = { navController.back() }
+        onBack = onBack
     ) {
         Column(
             modifier = Modifier.fillMaxSize()

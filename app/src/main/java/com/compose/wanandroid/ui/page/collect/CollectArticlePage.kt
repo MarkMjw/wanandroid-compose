@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CollectArticlePage(
-    navController: NavController,
+    controller: NavController,
     scaffoldState: ScaffoldState,
     viewModel: CollectArticleViewModel = viewModel()
 ) {
@@ -67,7 +67,7 @@ fun CollectArticlePage(
                                 "用户:$id".toast(context)
                             },
                             onSelected = {
-                                navController.navigate(Screen.Web.route, it)
+                                controller.navigate(Screen.Web.route, it)
                             })
                     }
                 }

@@ -5,23 +5,38 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.Logger
-import com.compose.wanandroid.logic.back
+import com.compose.wanandroid.logic.fromJson
 import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.page.main.Screen
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.progress
 import com.compose.wanandroid.ui.widget.StatePageEmpty
 import com.google.accompanist.web.*
 
+fun NavGraphBuilder.webGraph(onBack: () -> Unit) {
+    composable(
+        route = Screen.Web.route + "/{link}",
+        arguments = listOf(navArgument("link") { type = NavType.StringType })
+    ) {
+        val link = it.arguments?.getString("link")?.fromJson<Link>()
+        if (link != null) {
+            WebPage(link, onBack)
+        }
+    }
+}
+
 @Composable
 fun WebPage(
     link: Link,
-    navController: NavController = rememberNavController()
+    onBack: () -> Unit = {}
 ) {
     val state = rememberWebViewState(url = link.url)
     val navigator = rememberWebViewNavigator()
@@ -33,7 +48,7 @@ fun WebPage(
             if (navigator.canGoBack) {
                 navigator.navigateBack()
             } else {
-                navController.back()
+                onBack()
             }
         }
     ) {

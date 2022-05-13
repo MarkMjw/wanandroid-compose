@@ -14,25 +14,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.compose.wanandroid.data.model.Link
-import com.compose.wanandroid.data.model.Struct
-import com.compose.wanandroid.logic.fromJson
+import com.compose.wanandroid.logic.back
 import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.page.home.HomePage
 import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.question.QuestionPage
 import com.compose.wanandroid.ui.page.category.CategoryPage
-import com.compose.wanandroid.ui.page.collect.CollectPage
-import com.compose.wanandroid.ui.page.detail.WebPage
-import com.compose.wanandroid.ui.page.login.LoginPage
-import com.compose.wanandroid.ui.page.profile.SettingPage
-import com.compose.wanandroid.ui.page.struct.CategoryListPage
+import com.compose.wanandroid.ui.page.collect.collectGraph
+import com.compose.wanandroid.ui.page.detail.webGraph
+import com.compose.wanandroid.ui.page.login.loginGraph
+import com.compose.wanandroid.ui.page.profile.settingGraph
+import com.compose.wanandroid.ui.page.struct.categoryGraph
 import com.compose.wanandroid.ui.theme.*
 
 @Preview
@@ -79,41 +75,11 @@ private fun NavigationHost(
         composable(Screen.Category.route) { CategoryPage(controller, padding) }
         composable(Screen.Profile.route) { ProfilePage(controller, padding) }
 
-        composable(
-            route = Screen.Web.route + "/{link}",
-            arguments = listOf(navArgument("link") { type = NavType.StringType })
-        ) {
-            val args = it.arguments?.getString("link")?.fromJson<Link>()
-            if (args != null) {
-                WebPage(args, controller)
-            }
-        }
-
-        composable(route = Screen.Setting.route) {
-            SettingPage(controller)
-        }
-
-        composable(route = Screen.Login.route) {
-            LoginPage(controller)
-        }
-
-        composable(route = Screen.Collect.route) {
-            CollectPage(controller)
-        }
-
-        composable(
-            route = Screen.CategoryDetail.route + "/{category}/{index}",
-            arguments = listOf(
-                navArgument("category") { type = NavType.StringType },
-                navArgument("index") { type = NavType.IntType }
-            )
-        ) {
-            val args = it.arguments?.getString("category")?.fromJson<Struct>()
-            val index = it.arguments?.getInt("index", 0) ?: 0
-            if (args != null) {
-                CategoryListPage(struct = args, index = index, navController = controller)
-            }
-        }
+        loginGraph { controller.back() }
+        settingGraph { controller.back() }
+        webGraph { controller.back() }
+        collectGraph(controller)
+        categoryGraph(controller)
     }
 }
 

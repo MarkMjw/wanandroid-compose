@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CategoryDetailPage(
-    navController: NavController,
+    controller: NavController,
     viewModel: CategoryDetailViewModel,
     scaffoldState: ScaffoldState
 ) {
@@ -76,7 +76,7 @@ fun CategoryDetailPage(
                                 "用户:$id".toast(context)
                             },
                             onSelected = {
-                                navController.navigate(Screen.Web.route, it)
+                                controller.navigate(Screen.Web.route, it)
                             })
                     }
                 }
