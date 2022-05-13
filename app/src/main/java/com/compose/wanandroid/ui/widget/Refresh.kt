@@ -65,18 +65,48 @@ fun <T : Any> RefreshList(
 
             if (!refreshState.isRefreshing) {
                 item {
-                    lazyPagingItems.loadState.run {
-                        when (append) {
-                            is LoadState.Loading -> LoadingItem()
-                            is LoadState.Error -> ErrorItem {
-                                lazyPagingItems.retry()
-                            }
-                            is LoadState.NotLoading -> {
-                                if (append.endOfPaginationReached) {
-                                    EndItem()
-                                }
+                    val state = lazyPagingItems.loadState
+                    when (state.append) {
+                        is LoadState.Loading -> LoadingItem()
+                        is LoadState.Error -> ErrorItem {
+                            lazyPagingItems.retry()
+                        }
+                        is LoadState.NotLoading -> {
+                            if (state.append.endOfPaginationReached) {
+                                EndItem()
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun <T : Any> LoadList(
+    lazyPagingItems: LazyPagingItems<T>,
+    modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
+    itemContent: LazyListScope.() -> Unit,
+) {
+    LazyColumn(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        state = listState
+    ) {
+        itemContent()
+
+        item {
+            val state = lazyPagingItems.loadState
+            when (state.append) {
+                is LoadState.Loading -> LoadingItem()
+                is LoadState.Error -> ErrorItem {
+                    lazyPagingItems.retry()
+                }
+                is LoadState.NotLoading -> {
+                    if (state.append.endOfPaginationReached) {
+                        EndItem()
                     }
                 }
             }

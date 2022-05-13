@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.logic.zips
+import com.compose.wanandroid.ui.common.RefreshViewAction
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,12 +20,13 @@ class StructViewModel : ViewModel() {
         private set
 
     init {
-        dispatch(StructViewAction.FetchData)
+        dispatch(RefreshViewAction.FetchData)
     }
 
-    fun dispatch(action: StructViewAction) {
+    fun dispatch(action: RefreshViewAction) {
         when (action) {
-            is StructViewAction.FetchData -> fetchData()
+            is RefreshViewAction.FetchData -> fetchData()
+            is RefreshViewAction.Refresh -> fetchData()
         }
     }
 
@@ -63,8 +65,4 @@ data class StructViewState(
     val listState: LazyListState = LazyListState()
 ) {
     val size = data.size
-}
-
-sealed class StructViewAction {
-    object FetchData : StructViewAction()
 }

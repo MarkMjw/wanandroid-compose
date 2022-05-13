@@ -123,6 +123,16 @@ interface Api {
         @Field("name") name: String?,
         @Field("link") link: String?
     ): Response<CollectLink>
+
+    @GET("hotkey/json")
+    fun hotKey(): Flow<Response<MutableList<HotKey>>>
+
+    @FormUrlEncoded
+    @POST("article/query/{page}/json")
+    suspend fun search(
+        @Path("page") page: Int,
+        @Field("k") key: String
+    ): ListResponse<Article>
 }
 
 object ApiService : KoinComponent {

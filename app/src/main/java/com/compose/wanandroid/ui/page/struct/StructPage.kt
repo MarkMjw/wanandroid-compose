@@ -24,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.logic.navigate
+import com.compose.wanandroid.ui.common.RefreshViewAction
 import com.compose.wanandroid.ui.common.StickyTitle
 import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
@@ -40,7 +41,7 @@ fun StructPage(
         modifier = Modifier.fillMaxSize(),
         state = viewState.pageState,
         onRetry = {
-            viewModel.dispatch(StructViewAction.FetchData)
+            viewModel.dispatch(RefreshViewAction.FetchData)
         }
     ) {
         LazyColumn(

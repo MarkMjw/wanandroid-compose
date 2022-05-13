@@ -65,3 +65,11 @@ data class CollectLink(
     var userId: Int = 0,
     var visible: Int = 0,
 )
+
+data class HotKey(
+    val id: Int,
+    val link: String = "",
+    val name: String = "",
+    val order: Int = 1,
+    val visible: Int = 1,
+)
