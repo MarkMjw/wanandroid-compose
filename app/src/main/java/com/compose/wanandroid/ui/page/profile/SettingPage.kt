@@ -147,6 +147,7 @@ fun RadioGroup(
                 fontSize = 15.sp,
                 color = AppTheme.colors.textPrimary,
                 textAlign = TextAlign.Start,
+                fontWeight = FontWeight.Medium,
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 5.dp),
             )
@@ -210,8 +211,8 @@ fun SwitchItem(
                 fontSize = 15.sp,
                 color = AppTheme.colors.textPrimary,
                 textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .padding(end = 10.dp)
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(end = 10.dp)
             )
 
             Text(
@@ -219,8 +220,7 @@ fun SwitchItem(
                 fontSize = 12.sp,
                 color = AppTheme.colors.textSecondary,
                 textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .padding(top = 5.dp, end = 10.dp)
+                modifier = Modifier.padding(top = 5.dp, end = 10.dp)
             )
         }
 
@@ -260,6 +260,7 @@ fun SettingItem(
             fontSize = 15.sp,
             color = AppTheme.colors.textPrimary,
             textAlign = TextAlign.Start,
+            fontWeight = FontWeight.Medium,
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .padding(end = 10.dp)

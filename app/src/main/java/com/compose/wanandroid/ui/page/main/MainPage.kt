@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -106,8 +107,8 @@ private fun BottomNavigation(
         pages.forEach { tab ->
             BottomNavigationItem(
                 selected = tab.route == currentRoute,
-                icon = { Icon(painter = painterResource(id = tab.icon), contentDescription = "") },
-                label = { Text(text = tab.text, fontSize = 11.sp) },
+                icon = { Icon(painter = painterResource(id = tab.icon), contentDescription = null) },
+                label = { Text(text = tab.text, fontSize = 11.sp, fontWeight = FontWeight.SemiBold) },
                 onClick = {
                     if (tab.route != currentRoute) {
                         controller.navigate(tab.route) {

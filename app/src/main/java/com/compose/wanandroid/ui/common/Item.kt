@@ -161,6 +161,7 @@ fun ArticleItem(
                         modifier = Modifier.wrapContentSize(),
                         text = data.title.asHTML(fontSize = 15.sp),
                         color = AppTheme.colors.textPrimary,
+                        fontWeight = FontWeight.Medium,
                         fontSize = 15.sp,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
@@ -254,10 +255,11 @@ fun StickyTitle(
         Text(
             text = title,
             modifier = Modifier.align(Alignment.CenterVertically),
-            fontSize = 16.sp,
+            fontSize = 15.sp,
             color = AppTheme.colors.textPrimary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Start
         )
     }

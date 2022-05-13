@@ -1,6 +1,9 @@
 package com.compose.wanandroid.ui.page.login
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,7 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -126,7 +129,7 @@ fun LoginPage(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Close,
+                        imageVector = Icons.Outlined.Close,
                         tint = AppTheme.colors.onPrimary,
                         contentDescription = "Close"
                     )
@@ -280,7 +283,11 @@ fun Input(
                 )
             },
             trailingIcon = {
-                if (hasFocus && text.trim().isNotEmpty()) {
+                AnimatedVisibility(
+                    visible = hasFocus && text.trim().isNotEmpty(),
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     Row {
                         if (isPassword) {
                             Image(

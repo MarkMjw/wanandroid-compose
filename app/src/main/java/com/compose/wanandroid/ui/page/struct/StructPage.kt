@@ -89,10 +89,10 @@ fun StructItem(
         ) {
             struct.children.forEachIndexed { index, item ->
                 Box(modifier = modifier
-                    .padding(start = 8.dp, bottom = 8.dp)
-                    .height(25.dp)
-                    .background(color = AppTheme.colors.secondaryBackground, shape = RoundedCornerShape(25.dp / 2))
-                    .clip(shape = RoundedCornerShape(25.dp / 2))
+                    .padding(start = 10.dp, bottom = 10.dp)
+                    .height(28.dp)
+                    .background(color = AppTheme.colors.secondaryBackground, shape = RoundedCornerShape(14.dp))
+                    .clip(shape = RoundedCornerShape(14.dp))
                     .clickable {
                         onSelect(struct, index)
                     }

@@ -1,15 +1,16 @@
 package com.compose.wanandroid.ui.page.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -66,31 +67,31 @@ fun HomePage(
                 modifier = Modifier.fillMaxWidth(),
                 text = "首页",
                 leadingActions = {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.ic_scan),
-//                        modifier = Modifier
-//                            .fillMaxHeight()
-//                            .width(AppBarHeight)
-//                            .clickable {
-//                                // TODO 扫描
-//                            },
-//                        colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
-//                        contentScale = ContentScale.Inside,
-//                        contentDescription = null
-//                    )
+                    IconButton(
+                        onClick = {
+                            // TODO 扫描
+                        },
+                        content = {
+                            Icon(
+                                imageVector = Icons.Outlined.PhotoCamera,
+                                tint = AppTheme.colors.onPrimary,
+                                contentDescription = null
+                            )
+                        }
+                    )
                 },
                 trailingActions = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_search),
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(AppBarHeight)
-                            .clickable {
-                                controller.navigate(Page.Search.route)
-                            },
-                        colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
-                        contentScale = ContentScale.Inside,
-                        contentDescription = null
+                    IconButton(
+                        onClick = {
+                            controller.navigate(Page.Search.route)
+                        },
+                        content = {
+                            Icon(
+                                imageVector = Icons.Outlined.Search,
+                                tint = AppTheme.colors.onPrimary,
+                                contentDescription = null
+                            )
+                        }
                     )
                 }
             )

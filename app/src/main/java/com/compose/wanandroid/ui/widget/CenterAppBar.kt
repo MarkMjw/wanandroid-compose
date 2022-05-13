@@ -1,6 +1,7 @@
 package com.compose.wanandroid.ui.widget
 
-import androidx.compose.foundation.layout.*import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -10,7 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,7 +88,7 @@ fun CenterAppBar(
                             val previous = controller?.previousBackStackEntry
                             if (previous != null) {
                                 IconButton(onClick = { controller.popBackStack() }) {
-                                    Icon(Icons.Filled.ArrowBack, null)
+                                    Icon(Icons.Outlined.ArrowBack, null)
                                 }
                             }
                         }

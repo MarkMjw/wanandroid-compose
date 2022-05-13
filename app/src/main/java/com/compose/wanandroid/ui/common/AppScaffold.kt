@@ -3,9 +3,10 @@ package com.compose.wanandroid.ui.common
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +51,7 @@ fun AppTitleBar(
             onClick = { onBack() },
             content = {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.Outlined.ArrowBack,
                     tint = AppTheme.colors.onPrimary,
                     contentDescription = "Back"
                 )
@@ -62,6 +63,7 @@ fun AppTitleBar(
             text = text,
             fontSize = 16.sp,
             color = AppTheme.colors.onPrimary,
+            fontWeight = FontWeight.SemiBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )

@@ -5,12 +5,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -69,17 +72,17 @@ fun SearchPage(controller: NavController) {
                     )
                 },
                 trailingActions = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_search),
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(AppBarHeight)
-                            .clickable {
-                                // TODO search
-                            },
-                        colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
-                        contentScale = ContentScale.Inside,
-                        contentDescription = null
+                    IconButton(
+                        onClick = {
+                            // TODO search
+                        },
+                        content = {
+                            Icon(
+                                imageVector = Icons.Outlined.Search,
+                                tint = AppTheme.colors.onPrimary,
+                                contentDescription = null
+                            )
+                        }
                     )
                 })
         }
@@ -98,7 +101,7 @@ fun SearchBar(
     Row(
         modifier = modifier
             .height(32.dp)
-            .background(Color.Black.copy(0.1f), RoundedCornerShape(20.dp)),
+            .background(Color.Black.copy(0.08f), RoundedCornerShape(20.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
         BasicTextField(
@@ -143,13 +146,13 @@ fun SearchBar(
             exit = fadeOut()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_delete),
+                painter = painterResource(id = R.drawable.ic_remove),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary.copy(0.8f)),
+                colorFilter = ColorFilter.tint(AppTheme.colors.onPrimary),
                 contentScale = ContentScale.Inside,
                 modifier = Modifier
-                    .padding(end = 5.dp)
-                    .size(25.dp)
+                    .padding(end = 10.dp)
+                    .size(20.dp)
                     .noRippleClickable {
                         onValueChanged("")
                     }
