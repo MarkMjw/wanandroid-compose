@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.question
+package com.compose.wanandroid.ui.page.square
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,10 +17,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class QuestionViewModel : ViewModel() {
+class SquareViewModel : ViewModel() {
 
     val pager: Flow<PagingData<Article>> by lazy {
-        loadPage { ApiService.api.wendaList(it) }
+        loadPage { ApiService.api.squareArticles(it) }
     }
 
     private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)

@@ -36,6 +36,9 @@ interface Api {
         @Query("cid") cid: Int
     ): ListResponse<Article>
 
+    @GET("user_article/list/{page}/json")
+    suspend fun squareArticles(@Path("page") page: Int): ListResponse<Article>
+
     @POST("user/login")
     @FormUrlEncoded
     suspend fun login(
