@@ -23,7 +23,7 @@ import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.data.model.Navigate
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.ui.common.StickyTitle
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.widget.StatePage
 import com.google.accompanist.flowlayout.FlowRow
@@ -52,7 +52,7 @@ fun NavigatePage(
                 stickyHeader { StickyTitle(navigate.name) }
                 item {
                     NavigateItem(navigate, onSelect = {
-                        navController.navigate(Screen.Web.route, it)
+                        navController.navigate(Page.Web.route, it)
                     })
                     if (position <= viewState.size - 1) {
                         Divider(

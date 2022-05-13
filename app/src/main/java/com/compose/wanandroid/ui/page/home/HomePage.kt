@@ -25,7 +25,7 @@ import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.*
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.widget.*
 import kotlinx.coroutines.launch
@@ -132,7 +132,7 @@ fun HomePage(
                                         .background(AppTheme.colors.secondaryBackground)
                                         .clickable {
                                             with(banners[page]) {
-                                                navController.navigate(Screen.Web.route, Link(title = title, url = url))
+                                                navController.navigate(Page.Web.route, Link(title = title, url = url))
                                             }
                                         },
                                     contentDescription = null,
@@ -156,7 +156,7 @@ fun HomePage(
                                         "用户:$id".toast(context)
                                     },
                                     onSelected = {
-                                        navController.navigate(Screen.Web.route, it)
+                                        navController.navigate(Page.Web.route, it)
                                     }
                                 )
                             }
@@ -174,7 +174,7 @@ fun HomePage(
                                     "用户:$id".toast(context)
                                 },
                                 onSelected = {
-                                    navController.navigate(Screen.Web.route, it)
+                                    navController.navigate(Page.Web.route, it)
                                 })
                         }
                     }

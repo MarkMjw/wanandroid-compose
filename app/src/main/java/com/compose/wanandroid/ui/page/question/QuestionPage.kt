@@ -14,7 +14,7 @@ import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.widget.RefreshList
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.widget.StatePage
 import kotlinx.coroutines.launch
 
@@ -68,7 +68,7 @@ fun QuestionPage(
                                     "用户:$id".toast(context)
                                 },
                                 onSelected = {
-                                    navController.navigate(Screen.Web.route, it)
+                                    navController.navigate(Page.Web.route, it)
                                 })
                         }
                     }

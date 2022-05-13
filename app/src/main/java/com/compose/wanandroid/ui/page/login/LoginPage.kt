@@ -43,7 +43,7 @@ import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.common.ProgressViewEvent
 import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.showSnackbar
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.widget.ProgressDialog
 import kotlinx.coroutines.launch
 
@@ -58,7 +58,7 @@ fun LoginPagePreview() {
 fun NavGraphBuilder.loginGraph(
     onBack: () -> Unit
 ) {
-    composable(route = Screen.Login.route) {
+    composable(route = Page.Login.route) {
         LoginPage(onBack = onBack)
     }
 }

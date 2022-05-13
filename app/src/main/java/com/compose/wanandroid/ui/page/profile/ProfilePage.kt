@@ -23,7 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.compose.wanandroid.R
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
 
@@ -67,7 +67,7 @@ fun ProfilePage(
                     .clip(CircleShape)
                     .clickable {
                         if (!viewState.isLogin) {
-                            navController.navigate(Screen.Login.route)
+                            navController.navigate(Page.Login.route)
                         }
                     },
                 model = userInfo?.avatar,
@@ -82,7 +82,7 @@ fun ProfilePage(
                     .align(Alignment.CenterHorizontally)
                     .clickable {
                         if (!viewState.isLogin) {
-                            navController.navigate(Screen.Login.route)
+                            navController.navigate(Page.Login.route)
                         }
                     },
                 fontSize = 22.sp,
@@ -117,9 +117,9 @@ fun ProfilePage(
         ProfileItem(icon = R.drawable.ic_share_article, text = "我的分享") { }
         ProfileItem(icon = R.drawable.ic_collect, text = "我的收藏") {
             if (viewState.isLogin) {
-                navController.navigate(Screen.Collect.route)
+                navController.navigate(Page.Collect.route)
             } else {
-                navController.navigate(Screen.Login.route)
+                navController.navigate(Page.Login.route)
             }
         }
         ProfileItem(icon = R.drawable.ic_read_later, text = "我的书签") { }
@@ -127,7 +127,7 @@ fun ProfilePage(
         ProfileItem(icon = R.drawable.ic_github, text = "开源项目") { }
         ProfileItem(icon = R.drawable.ic_about, text = "关于作者", subText = "请他喝杯☕️~") { }
         ProfileItem(icon = R.drawable.ic_setting, text = "系统设置") {
-            navController.navigate(Screen.Setting.route)
+            navController.navigate(Page.Setting.route)
         }
     }
 }

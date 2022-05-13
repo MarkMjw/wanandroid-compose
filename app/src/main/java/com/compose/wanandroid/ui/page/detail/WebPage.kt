@@ -15,7 +15,7 @@ import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.fromJson
 import com.compose.wanandroid.ui.common.AppScaffold
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.progress
 import com.compose.wanandroid.ui.widget.StatePageEmpty
@@ -23,7 +23,7 @@ import com.google.accompanist.web.*
 
 fun NavGraphBuilder.webGraph(onBack: () -> Unit) {
     composable(
-        route = Screen.Web.route + "/{link}",
+        route = Page.Web.route + "/{link}",
         arguments = listOf(navArgument("link") { type = NavType.StringType })
     ) {
         val link = it.arguments?.getString("link")?.fromJson<Link>()

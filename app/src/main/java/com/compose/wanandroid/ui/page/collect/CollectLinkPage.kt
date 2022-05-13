@@ -23,7 +23,7 @@ import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.ui.common.RefreshViewAction
 import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.showSnackbar
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
 import com.compose.wanandroid.ui.widget.StatePage
@@ -69,7 +69,7 @@ fun CollectLinkPage(
                     LinkItem(
                         link = link,
                         modifier = Modifier.clickable {
-                            navController.navigate(Screen.Web.route, Link(title = link.name, url = link.link))
+                            navController.navigate(Page.Web.route, Link(title = link.name, url = link.link))
                         })
 
                     if (position <= viewState.size - 1) {

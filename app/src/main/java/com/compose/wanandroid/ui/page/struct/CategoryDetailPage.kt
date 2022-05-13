@@ -18,7 +18,7 @@ import com.compose.wanandroid.ui.common.ArticleItem
 import com.compose.wanandroid.ui.common.CollectViewAction
 import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.showSnackbar
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.widget.RefreshList
 import com.compose.wanandroid.ui.widget.StatePage
 import kotlinx.coroutines.launch
@@ -76,7 +76,7 @@ fun CategoryDetailPage(
                                 "用户:$id".toast(context)
                             },
                             onSelected = {
-                                controller.navigate(Screen.Web.route, it)
+                                controller.navigate(Page.Web.route, it)
                             })
                     }
                 }

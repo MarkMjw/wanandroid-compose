@@ -25,7 +25,7 @@ import androidx.navigation.NavController
 import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.ui.common.StickyTitle
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.google.accompanist.flowlayout.FlowRow
 
@@ -54,7 +54,7 @@ fun StructPage(
                 stickyHeader { StickyTitle(title = struct.name) }
                 item {
                     StructItem(struct, onSelect = { struct, index ->
-                        navController.navigate(Screen.CategoryDetail.route, struct, index)
+                        navController.navigate(Page.CategoryDetail.route, struct, index)
                     })
                     if (position <= viewState.size - 1) {
                         Divider(

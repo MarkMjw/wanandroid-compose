@@ -22,13 +22,13 @@ import com.compose.wanandroid.logic.fromJson
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.common.AppTitleBar
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.categoryGraph(controller: NavController) {
     composable(
-        route = Screen.CategoryDetail.route + "/{category}/{index}",
+        route = Page.CategoryDetail.route + "/{category}/{index}",
         arguments = listOf(
             navArgument("category") { type = NavType.StringType },
             navArgument("index") { type = NavType.IntType }

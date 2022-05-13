@@ -21,7 +21,7 @@ import androidx.navigation.compose.composable
 import com.compose.wanandroid.R
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.darkMode
-import com.compose.wanandroid.ui.page.main.Screen
+import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.*
 import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.common.ProgressViewEvent
@@ -41,7 +41,7 @@ fun SettingPagePreview() {
 fun NavGraphBuilder.settingGraph(
     onBack: () -> Unit
 ) {
-    composable(route = Screen.Setting.route) {
+    composable(route = Page.Setting.route) {
         SettingPage(onBack = onBack)
     }
 }
@@ -81,7 +81,7 @@ fun SettingPage(
     }
 
     AppScaffold(
-        title = Screen.Setting.text,
+        title = Page.Setting.text,
         onBack = onBack
     ) {
         Column(

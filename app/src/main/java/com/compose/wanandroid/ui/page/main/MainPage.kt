@@ -51,7 +51,7 @@ fun MainPage() {
         bottomBar = {
             // 仅在主页展示BottomBar
             when (currentRoute) {
-                null, Screen.Home.route, Screen.Question.route, Screen.Category.route, Screen.Profile.route -> {
+                null, Page.Home.route, Page.Question.route, Page.Category.route, Page.Profile.route -> {
                     BottomNavigation(controller, currentRoute)
                 }
             }
@@ -66,14 +66,13 @@ private fun NavigationHost(
 ) {
     NavHost(
         navController = controller,
-        startDestination = Screen.Home.route,
-        modifier = Modifier
-            .background(AppTheme.colors.background)
+        startDestination = Page.Home.route,
+        modifier = Modifier.background(AppTheme.colors.background)
     ) {
-        composable(Screen.Home.route) { HomePage(controller, padding) }
-        composable(Screen.Question.route) { QuestionPage(controller, padding) }
-        composable(Screen.Category.route) { CategoryPage(controller, padding) }
-        composable(Screen.Profile.route) { ProfilePage(controller, padding) }
+        composable(Page.Home.route) { HomePage(controller, padding) }
+        composable(Page.Question.route) { QuestionPage(controller, padding) }
+        composable(Page.Category.route) { CategoryPage(controller, padding) }
+        composable(Page.Profile.route) { ProfilePage(controller, padding) }
 
         loginGraph { controller.back() }
         settingGraph { controller.back() }
@@ -88,11 +87,11 @@ private fun BottomNavigation(
     controller: NavController,
     currentRoute: String?
 ) {
-    val screens = listOf(
-        Screen.Home,
-        Screen.Question,
-        Screen.Category,
-        Screen.Profile
+    val pages = listOf(
+        Page.Home,
+        Page.Question,
+        Page.Category,
+        Page.Profile
     )
     BottomNavigation(
         modifier = Modifier
@@ -101,7 +100,7 @@ private fun BottomNavigation(
         backgroundColor = AppTheme.colors.tabBackground,
         contentColor = defaultContentColorFor(backgroundColor = AppTheme.colors.background)
     ) {
-        screens.forEach { tab ->
+        pages.forEach { tab ->
             BottomNavigationItem(
                 selected = tab.route == currentRoute,
                 icon = { Icon(painter = painterResource(id = tab.icon), contentDescription = "") },
