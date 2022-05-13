@@ -1,5 +1,7 @@
 package com.compose.wanandroid.ui.page.detail
 
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -83,6 +85,16 @@ fun WebPage(
                         }
                     },
                     navigator = navigator,
+                    client = object : AccompanistWebViewClient() {
+                        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                            val url = request?.url?.scheme ?: ""
+                            return if (url.startsWith("http", ignoreCase = true)) {
+                                super.shouldOverrideUrlLoading(view, request)
+                            } else {
+                                true
+                            }
+                        }
+                    }
                 )
 
                 if (loadingState is LoadingState.Loading) {
