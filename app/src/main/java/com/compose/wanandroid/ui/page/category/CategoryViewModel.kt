@@ -12,6 +12,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.data.remote.loadPage
+import com.compose.wanandroid.data.repository.ArticleListRepository
 import com.compose.wanandroid.ui.common.CollectViewAction
 import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.ViewAction
@@ -23,11 +24,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class CategoryViewModel(
-    private val cid: Int
+    private val repo: ArticleListRepository
 ) : ViewModel() {
 
     private val pager: Flow<PagingData<Article>> by lazy {
-        loadPage { ApiService.api.structArticles(it, cid) }
+        loadPage { repo.getArticleList(it) }
     }
 
     var viewState by mutableStateOf(CategoryViewState(pagingData = pager))

@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +26,7 @@ import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
 import com.compose.wanandroid.ui.widget.StatePage
-import com.compose.wanandroid.ui.widget.html.HtmlText
+import com.compose.wanandroid.ui.widget.html.asHTML
 import kotlinx.coroutines.launch
 
 @Composable
@@ -95,16 +94,15 @@ fun LinkItem(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        HtmlText(
+        Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            text = link.name,
+            text = link.name.asHTML(fontSize = 15.sp),
             color = AppTheme.colors.textPrimary,
             fontSize = 15.sp,
             maxLines = 3,
-            overflow = TextOverflow.Ellipsis,
-            urlSpanStyle = SpanStyle(textDecoration = null)
+            overflow = TextOverflow.Ellipsis
         )
 
         Text(

@@ -21,6 +21,9 @@ interface Api {
     @GET("article/list/{page}/json")
     suspend fun articles(@Path("page") page: Int): ListResponse<Article>
 
+    @GET("user_article/list/{page}/json")
+    suspend fun squareArticles(@Path("page") page: Int): ListResponse<Article>
+
     @GET("wenda/list/{page}/json")
     suspend fun wendaList(@Path("page") page: Int): ListResponse<Article>
 
@@ -30,14 +33,20 @@ interface Api {
     @GET("navi/json")
     suspend fun navigationList(): Response<MutableList<Navigate>>
 
+    @GET("project/tree/json")
+    suspend fun projectList(): Response<MutableList<Struct>>
+
     @GET("article/list/{page}/json")
     suspend fun structArticles(
         @Path("page") page: Int,
         @Query("cid") cid: Int
     ): ListResponse<Article>
 
-    @GET("user_article/list/{page}/json")
-    suspend fun squareArticles(@Path("page") page: Int): ListResponse<Article>
+    @GET("project/list/{page}/json")
+    suspend fun projectArticles(
+        @Path("page") page: Int,
+        @Query("cid") cid: Int
+    ): ListResponse<Article>
 
     @POST("user/login")
     @FormUrlEncoded

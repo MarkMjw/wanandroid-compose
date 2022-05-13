@@ -113,7 +113,7 @@ fun CategoryListPage(
                 modifier = Modifier.background(AppTheme.colors.background)
             ) { page ->
                 // Pager子页无法区分ViewModel，父页面统一创建和管理
-                CategoryPage(controller, viewModel.getChildViewModel(structs[page].id), scaffoldState)
+                CategoryPage(controller, viewModel.getChildViewModel(structs[page]), scaffoldState)
             }
         }
     }

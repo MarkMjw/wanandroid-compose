@@ -75,10 +75,10 @@ private fun linkTextColor() = Color(
 )
 
 @Composable
-private fun String.asHTML(
+fun String.asHTML(
     fontSize: TextUnit,
-    flags: Int,
-    URLSpanStyle: SpanStyle
+    flags: Int = HtmlCompat.FROM_HTML_MODE_COMPACT,
+    URLSpanStyle: SpanStyle = SpanStyle(textDecoration = null)
 ) = buildAnnotatedString {
     val spanned = HtmlCompat.fromHtml(this@asHTML, flags)
     val spans = spanned.getSpans(0, spanned.length, Any::class.java)

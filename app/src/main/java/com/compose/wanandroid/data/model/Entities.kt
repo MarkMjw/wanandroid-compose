@@ -38,8 +38,14 @@ data class Struct(
     var userControlSetTop: Boolean = false,
     var visible: Int = -1,
     var icon: String = "",
-    var link: String = ""
-) : Parcelable
+    var link: String = "",
+    var type: Int = TYPE_STRUCT
+) : Parcelable {
+    companion object {
+        const val TYPE_STRUCT = 0
+        const val TYPE_PROJECT = 1
+    }
+}
 
 @Parcelize
 data class Navigate(

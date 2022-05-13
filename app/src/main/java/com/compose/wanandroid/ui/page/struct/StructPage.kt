@@ -27,6 +27,7 @@ import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.ui.common.StickyTitle
 import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
+import com.compose.wanandroid.ui.widget.html.asHTML
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -56,14 +57,15 @@ fun StructPage(
                     StructItem(struct, onSelect = { struct, index ->
                         navController.navigate(Page.Category.route, struct, index)
                     })
-                    if (position <= viewState.size - 1) {
+
+                    if (position < viewState.size - 1) {
                         Divider(
                             startIndent = 10.dp,
                             color = AppTheme.colors.secondaryBackground,
                             thickness = 0.8f.dp
                         )
+                        Spacer(modifier = Modifier.height(10.dp))
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
         }
@@ -101,7 +103,7 @@ fun StructItem(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = item.name,
+                        text = item.name.asHTML(fontSize = 13.sp),
                         fontSize = 13.sp,
                         textAlign = TextAlign.Center,
                         color = AppTheme.colors.textSecondary,

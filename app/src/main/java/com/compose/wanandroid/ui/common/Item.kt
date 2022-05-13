@@ -11,7 +11,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,7 +25,7 @@ import com.compose.wanandroid.logic.rippleClickable
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.collectColor
 import com.compose.wanandroid.ui.theme.textThird
-import com.compose.wanandroid.ui.widget.html.HtmlText
+import com.compose.wanandroid.ui.widget.html.asHTML
 
 @Preview
 @Composable
@@ -158,26 +157,24 @@ fun ArticleItem(
                         .fillMaxSize()
                         .height(IntrinsicSize.Min)
                 ) {
-                    HtmlText(
+                    Text(
                         modifier = Modifier.wrapContentSize(),
-                        text = data.title,
+                        text = data.title.asHTML(fontSize = 15.sp),
                         color = AppTheme.colors.textPrimary,
                         fontSize = 15.sp,
                         maxLines = 3,
-                        overflow = TextOverflow.Ellipsis,
-                        urlSpanStyle = SpanStyle(textDecoration = null)
+                        overflow = TextOverflow.Ellipsis
                     )
 
                     if (data.desc.isNotEmpty()) {
                         Spacer(modifier = Modifier.size(5.dp))
-                        HtmlText(
+                        Text(
                             modifier = Modifier.wrapContentSize(),
-                            text = data.desc,
+                            text = data.desc.asHTML(fontSize = 13.sp),
                             color = AppTheme.colors.textSecondary,
                             fontSize = 13.sp,
                             maxLines = 3,
-                            overflow = TextOverflow.Ellipsis,
-                            urlSpanStyle = SpanStyle(textDecoration = null)
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
