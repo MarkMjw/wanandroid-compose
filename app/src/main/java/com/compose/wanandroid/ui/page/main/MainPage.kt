@@ -23,12 +23,12 @@ import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.page.home.HomePage
 import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.question.QuestionPage
-import com.compose.wanandroid.ui.page.category.CategoryPage
+import com.compose.wanandroid.ui.page.struct.StructHostPage
 import com.compose.wanandroid.ui.page.collect.collectGraph
 import com.compose.wanandroid.ui.page.detail.webGraph
 import com.compose.wanandroid.ui.page.login.loginGraph
 import com.compose.wanandroid.ui.page.profile.settingGraph
-import com.compose.wanandroid.ui.page.struct.categoryGraph
+import com.compose.wanandroid.ui.page.category.categoryGraph
 import com.compose.wanandroid.ui.theme.*
 
 @Preview
@@ -51,7 +51,7 @@ fun MainPage() {
         bottomBar = {
             // 仅在主页展示BottomBar
             when (currentRoute) {
-                null, Page.Home.route, Page.Question.route, Page.Category.route, Page.Profile.route -> {
+                null, Page.Home.route, Page.Question.route, Page.Struct.route, Page.Profile.route -> {
                     BottomNavigation(controller, currentRoute)
                 }
             }
@@ -71,7 +71,7 @@ private fun NavigationHost(
     ) {
         composable(Page.Home.route) { HomePage(controller, padding) }
         composable(Page.Question.route) { QuestionPage(controller, padding) }
-        composable(Page.Category.route) { CategoryPage(controller, padding) }
+        composable(Page.Struct.route) { StructHostPage(controller, padding) }
         composable(Page.Profile.route) { ProfilePage(controller, padding) }
 
         loginGraph { controller.back() }
@@ -90,7 +90,7 @@ private fun BottomNavigation(
     val pages = listOf(
         Page.Home,
         Page.Question,
-        Page.Category,
+        Page.Struct,
         Page.Profile
     )
     BottomNavigation(

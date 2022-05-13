@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.category
+package com.compose.wanandroid.ui.page.struct
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
@@ -6,31 +6,31 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.compose.wanandroid.data.model.Struct
+import com.compose.wanandroid.data.model.Navigate
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class StructViewModel : ViewModel() {
+class NavigateViewModel : ViewModel() {
 
-    var viewState by mutableStateOf(StructViewState())
+    var viewState by mutableStateOf(NavigateViewState())
         private set
 
     init {
-        dispatch(StructViewAction.FetchData)
+        dispatch(NavigateViewAction.FetchData)
     }
 
-    fun dispatch(action: StructViewAction) {
+    fun dispatch(action: NavigateViewAction) {
         when (action) {
-            is StructViewAction.FetchData -> fetchData()
+            is NavigateViewAction.FetchData -> fetchData()
         }
     }
 
     private fun fetchData() {
         viewModelScope.launch {
             flow {
-                emit(ApiService.api.structList())
+                emit(ApiService.api.navigationList())
             }.map {
                 it.data ?: emptyList()
             }.onStart {
@@ -47,14 +47,14 @@ class StructViewModel : ViewModel() {
     }
 }
 
-data class StructViewState(
-    val data: List<Struct> = emptyList(),
+data class NavigateViewState(
+    val data: List<Navigate> = emptyList(),
     val pageState: PageState = PageState.Loading,
     val listState: LazyListState = LazyListState()
 ) {
     val size = data.size
 }
 
-sealed class StructViewAction {
-    object FetchData : StructViewAction()
+sealed class NavigateViewAction {
+    object FetchData : NavigateViewAction()
 }

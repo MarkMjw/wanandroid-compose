@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.struct
+package com.compose.wanandroid.ui.page.category
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class CategoryDetailViewModel(
+class CategoryViewModel(
     private val cid: Int
 ) : ViewModel() {
 
@@ -30,7 +30,7 @@ class CategoryDetailViewModel(
         loadPage { ApiService.api.structArticles(it, cid) }
     }
 
-    var viewState by mutableStateOf(CategoryDetailViewState(pagingData = pager))
+    var viewState by mutableStateOf(CategoryViewState(pagingData = pager))
         private set
 
     private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
@@ -87,7 +87,7 @@ class CategoryDetailViewModel(
     }
 }
 
-data class CategoryDetailViewState(
+data class CategoryViewState(
     val pagingData: Flow<PagingData<Article>>,
     val isRefreshing: Boolean = false,
     val listState: LazyListState = LazyListState(),

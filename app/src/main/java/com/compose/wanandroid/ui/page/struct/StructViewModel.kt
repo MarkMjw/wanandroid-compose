@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.category
+package com.compose.wanandroid.ui.page.struct
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
@@ -6,31 +6,31 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.compose.wanandroid.data.model.Navigate
+import com.compose.wanandroid.data.model.Struct
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class NavigateViewModel : ViewModel() {
+class StructViewModel : ViewModel() {
 
-    var viewState by mutableStateOf(NavigateViewState())
+    var viewState by mutableStateOf(StructViewState())
         private set
 
     init {
-        dispatch(NavigateViewAction.FetchData)
+        dispatch(StructViewAction.FetchData)
     }
 
-    fun dispatch(action: NavigateViewAction) {
+    fun dispatch(action: StructViewAction) {
         when (action) {
-            is NavigateViewAction.FetchData -> fetchData()
+            is StructViewAction.FetchData -> fetchData()
         }
     }
 
     private fun fetchData() {
         viewModelScope.launch {
             flow {
-                emit(ApiService.api.navigationList())
+                emit(ApiService.api.structList())
             }.map {
                 it.data ?: emptyList()
             }.onStart {
@@ -47,14 +47,14 @@ class NavigateViewModel : ViewModel() {
     }
 }
 
-data class NavigateViewState(
-    val data: List<Navigate> = emptyList(),
+data class StructViewState(
+    val data: List<Struct> = emptyList(),
     val pageState: PageState = PageState.Loading,
     val listState: LazyListState = LazyListState()
 ) {
     val size = data.size
 }
 
-sealed class NavigateViewAction {
-    object FetchData : NavigateViewAction()
+sealed class StructViewAction {
+    object FetchData : StructViewAction()
 }

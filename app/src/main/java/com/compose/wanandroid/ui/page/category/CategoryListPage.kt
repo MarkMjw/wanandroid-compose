@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.struct
+package com.compose.wanandroid.ui.page.category
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.categoryGraph(controller: NavController) {
     composable(
-        route = Page.CategoryDetail.route + "/{category}/{index}",
+        route = Page.Category.route + "/{category}/{index}",
         arguments = listOf(
             navArgument("category") { type = NavType.StringType },
             navArgument("index") { type = NavType.IntType }
@@ -113,7 +113,7 @@ fun CategoryListPage(
                 modifier = Modifier.background(AppTheme.colors.background)
             ) { page ->
                 // Pager子页无法区分ViewModel，父页面统一创建和管理
-                CategoryDetailPage(controller, viewModel.getChildViewModel(structs[page].id), scaffoldState)
+                CategoryPage(controller, viewModel.getChildViewModel(structs[page].id), scaffoldState)
             }
         }
     }

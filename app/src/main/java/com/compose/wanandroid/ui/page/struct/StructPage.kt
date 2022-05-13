@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.compose.wanandroid.ui.page.category
+package com.compose.wanandroid.ui.page.struct
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -54,7 +54,7 @@ fun StructPage(
                 stickyHeader { StickyTitle(title = struct.name) }
                 item {
                     StructItem(struct, onSelect = { struct, index ->
-                        navController.navigate(Page.CategoryDetail.route, struct, index)
+                        navController.navigate(Page.Category.route, struct, index)
                     })
                     if (position <= viewState.size - 1) {
                         Divider(

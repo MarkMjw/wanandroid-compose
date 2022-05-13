@@ -10,12 +10,12 @@ sealed class Page(
 ) {
     object Home : Page("home", "首页", R.drawable.ic_bottom_bar_home)
     object Question : Page("question", "问答", R.drawable.ic_bottom_bar_ques)
-    object Category : Page("category", "分类", R.drawable.ic_bottom_bar_navi)
+    object Struct : Page("struct", "体系", R.drawable.ic_bottom_bar_navi)
     object Profile : Page("profile", "我的", R.drawable.ic_bottom_bar_mine)
     object Web : Page("web")
     object Login : Page("login")
     object Search : Page("search", "搜索")
     object Collect : Page("collect")
     object Setting : Page("setting", "设置")
-    object CategoryDetail : Page("category_detail")
+    object Category : Page("category")
 }

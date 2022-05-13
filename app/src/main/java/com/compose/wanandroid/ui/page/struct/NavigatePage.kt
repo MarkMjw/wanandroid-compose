@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.compose.wanandroid.ui.page.category
+package com.compose.wanandroid.ui.page.struct
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
