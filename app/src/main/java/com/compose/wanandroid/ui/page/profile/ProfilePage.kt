@@ -115,7 +115,13 @@ fun ProfilePage(
         }
 
         ProfileItem(icon = R.drawable.ic_coin, text = "我的积分", subText = "${coinInfo?.coinCount ?: ""}") { }
-        ProfileItem(icon = R.drawable.ic_share_article, text = "我的分享") { }
+        ProfileItem(icon = R.drawable.ic_share_article, text = "我的分享") {
+            if (viewState.isLogin) {
+                controller.navigate(Page.MineShare.route)
+            } else {
+                controller.navigate(Page.Login.route)
+            }
+        }
         ProfileItem(icon = R.drawable.ic_collect, text = "我的收藏") {
             if (viewState.isLogin) {
                 controller.navigate(Page.Collect.route)

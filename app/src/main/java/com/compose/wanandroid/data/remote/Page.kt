@@ -38,9 +38,10 @@ fun <K : Any, V : Any> ViewModel.page(
 
 fun <T : Any> ViewModel.loadPage(
     config: PagingConfig = defaultPage,
+    initialKey: Int = 0,
     block: suspend (page: Int) -> ListResponse<T>
 ): Flow<PagingData<T>> {
-    return page(config, 0) {
+    return page(config, initialKey) {
         val page = it.key ?: 0
         val response = try {
             HttpResult.Success(block(page))

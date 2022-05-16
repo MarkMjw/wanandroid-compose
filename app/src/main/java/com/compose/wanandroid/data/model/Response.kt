@@ -20,3 +20,4 @@ data class ListWrapper<T>(
 )
 
 typealias ListResponse<T> = Response<ListWrapper<T>>
+

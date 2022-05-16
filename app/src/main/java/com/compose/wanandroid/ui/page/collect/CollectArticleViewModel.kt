@@ -46,7 +46,3 @@ class CollectArticleViewModel : ViewModel() {
         // TODO 取消收藏
     }
 }
-
-sealed class CollectArticleViewAction {
-    data class UnCollect(val article: Article) : CollectArticleViewAction()
-}

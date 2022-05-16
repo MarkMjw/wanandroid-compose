@@ -133,6 +133,9 @@ interface Api {
         @Path("page") page: Int,
         @Field("k") key: String
     ): ListResponse<Article>
+
+    @GET("user/lg/private_articles/{page}/json")
+    suspend fun mineShareArticles(@Path("page") page: Int): Response<UserShareResponse>
 }
 
 object ApiService : KoinComponent {

@@ -18,4 +18,5 @@ sealed class Page(
     object Collect : Page("collect")
     object Setting : Page("setting", "设置")
     object Category : Page("category")
+    object MineShare : Page("mine_share")
 }

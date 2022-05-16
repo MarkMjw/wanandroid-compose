@@ -36,3 +36,8 @@ data class UserResponse(
     var userInfo: UserInfo? = null,
     var coinInfo: CoinInfo? = null
 )
+
+data class UserShareResponse(
+    var shareArticles: ListWrapper<Article>? = null,
+    var coinInfo: CoinInfo? = null
+)
