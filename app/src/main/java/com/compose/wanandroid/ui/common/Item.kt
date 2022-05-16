@@ -292,7 +292,7 @@ fun LinkItem(
             fontSize = 12.sp,
             color = AppTheme.colors.textThird,
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
+            maxLines = 2,
             modifier = Modifier.padding(top = 5.dp)
         )
     }

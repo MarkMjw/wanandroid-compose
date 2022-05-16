@@ -132,21 +132,13 @@ fun ProfilePage(
             }
         }
         ProfileItem(icon = R.drawable.ic_read_later, text = "我的书签") {
-            if (viewState.isLogin) {
-                controller.navigate(Page.Bookmark.route)
-            } else {
-                controller.navigate(Page.Login.route)
-            }
+            controller.navigate(Page.Bookmark.route)
         }
         ProfileItem(icon = R.drawable.ic_read_record, text = "阅读历史") {
-            if (viewState.isLogin) {
-                controller.navigate(Page.History.route)
-            } else {
-                controller.navigate(Page.Login.route)
-            }
+            controller.navigate(Page.History.route)
         }
         ProfileItem(icon = R.drawable.ic_github, text = "开源项目") {
-
+            controller.navigate(Page.Opensource.route)
         }
         ProfileItem(icon = R.drawable.ic_about, text = "关于作者", subText = "请他喝杯☕️~") {
             controller.navigate(Page.Web.route, Link("https://github.com/MarkMjw", "MarkMjw的Github", false))

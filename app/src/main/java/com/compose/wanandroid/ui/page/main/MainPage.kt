@@ -30,6 +30,7 @@ import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.profile.bookmark.bookmarkGraph
 import com.compose.wanandroid.ui.page.profile.collect.collectGraph
 import com.compose.wanandroid.ui.page.profile.history.historyGraph
+import com.compose.wanandroid.ui.page.profile.opensource.opensourceGraph
 import com.compose.wanandroid.ui.page.profile.setting.settingGraph
 import com.compose.wanandroid.ui.page.profile.share.mineShareGraph
 import com.compose.wanandroid.ui.page.search.searchGraph
@@ -87,6 +88,7 @@ private fun NavigationHost(
         mineShareGraph(controller)
         bookmarkGraph(controller)
         historyGraph(controller)
+        opensourceGraph(controller)
         settingGraph { controller.back() }
     }
 }

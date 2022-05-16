@@ -21,4 +21,5 @@ sealed class Page(
     object MineShare : Page("mine_share")
     object Bookmark : Page("bookmark")
     object History : Page("history")
+    object Opensource : Page("opensource")
 }
