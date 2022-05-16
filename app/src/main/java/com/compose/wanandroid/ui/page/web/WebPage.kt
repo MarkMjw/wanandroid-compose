@@ -1,12 +1,17 @@
 package com.compose.wanandroid.ui.page.web
 
+import android.net.Uri
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -19,6 +24,7 @@ import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.fromJson
 import com.compose.wanandroid.ui.common.AppScaffold
+import com.compose.wanandroid.ui.common.AppTitleBar
 import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.progress
@@ -48,17 +54,35 @@ fun WebPage(
     val navigator = rememberWebViewNavigator()
     val isDark = !AppTheme.colors.isLight
 
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val historyRepo: HistoryRepository by inject()
 
     AppScaffold(
-        title = state.pageTitle ?: link.title,
-        onBack = {
-            if (navigator.canGoBack) {
-                navigator.navigateBack()
-            } else {
-                onBack()
-            }
+        topBar = {
+            AppTitleBar(text = state.pageTitle ?: link.title,
+                onBack = {
+                    if (navigator.canGoBack) {
+                        navigator.navigateBack()
+                    } else {
+                        onBack()
+                    }
+                },
+                trailingActions = {
+                    IconButton(
+                        onClick = {
+                            CustomTabsIntent.Builder().build().launchUrl(context, Uri.parse(link.url))
+                        },
+                        content = {
+                            Icon(
+                                imageVector = Icons.Outlined.OpenInBrowser,
+                                tint = AppTheme.colors.onPrimary,
+                                contentDescription = null
+                            )
+                        }
+                    )
+                }
+            )
         }
     ) {
         if (link.url.isNotEmpty()) {

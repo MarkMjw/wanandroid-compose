@@ -65,6 +65,7 @@ dependencies {
     implementation "androidx.paging:paging-compose:1.0.0-alpha14"
     implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
     implementation 'androidx.webkit:webkit:1.4.0'
+    implementation 'androidx.browser:browser:1.4.0'
 
     def room_version = "2.4.2"
     implementation "androidx.room:room-runtime:$room_version"
