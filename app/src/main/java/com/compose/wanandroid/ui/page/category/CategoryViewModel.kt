@@ -11,7 +11,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
-import com.compose.wanandroid.data.remote.loadPage
+import com.compose.wanandroid.logic.loadPage
 import com.compose.wanandroid.data.repository.ArticleListRepository
 import com.compose.wanandroid.ui.common.CollectViewAction
 import com.compose.wanandroid.ui.common.SnackViewEvent

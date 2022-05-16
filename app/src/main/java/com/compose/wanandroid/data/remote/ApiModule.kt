@@ -1,16 +1,17 @@
-package com.compose.wanandroid.logic
+package com.compose.wanandroid.data.remote
 
 import com.compose.wanandroid.BuildConfig
-import com.compose.wanandroid.data.remote.Api
-import com.compose.wanandroid.logic.flowadapter.FlowCallAdapterFactory
-import com.compose.wanandroid.logic.interceptor.CacheCookieInterceptor
-import com.compose.wanandroid.logic.interceptor.LogInterceptor
-import com.compose.wanandroid.logic.interceptor.SetCookieInterceptor
-import com.compose.wanandroid.logic.ssl.SSLContextFactory
-import com.compose.wanandroid.logic.ssl.SimpleX509TrustManager
+import com.compose.wanandroid.logic.Logger
+import com.compose.wanandroid.data.remote.flowadapter.FlowCallAdapterFactory
+import com.compose.wanandroid.data.remote.interceptor.CacheCookieInterceptor
+import com.compose.wanandroid.data.remote.interceptor.LogInterceptor
+import com.compose.wanandroid.data.remote.interceptor.SetCookieInterceptor
+import com.compose.wanandroid.data.remote.ssl.SSLContextFactory
+import com.compose.wanandroid.data.remote.ssl.SimpleX509TrustManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.*
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,8 +19,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
 val apiModule = module {
-    single { createOkHttpClient() }
-    single { createRetrofitBuilder(get()) }
+    singleOf(::createOkHttpClient)
+    singleOf(::createRetrofitBuilder)
     factory { (baseUrl: String) -> createApi(get(), baseUrl) }
 }
 

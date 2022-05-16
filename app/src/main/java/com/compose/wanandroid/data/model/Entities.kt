@@ -6,7 +6,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Link(
     var url: String,
-    var title: String = ""
+    var title: String = "",
+    var time: Long = 0
 ) : Parcelable
 
 @Parcelize

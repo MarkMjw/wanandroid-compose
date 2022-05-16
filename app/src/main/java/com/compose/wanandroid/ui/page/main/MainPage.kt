@@ -23,7 +23,7 @@ import com.compose.wanandroid.logic.back
 import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.page.home.HomePage
 import com.compose.wanandroid.ui.page.struct.StructHostPage
-import com.compose.wanandroid.ui.page.detail.webGraph
+import com.compose.wanandroid.ui.page.web.webGraph
 import com.compose.wanandroid.ui.page.login.loginGraph
 import com.compose.wanandroid.ui.page.category.categoryGraph
 import com.compose.wanandroid.ui.page.profile.ProfilePage

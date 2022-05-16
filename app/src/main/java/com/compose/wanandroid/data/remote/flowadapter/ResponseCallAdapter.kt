@@ -1,4 +1,4 @@
-package com.compose.wanandroid.logic.flowadapter;
+package com.compose.wanandroid.data.remote.flowadapter;
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

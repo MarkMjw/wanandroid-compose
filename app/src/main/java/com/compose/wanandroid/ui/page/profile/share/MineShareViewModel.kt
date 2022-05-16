@@ -8,6 +8,8 @@ import androidx.paging.PagingSource
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.*
 import com.compose.wanandroid.data.remote.*
+import com.compose.wanandroid.logic.defaultPage
+import com.compose.wanandroid.logic.page
 import com.compose.wanandroid.ui.common.ViewAction
 import com.compose.wanandroid.ui.common.CollectViewAction
 import com.compose.wanandroid.ui.common.ViewEvent

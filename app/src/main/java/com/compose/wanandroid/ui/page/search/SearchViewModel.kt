@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
-import com.compose.wanandroid.data.remote.loadPage
+import com.compose.wanandroid.logic.loadPage
 import com.compose.wanandroid.ui.common.RefreshViewAction
 import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.ViewAction

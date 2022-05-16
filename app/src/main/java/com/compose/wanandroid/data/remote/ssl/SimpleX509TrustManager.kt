@@ -1,4 +1,4 @@
-package com.compose.wanandroid.logic.ssl
+package com.compose.wanandroid.data.remote.ssl
 
 import android.annotation.SuppressLint
 import java.security.cert.X509Certificate

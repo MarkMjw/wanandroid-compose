@@ -1,4 +1,4 @@
-package com.compose.wanandroid.logic.interceptor
+package com.compose.wanandroid.data.remote.interceptor
 
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.Pref

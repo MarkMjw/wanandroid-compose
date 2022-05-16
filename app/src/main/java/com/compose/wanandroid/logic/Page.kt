@@ -1,9 +1,10 @@
-package com.compose.wanandroid.data.remote
+package com.compose.wanandroid.logic
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.compose.wanandroid.data.model.ListResponse
+import com.compose.wanandroid.data.remote.HttpResult
 import kotlinx.coroutines.flow.Flow
 
 val defaultPage = PagingConfig(

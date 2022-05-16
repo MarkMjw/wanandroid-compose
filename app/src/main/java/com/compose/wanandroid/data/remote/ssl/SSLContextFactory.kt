@@ -1,4 +1,4 @@
-package com.compose.wanandroid.logic.ssl
+package com.compose.wanandroid.data.remote.ssl
 
 import android.util.Base64
 import java.io.*

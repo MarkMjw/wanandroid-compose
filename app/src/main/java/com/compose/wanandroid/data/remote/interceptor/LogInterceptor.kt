@@ -1,4 +1,4 @@
-package com.compose.wanandroid.logic.interceptor
+package com.compose.wanandroid.data.remote.interceptor
 
 import android.net.Uri
 import android.util.Log

@@ -10,7 +10,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.model.Banner
 import com.compose.wanandroid.data.remote.ApiService
-import com.compose.wanandroid.data.remote.loadPage
+import com.compose.wanandroid.logic.loadPage
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.widget.PageState
