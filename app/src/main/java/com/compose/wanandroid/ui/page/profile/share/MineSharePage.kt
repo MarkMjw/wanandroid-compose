@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.publish
+package com.compose.wanandroid.ui.page.profile.share
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.rememberScaffoldState
@@ -23,7 +23,7 @@ import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.widget.RefreshList
 import kotlinx.coroutines.launch
 
-fun NavGraphBuilder.minShareGraph(controller: NavController) {
+fun NavGraphBuilder.mineShareGraph(controller: NavController) {
     composable(route = Page.MineShare.route) {
         MineSharePage(controller)
     }

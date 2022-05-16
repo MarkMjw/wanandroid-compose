@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.profile
+package com.compose.wanandroid.ui.page.profile.setting
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

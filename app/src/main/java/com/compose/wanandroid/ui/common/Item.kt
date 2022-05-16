@@ -265,3 +265,36 @@ fun StickyTitle(
     }
 }
 
+@Composable
+fun LinkItem(
+    title: String,
+    link: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            text = title.asHTML(fontSize = 15.sp),
+            color = AppTheme.colors.textPrimary,
+            fontSize = 15.sp,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        Text(
+            text = link,
+            fontSize = 12.sp,
+            color = AppTheme.colors.textThird,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            modifier = Modifier.padding(top = 5.dp)
+        )
+    }
+}
+

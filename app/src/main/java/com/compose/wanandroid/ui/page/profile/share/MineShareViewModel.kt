@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.publish
+package com.compose.wanandroid.ui.page.profile.share
 
 import androidx.lifecycle.ViewModel
 import androidx.paging.LoadState

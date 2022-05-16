@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.collect
+package com.compose.wanandroid.ui.page.profile.collect
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

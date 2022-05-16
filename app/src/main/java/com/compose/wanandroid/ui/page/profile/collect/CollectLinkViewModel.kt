@@ -1,4 +1,4 @@
-package com.compose.wanandroid.ui.page.collect
+package com.compose.wanandroid.ui.page.profile.collect
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.*

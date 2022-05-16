@@ -22,15 +22,14 @@ import androidx.navigation.compose.rememberNavController
 import com.compose.wanandroid.logic.back
 import com.compose.wanandroid.ui.common.AppScaffold
 import com.compose.wanandroid.ui.page.home.HomePage
-import com.compose.wanandroid.ui.page.profile.ProfilePage
-import com.compose.wanandroid.ui.page.square.QuestionPage
 import com.compose.wanandroid.ui.page.struct.StructHostPage
-import com.compose.wanandroid.ui.page.collect.collectGraph
 import com.compose.wanandroid.ui.page.detail.webGraph
 import com.compose.wanandroid.ui.page.login.loginGraph
-import com.compose.wanandroid.ui.page.profile.settingGraph
 import com.compose.wanandroid.ui.page.category.categoryGraph
-import com.compose.wanandroid.ui.page.publish.minShareGraph
+import com.compose.wanandroid.ui.page.profile.ProfilePage
+import com.compose.wanandroid.ui.page.profile.collect.collectGraph
+import com.compose.wanandroid.ui.page.profile.setting.settingGraph
+import com.compose.wanandroid.ui.page.profile.share.mineShareGraph
 import com.compose.wanandroid.ui.page.search.searchGraph
 import com.compose.wanandroid.ui.page.square.SquareHostPage
 import com.compose.wanandroid.ui.theme.*
@@ -78,13 +77,13 @@ private fun NavigationHost(
         composable(Page.Struct.route) { StructHostPage(controller, padding) }
         composable(Page.Profile.route) { ProfilePage(controller, padding) }
 
-        loginGraph { controller.back() }
-        settingGraph { controller.back() }
         webGraph { controller.back() }
-        collectGraph(controller)
+        loginGraph { controller.back() }
         categoryGraph(controller)
         searchGraph(controller)
-        minShareGraph(controller)
+        collectGraph(controller)
+        mineShareGraph(controller)
+        settingGraph { controller.back() }
     }
 }
 
