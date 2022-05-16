@@ -2,14 +2,14 @@ package com.compose.wanandroid.ui.page.web
 
 import android.net.Uri
 import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.OpenInBrowser
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -60,7 +60,8 @@ fun WebPage(
 
     AppScaffold(
         topBar = {
-            AppTitleBar(text = state.pageTitle ?: link.title,
+            AppTitleBar(
+                text = state.pageTitle ?: link.title,
                 onBack = {
                     if (navigator.canGoBack) {
                         navigator.navigateBack()
@@ -92,19 +93,22 @@ fun WebPage(
                 WebView(
                     state = state,
                     onCreated = { webView ->
+                        webView.isVerticalScrollBarEnabled = false
                         webView.settings.run {
                             javaScriptEnabled = true
                             useWideViewPort = true
                             loadWithOverviewMode = true
-
                             setSupportZoom(true)
                             builtInZoomControls = true
                             displayZoomControls = false
-
+                            cacheMode = WebSettings.LOAD_DEFAULT
+                            domStorageEnabled = true
+                            databaseEnabled = true
                             allowFileAccess = true
                             javaScriptCanOpenWindowsAutomatically = true
                             loadsImagesAutomatically = true
                             defaultTextEncodingName = "UTF-8"
+                            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW // fix图片无法显示(https与http混合资源处理)
 
                             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                                 if (isDark) {
