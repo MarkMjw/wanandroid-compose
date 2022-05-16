@@ -68,3 +68,24 @@ fun <T : Any> ViewModel.loadPage(
         }
     }
 }
+
+fun <T : Any> ViewModel.loadPageFromDb(
+    config: PagingConfig = defaultPage,
+    initialKey: Int = 0,
+    block: suspend (page: Int) -> List<T>
+): Flow<PagingData<T>> {
+    return page(config, initialKey) {
+        val page = it.key ?: 0
+        try {
+            val data = block(page)
+            val hasNext = data.size >= it.loadSize
+            PagingSource.LoadResult.Page(
+                data = data,
+                prevKey = if (page - it.loadSize > 0) page - it.loadSize else null,
+                nextKey = if (hasNext) page + data.size else null
+            )
+        } catch (e: Exception) {
+            PagingSource.LoadResult.Error(e)
+        }
+    }
+}

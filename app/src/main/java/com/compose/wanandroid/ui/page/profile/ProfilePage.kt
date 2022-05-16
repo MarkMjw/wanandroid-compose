@@ -24,6 +24,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.compose.wanandroid.R
+import com.compose.wanandroid.data.model.Link
+import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.textThird
@@ -129,10 +131,26 @@ fun ProfilePage(
                 controller.navigate(Page.Login.route)
             }
         }
-        ProfileItem(icon = R.drawable.ic_read_later, text = "我的书签") { }
-        ProfileItem(icon = R.drawable.ic_read_record, text = "阅读历史") { }
-        ProfileItem(icon = R.drawable.ic_github, text = "开源项目") { }
-        ProfileItem(icon = R.drawable.ic_about, text = "关于作者", subText = "请他喝杯☕️~") { }
+        ProfileItem(icon = R.drawable.ic_read_later, text = "我的书签") {
+            if (viewState.isLogin) {
+                controller.navigate(Page.Bookmark.route)
+            } else {
+                controller.navigate(Page.Login.route)
+            }
+        }
+        ProfileItem(icon = R.drawable.ic_read_record, text = "阅读历史") {
+            if (viewState.isLogin) {
+                controller.navigate(Page.History.route)
+            } else {
+                controller.navigate(Page.Login.route)
+            }
+        }
+        ProfileItem(icon = R.drawable.ic_github, text = "开源项目") {
+
+        }
+        ProfileItem(icon = R.drawable.ic_about, text = "关于作者", subText = "请他喝杯☕️~") {
+            controller.navigate(Page.Web.route, Link("https://github.com/MarkMjw", "MarkMjw的Github", false))
+        }
         ProfileItem(icon = R.drawable.ic_setting, text = "系统设置") {
             controller.navigate(Page.Setting.route)
         }

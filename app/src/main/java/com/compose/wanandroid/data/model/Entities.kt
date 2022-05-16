@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Link(
     var url: String,
     var title: String = "",
-    var time: Long = 0
+    var addHistory: Boolean = true
 ) : Parcelable
 
 @Parcelize

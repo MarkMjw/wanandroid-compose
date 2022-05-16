@@ -19,4 +19,6 @@ sealed class Page(
     object Setting : Page("setting", "设置")
     object Category : Page("category")
     object MineShare : Page("mine_share")
+    object Bookmark : Page("bookmark")
+    object History : Page("history")
 }

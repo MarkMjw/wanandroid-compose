@@ -1,10 +1,11 @@
-package com.compose.wanandroid.ui.page.detail
+package com.compose.wanandroid.ui.page.web
 
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
@@ -13,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
+import com.compose.wanandroid.data.repository.HistoryRepository
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.fromJson
@@ -22,6 +24,8 @@ import com.compose.wanandroid.ui.theme.AppTheme
 import com.compose.wanandroid.ui.theme.progress
 import com.compose.wanandroid.ui.widget.StatePageEmpty
 import com.google.accompanist.web.*
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.inject
 
 fun NavGraphBuilder.webGraph(onBack: () -> Unit) {
     composable(
@@ -43,6 +47,9 @@ fun WebPage(
     val state = rememberWebViewState(url = link.url)
     val navigator = rememberWebViewNavigator()
     val isDark = !AppTheme.colors.isLight
+
+    val scope = rememberCoroutineScope()
+    val historyRepo: HistoryRepository by inject()
 
     AppScaffold(
         title = state.pageTitle ?: link.title,
@@ -92,6 +99,18 @@ fun WebPage(
                                 super.shouldOverrideUrlLoading(view, request)
                             } else {
                                 true
+                            }
+                        }
+                    },
+                    chromeClient = object : AccompanistWebChromeClient() {
+                        override fun onReceivedTitle(view: WebView?, title: String?) {
+                            super.onReceivedTitle(view, title)
+                            if (link.addHistory) {
+                                scope.launch {
+                                    if (view?.url == link.url) {
+                                        historyRepo.add(link.url, title ?: link.title)
+                                    }
+                                }
                             }
                         }
                     }
