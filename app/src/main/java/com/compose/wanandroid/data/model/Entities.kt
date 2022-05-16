@@ -74,3 +74,34 @@ data class HotKey(
     val order: Int = 1,
     val visible: Int = 1,
 )
+
+data class Coin(
+    val coinCount: Int = 0,
+    val date: Long = 0,
+    val desc: String = "",
+    val id: Int = 0,
+    val type: Int = 0,
+    val userId: Int = 0,
+    val userName: String = ""
+) {
+    val title: String
+        get() {
+            // 2022-05-16 10:23:02 签到 , 积分：10 + 4
+            val firstSpace = desc.indexOf(" ")
+            val secondSpace = desc.indexOf(" ", firstSpace + 1)
+            return desc.substring(secondSpace + 1)
+                .replace(" , ", "")
+//                .replace("：", "")
+//                .replace(" ", "")
+        }
+
+    val time: String
+        get() {
+            val firstSpace = desc.indexOf(" ")
+            val secondSpace = desc.indexOf(" ", firstSpace + 1)
+            return desc.substring(0, secondSpace)
+        }
+
+    val count: String
+        get() = if (coinCount < 0) "-$coinCount" else "+$coinCount"
+}

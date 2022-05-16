@@ -28,6 +28,7 @@ import com.compose.wanandroid.ui.page.login.loginGraph
 import com.compose.wanandroid.ui.page.category.categoryGraph
 import com.compose.wanandroid.ui.page.profile.ProfilePage
 import com.compose.wanandroid.ui.page.profile.bookmark.bookmarkGraph
+import com.compose.wanandroid.ui.page.profile.coin.coinGraph
 import com.compose.wanandroid.ui.page.profile.collect.collectGraph
 import com.compose.wanandroid.ui.page.profile.history.historyGraph
 import com.compose.wanandroid.ui.page.profile.opensource.opensourceGraph
@@ -84,6 +85,7 @@ private fun NavigationHost(
         loginGraph { controller.back() }
         categoryGraph(controller)
         searchGraph(controller)
+        coinGraph(controller)
         collectGraph(controller)
         mineShareGraph(controller)
         bookmarkGraph(controller)

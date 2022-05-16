@@ -136,6 +136,9 @@ interface Api {
 
     @GET("user/lg/private_articles/{page}/json")
     suspend fun mineShareArticles(@Path("page") page: Int): Response<UserShareResponse>
+
+    @GET("lg/coin/list/{page}/json")
+    suspend fun coinList(@Path("page") page: Int): ListResponse<Coin>
 }
 
 object ApiService : KoinComponent {
