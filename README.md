@@ -1,7 +1,7 @@
 # 玩Android
 A Android app of [玩Android](https://www.wanandroid.com/index) by jetpack compose.
 
-使用 `Jetpack Compose` 开发的玩Android客户端。项目完全由 `Kotlin` 编写，主要用于学习 `Compose`、 `Navgation` 、`Paging` 、`DataSotre` 、`Room` 等一系列 `JetPack` 组件， 以及 `MVI`架构思想。除此之外还用到了一些优秀的开源框架：`okhttp`、`retrofit`、`gson`、`coil`、`koin` 以及 `google/accompanist` 一系列组件。
+使用 `Jetpack Compose` 开发的玩Android客户端。项目完全由 `Kotlin` 编写，主要用于学习 `Compose`、 `Navgation` 、`Paging` 、`DataSotre` 、`Room` 等一系列 `JetPack` 组件， 以及 `MVI`架构思想。另外还用到了一些优秀的开源框架：`okhttp`、`retrofit`、`gson`、`coil`、`koin` 以及 `google/accompanist` 中提供的一系列组件。
 
 项目使用API均来源于[玩Android 开放API](https://www.wanandroid.com/blog/show/2)，代码和UI设计参考了[shenzhen2017/wanandroid-compose](https://github.com/shenzhen2017/wanandroid-compose) 和 [goweii/WanAndroid](https://github.com/goweii/WanAndroid) 两个项目，感谢两位作者的分享。
 
