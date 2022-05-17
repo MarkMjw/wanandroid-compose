@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
-import com.compose.wanandroid.logic.loadPage
+import com.compose.wanandroid.logic.pageLoading
 import com.compose.wanandroid.ui.common.ViewAction
 import com.compose.wanandroid.ui.common.CollectViewAction
 import com.compose.wanandroid.ui.common.ViewEvent
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.*
 class CollectArticleViewModel : ViewModel() {
 
     val pager: Flow<PagingData<Article>> by lazy {
-        loadPage {
+        pageLoading {
             ApiService.api.collectArticles(it).apply {
                 data?.datas?.forEach { it.collect = true }
             }

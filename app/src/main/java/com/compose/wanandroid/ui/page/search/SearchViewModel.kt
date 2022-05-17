@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
-import com.compose.wanandroid.logic.loadPage
+import com.compose.wanandroid.logic.pageLoading
 import com.compose.wanandroid.ui.common.RefreshViewAction
 import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.ViewAction
@@ -22,7 +22,7 @@ class SearchViewModel : ViewModel() {
 
     private var keyword: String = ""
     private val pager: Flow<PagingData<Article>> by lazy {
-        loadPage {
+        pageLoading {
             if (keyword.isNotEmpty()) {
                 ApiService.api.search(it, keyword)
             } else {

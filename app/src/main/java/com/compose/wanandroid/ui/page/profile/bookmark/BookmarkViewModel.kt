@@ -7,7 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.local.model.Bookmark
 import com.compose.wanandroid.data.repository.BookmarkRepository
-import com.compose.wanandroid.logic.loadPageFromDb
+import com.compose.wanandroid.logic.pageLoadingLocal
 import com.compose.wanandroid.ui.common.ViewAction
 import com.compose.wanandroid.ui.common.ViewEvent
 import com.compose.wanandroid.ui.widget.PageState
@@ -22,7 +22,7 @@ class BookmarkViewModel : ViewModel(), KoinComponent {
     private val repo: BookmarkRepository by inject()
 
     val pager: Flow<PagingData<Bookmark>> by lazy {
-        loadPageFromDb {
+        pageLoadingLocal {
             repo.find(it, 20)
         }
     }

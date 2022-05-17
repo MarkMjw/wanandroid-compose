@@ -15,7 +15,7 @@ val defaultPage = PagingConfig(
     enablePlaceholders = false
 )
 
-fun <K : Any, V : Any> ViewModel.page(
+fun <K : Any, V : Any> ViewModel.pageFlow(
     config: PagingConfig = defaultPage,
     initialKey: K? = null,
     block: suspend (PagingSource.LoadParams<K>) -> PagingSource.LoadResult<K, V>
@@ -37,12 +37,12 @@ fun <K : Any, V : Any> ViewModel.page(
     }.flow.cachedIn(viewModelScope)
 }
 
-fun <T : Any> ViewModel.loadPage(
+fun <T : Any> ViewModel.pageLoading(
     config: PagingConfig = defaultPage,
     initialKey: Int = 0,
     block: suspend (page: Int) -> ListResponse<T>
 ): Flow<PagingData<T>> {
-    return page(config, initialKey) {
+    return pageFlow(config, initialKey) {
         val page = it.key ?: 0
         val response = try {
             HttpResult.Success(block(page))
@@ -69,12 +69,12 @@ fun <T : Any> ViewModel.loadPage(
     }
 }
 
-fun <T : Any> ViewModel.loadPageFromDb(
+fun <T : Any> ViewModel.pageLoadingLocal(
     config: PagingConfig = defaultPage,
     initialKey: Int = 0,
     block: suspend (page: Int) -> List<T>
 ): Flow<PagingData<T>> {
-    return page(config, initialKey) {
+    return pageFlow(config, initialKey) {
         val page = it.key ?: 0
         try {
             val data = block(page)

@@ -9,7 +9,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.*
 import com.compose.wanandroid.data.remote.*
 import com.compose.wanandroid.logic.defaultPage
-import com.compose.wanandroid.logic.page
+import com.compose.wanandroid.logic.pageFlow
 import com.compose.wanandroid.ui.common.ViewAction
 import com.compose.wanandroid.ui.common.CollectViewAction
 import com.compose.wanandroid.ui.common.ViewEvent
@@ -53,7 +53,7 @@ class MineShareViewModel : ViewModel() {
         initialKey: Int = 0,
         block: suspend (page: Int) -> Response<UserShareResponse>
     ): Flow<PagingData<Article>> {
-        return page(config, initialKey) {
+        return pageFlow(config, initialKey) {
             val page = it.key ?: 0
             val response = try {
                 HttpResult.Success(block(page))
