@@ -23,6 +23,7 @@ import coil.compose.AsyncImage
 import com.compose.wanandroid.R
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.model.Link
+import com.compose.wanandroid.logic.UserStore
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.*
@@ -37,25 +38,39 @@ fun HomePage(
     padding: PaddingValues = PaddingValues(),
     viewModel: HomeViewModel = viewModel()
 ) {
+    val scope = rememberCoroutineScope()
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+
     val viewState = viewModel.viewState
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
     val banners = viewState.banners
     val tops = viewState.tops
     val isRefreshing = viewState.isRefreshing
     val listState = if (pagingItems.itemCount > 0) viewState.listState else LazyListState()
-    val scope = rememberCoroutineScope()
 
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val isLogin = UserStore.isLogin.collectAsState(initial = false)
+    var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.viewEvents.collect {
-            when (it) {
+        viewModel.viewEvents.collect { event ->
+            when (event) {
                 is SnackViewEvent -> {
+                    showDialog = false
                     scope.launch {
-                        scaffoldState.showSnackbar(message = it.message)
+                        scaffoldState.showSnackbar(message = event.message)
                     }
                 }
+
+                is ProgressViewEvent -> showDialog = event.show
             }
+        }
+    }
+
+    if (showDialog) {
+        // 这里加一个ProgressDialog的目的是为了收藏状态能及时刷新，ps：LazyColumn结合SnapshotStateList本可以自动更新，
+        // 但是LazyColumn结合PagingData之后界面并未自动更新
+        ProgressDialog("加载中...") {
+            showDialog = false
         }
     }
 
@@ -169,7 +184,11 @@ fun HomePage(
                             ArticleItem(
                                 data = value,
                                 onCollectClick = {
-                                    viewModel.dispatch(CollectViewAction.Collect(it))
+                                    if (isLogin.value) {
+                                        viewModel.dispatch(CollectViewAction.Collect(it))
+                                    } else {
+                                        controller.navigate(Page.Login.route)
+                                    }
                                 },
                                 onUserClick = { id ->
                                     "用户:$id".toast(context)

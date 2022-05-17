@@ -4,14 +4,13 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LoadState
-import androidx.paging.PagingData
+import androidx.paging.*
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.model.Banner
 import com.compose.wanandroid.data.remote.ApiService
+import com.compose.wanandroid.data.repository.CollectRepository
 import com.compose.wanandroid.logic.pageLoading
-import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.channels.Channel
@@ -27,10 +26,13 @@ class HomeViewModel : ViewModel() {
     var viewState by mutableStateOf(HomeViewState(pagingData = pager))
         private set
 
-    private var _tops = mutableStateListOf<Article>()
+    // LazyColumn结合SnapshotStateList，界面会自动观察数据变化
+//    private var _tops = mutableStateListOf<Article>()
 
     private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
+
+    private val collectRepo by lazy { CollectRepository() }
 
     init {
         dispatch(RefreshViewAction.FetchData)
@@ -53,8 +55,8 @@ class HomeViewModel : ViewModel() {
         val tops = ApiService.api.topArticles().map { it.data ?: emptyList() }
         viewModelScope.launch {
             banners.zip(tops) { banners, tops ->
-                _tops = tops.toMutableStateList()
-                viewState = viewState.copy(banners = banners, tops = _tops, isRefreshing = false)
+//                _tops = tops.toMutableStateList()
+                viewState = viewState.copy(banners = banners, tops = tops, isRefreshing = false)
             }.onStart {
                 viewState = viewState.copy(isRefreshing = true)
             }.catch {
@@ -65,59 +67,18 @@ class HomeViewModel : ViewModel() {
 
     private fun collect(article: Article) {
         viewModelScope.launch {
-            if (!article.collect) {
-                try {
-                    val result = if (article.author.isEmpty()) {
-                        ApiService.api.collectLink(article.title, article.link)
-                    } else {
-                        ApiService.api.collectArticle(article.id)
-                    }
-                    if (result.isSuccess) {
-                        val index = _tops.indexOf(article)
-                        if (index >= 0) {
-                            article.collect = true
-                            Logger.w("mjw", "${article.title} -> ${article.collect}")
-                            _tops.removeAt(index)
-                            _tops.add(index, article)
-                        }
-                        _viewEvents.send(SnackViewEvent("恭喜你：收藏成功~"))
-                        // TODO 刷新列表
-//                        viewState.pagingData.collectIndexed { _, value ->
-//                            value.filter { it.id == article.id }.map { it.collect = true }
-//                        }
-                    } else {
-                        _viewEvents.send(SnackViewEvent("收藏失败，请稍后重试~"))
-                    }
-                } catch (e: Throwable) {
-                    _viewEvents.send(SnackViewEvent("收藏失败，请稍后重试~"))
-                }
+            _viewEvents.send(ProgressViewEvent(true))
+            val result = if (!article.collect) collectRepo.collect(article) else collectRepo.unCollect(article)
+            if (result.isSuccess) {
+//                val index = _tops.indexOf(article)
+//                if (index >= 0) {
+//                    _tops.removeAt(index)
+//                    _tops.add(index, article)
+//                }
             } else {
-                try {
-                    val result = if (article.author.isEmpty()) {
-                        ApiService.api.unCollectLink(article.id)
-                    } else {
-                        ApiService.api.unCollectArticle(article.id)
-                    }
-                    if (result.isSuccess) {
-                        val index = _tops.indexOf(article)
-                        if (index >= 0) {
-                            article.collect = false
-                            Logger.i("mjw", "${article.title} -> ${article.collect}")
-                            _tops.removeAt(index)
-                            _tops.add(index, article)
-                        }
-                        _viewEvents.send(SnackViewEvent("恭喜你：取消收藏成功~"))
-                        // TODO 刷新列表
-//                        viewState.pagingData.collectIndexed { _, value ->
-//                            value.filter { it.id == article.id }.map { it.collect = false }
-//                        }
-                    } else {
-                        _viewEvents.send(SnackViewEvent("取消收藏失败，请稍后重试~"))
-                    }
-                } catch (e: Throwable) {
-                    _viewEvents.send(SnackViewEvent("取消收藏失败，请稍后重试~"))
-                }
+                _viewEvents.send(SnackViewEvent("操作失败，请稍后重试~"))
             }
+            _viewEvents.send(ProgressViewEvent(false))
         }
     }
 }
@@ -127,7 +88,7 @@ data class HomeViewState(
     val tops: List<Article> = emptyList(),
     val pagingData: Flow<PagingData<Article>>,
     val isRefreshing: Boolean = false,
-    val listState: LazyListState = LazyListState(),
+    val listState: LazyListState = LazyListState()
 ) {
     fun getPageState(pagingItems: LazyPagingItems<*>): PageState {
         val isEmpty = tops.isEmpty() && banners.isEmpty() && pagingItems.itemCount <= 0

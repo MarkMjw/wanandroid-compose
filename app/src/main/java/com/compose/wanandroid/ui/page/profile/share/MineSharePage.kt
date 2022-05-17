@@ -2,9 +2,7 @@ package com.compose.wanandroid.ui.page.profile.share
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.compose.wanandroid.ui.widget.StatePage
@@ -20,6 +18,7 @@ import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.logic.toast
 import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.page.main.Page
+import com.compose.wanandroid.ui.widget.ProgressDialog
 import com.compose.wanandroid.ui.widget.RefreshList
 import kotlinx.coroutines.launch
 
@@ -40,15 +39,26 @@ fun MineSharePage(
     val pagingItems = viewModel.pager.collectAsLazyPagingItems()
     val scaffoldState = rememberScaffoldState()
 
+    var showDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
-        viewModel.viewEvents.collect {
-            when (it) {
+        viewModel.viewEvents.collect { event ->
+            when (event) {
                 is SnackViewEvent -> {
+                    showDialog = false
                     scope.launch {
-                        scaffoldState.showSnackbar(message = it.message)
+                        scaffoldState.showSnackbar(message = event.message)
                     }
                 }
+
+                is ProgressViewEvent -> showDialog = event.show
             }
+        }
+    }
+
+    if (showDialog) {
+        ProgressDialog("加载中...") {
+            showDialog = false
         }
     }
 
@@ -72,7 +82,7 @@ fun MineSharePage(
                         if (value != null) {
                             ArticleItem(data = value,
                                 onCollectClick = {
-                                    viewModel.dispatch(CollectViewAction.UnCollect(it))
+                                    viewModel.dispatch(CollectViewAction.Collect(it))
                                 },
                                 onUserClick = { id ->
                                     "用户:$id".toast(context)

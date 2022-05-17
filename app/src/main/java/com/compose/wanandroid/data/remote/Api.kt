@@ -87,6 +87,7 @@ interface Api {
     @POST("lg/collect/{id}/json")
     suspend fun collectArticle(@Path("id") id: Int): Response<Any>
 
+    /** 收藏站外文章 */
     @FormUrlEncoded
     @POST("lg/collect/add/json")
     suspend fun collectArticle(

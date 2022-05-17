@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.wanandroid.data.model.CollectLink
 import com.compose.wanandroid.data.remote.ApiService
-import com.compose.wanandroid.ui.common.ViewAction
-import com.compose.wanandroid.ui.common.RefreshViewAction
-import com.compose.wanandroid.ui.common.ViewEvent
+import com.compose.wanandroid.data.repository.CollectRepository
+import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class CollectLinkViewModel : ViewModel() {
 
@@ -23,6 +23,8 @@ class CollectLinkViewModel : ViewModel() {
 
     private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
+
+    private val collectRepo by lazy { CollectRepository() }
 
     init {
         dispatch(RefreshViewAction.FetchData)
@@ -53,7 +55,16 @@ class CollectLinkViewModel : ViewModel() {
     }
 
     private fun unCollect(link: CollectLink) {
-        // TODO 取消收藏
+        viewModelScope.launch {
+            _viewEvents.send(ProgressViewEvent(true))
+            val result = collectRepo.unCollectLink(link.id)
+            if (result.isSuccess) {
+                // TODO un collect success need remove from list
+            } else {
+                _viewEvents.send(SnackViewEvent("操作失败，请稍后重试~"))
+            }
+            _viewEvents.send(ProgressViewEvent(false))
+        }
     }
 }
 

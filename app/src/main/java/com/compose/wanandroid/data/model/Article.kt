@@ -38,7 +38,8 @@ data class Article(
     var type: Int = -1,
     var userId: Int = -1,
     var visible: Int = -1,
-    var zan: Int = -1
+    var zan: Int = -1,
+    var originId: Int = -1
 ) : Parcelable
 
 val Article.authorName: String

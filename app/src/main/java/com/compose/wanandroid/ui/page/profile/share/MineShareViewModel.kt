@@ -1,6 +1,7 @@
 package com.compose.wanandroid.ui.page.profile.share
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -8,14 +9,14 @@ import androidx.paging.PagingSource
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.*
 import com.compose.wanandroid.data.remote.*
+import com.compose.wanandroid.data.repository.CollectRepository
 import com.compose.wanandroid.logic.defaultPage
 import com.compose.wanandroid.logic.pageFlow
-import com.compose.wanandroid.ui.common.ViewAction
-import com.compose.wanandroid.ui.common.CollectViewAction
-import com.compose.wanandroid.ui.common.ViewEvent
+import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class MineShareViewModel : ViewModel() {
 
@@ -29,6 +30,8 @@ class MineShareViewModel : ViewModel() {
     private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
 
+    private val collectRepo by lazy { CollectRepository() }
+
     fun getPageState(pagingItems: LazyPagingItems<*>): PageState {
         val isEmpty = pagingItems.itemCount <= 0
         return when (pagingItems.loadState.refresh) {
@@ -40,12 +43,19 @@ class MineShareViewModel : ViewModel() {
 
     fun dispatch(action: ViewAction) {
         when (action) {
-            is CollectViewAction.UnCollect -> unCollect(action.article)
+            is CollectViewAction.Collect -> collect(action.article)
         }
     }
 
-    private fun unCollect(article: Article) {
-        // TODO 取消收藏
+    private fun collect(article: Article) {
+        viewModelScope.launch {
+            _viewEvents.send(ProgressViewEvent(true))
+            val result = if (!article.collect) collectRepo.collect(article) else collectRepo.unCollect(article)
+            if (result.isFailure) {
+                _viewEvents.send(SnackViewEvent("操作失败，请稍后重试~"))
+            }
+            _viewEvents.send(ProgressViewEvent(false))
+        }
     }
 
     private fun loadPage(

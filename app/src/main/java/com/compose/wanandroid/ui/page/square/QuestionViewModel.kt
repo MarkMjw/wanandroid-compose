@@ -7,11 +7,9 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
+import com.compose.wanandroid.data.repository.CollectRepository
 import com.compose.wanandroid.logic.pageLoading
-import com.compose.wanandroid.ui.common.CollectViewAction
-import com.compose.wanandroid.ui.common.SnackViewEvent
-import com.compose.wanandroid.ui.common.ViewAction
-import com.compose.wanandroid.ui.common.ViewEvent
+import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.widget.PageState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -25,6 +23,8 @@ class QuestionViewModel : ViewModel() {
 
     private val _viewEvents = Channel<ViewEvent>(Channel.BUFFERED)
     val viewEvents = _viewEvents.receiveAsFlow()
+
+    private val collectRepo by lazy { CollectRepository() }
 
     fun getPageState(pagingItems: LazyPagingItems<*>): PageState {
         val isEmpty = pagingItems.itemCount <= 0
@@ -43,45 +43,12 @@ class QuestionViewModel : ViewModel() {
 
     private fun collect(article: Article) {
         viewModelScope.launch {
-            if (!article.collect) {
-                try {
-                    val result = if (article.author.isEmpty()) {
-                        ApiService.api.collectLink(article.title, article.link)
-                    } else {
-                        ApiService.api.collectArticle(article.id)
-                    }
-                    if (result.isSuccess) {
-                        // TODO 刷新列表
-//                        pager.collectIndexed { _, value ->
-//                            value.filter { it.id == article.id }.map { it.collect = true }
-//                        }
-//                        viewState = viewState.copy(pagingData = viewState.pagingData)
-                    } else {
-                        _viewEvents.send(SnackViewEvent("收藏失败，请稍后重试~"))
-                    }
-                } catch (e: Throwable) {
-                    _viewEvents.send(SnackViewEvent("收藏失败，请稍后重试~"))
-                }
-            } else {
-                try {
-                    val result = if (article.author.isEmpty()) {
-                        ApiService.api.unCollectLink(article.id)
-                    } else {
-                        ApiService.api.unCollectArticle(article.id)
-                    }
-                    if (result.isSuccess) {
-                        // TODO 刷新列表
-//                        pager.collectIndexed { _, value ->
-//                            value.filter { it.id == article.id }.map { it.collect = false }
-//                        }
-//                        viewState = viewState.copy(pagingData = viewState.pagingData)
-                    } else {
-                        _viewEvents.send(SnackViewEvent("取消收藏失败，请稍后重试~"))
-                    }
-                } catch (e: Throwable) {
-                    _viewEvents.send(SnackViewEvent("取消收藏失败，请稍后重试~"))
-                }
+            _viewEvents.send(ProgressViewEvent(true))
+            val result = if (!article.collect) collectRepo.collect(article) else collectRepo.unCollect(article)
+            if (result.isFailure) {
+                _viewEvents.send(SnackViewEvent("操作失败，请稍后重试~"))
             }
+            _viewEvents.send(ProgressViewEvent(false))
         }
     }
 }
