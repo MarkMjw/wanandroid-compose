@@ -4,22 +4,24 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.compose.wanandroid.R
 import com.compose.wanandroid.data.model.Link
 import com.compose.wanandroid.logic.navigate
 import com.compose.wanandroid.ui.common.*
 import com.compose.wanandroid.ui.page.main.Page
 import com.compose.wanandroid.ui.theme.AppTheme
-import com.compose.wanandroid.ui.widget.ProgressDialog
-import com.compose.wanandroid.ui.widget.StatePage
+import com.compose.wanandroid.ui.widget.*
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CollectLinkPage(
     controller: NavController,
@@ -67,14 +69,31 @@ fun CollectLinkPage(
         ) {
             viewState.data.forEachIndexed { position, link ->
                 item {
-                    LinkItem(
-                        title = link.name,
-                        link = link.link,
-                        modifier = Modifier.clickable {
-                            // TODO 取消收藏链接
-                            controller.navigate(Page.Web.route, Link(title = link.name, url = link.link))
-                        })
-
+                    RevealSwipe(
+                        closeOnContentClick = true,
+                        directions = setOf(RevealDirection.EndToStart),
+                        maxRevealDp = 88.dp,
+                        hiddenContentEnd = {
+                            ActionMenu(
+                                actionIconSize = 56.dp,
+                                onDelete = {
+                                    viewModel.dispatch(CollectLinkViewAction.UnCollect(link))
+                                }
+                            )
+                        },
+                        animateBackgroundCardColor = false,
+                        backgroundCardEndColor = AppTheme.colors.primary
+                    ) {
+                        LinkItem(
+                            title = link.name,
+                            link = link.link,
+                            modifier = Modifier
+                                .background(AppTheme.colors.background)
+                                .clickable {
+                                    controller.navigate(Page.Web.route, Link(title = link.name, url = link.link))
+                                }
+                        )
+                    }
                     if (position <= viewState.size - 1) {
                         Divider(
                             startIndent = 10.dp,
@@ -85,5 +104,51 @@ fun CollectLinkPage(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ActionMenu(
+    actionIconSize: Dp,
+    onDelete: () -> Unit,
+//    onEdit: () -> Unit,
+//    onFavorite: () -> Unit,
+) {
+    Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+        IconButton(
+            modifier = Modifier.size(actionIconSize),
+            onClick = {
+                onDelete()
+            },
+            content = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_bin),
+                    tint = AppTheme.colors.onPrimary,
+                    contentDescription = "delete action",
+                )
+            }
+        )
+//        IconButton(
+//            modifier = Modifier.size(actionIconSize),
+//            onClick = onEdit,
+//            content = {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.ic_edit),
+//                    tint = AppTheme.colors.onPrimary,
+//                    contentDescription = "edit action",
+//                )
+//            },
+//        )
+//        IconButton(
+//            modifier = Modifier.size(actionIconSize),
+//            onClick = onFavorite,
+//            content = {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.ic_favorite),
+//                    tint = AppTheme.colors.onPrimary,
+//                    contentDescription = "Expandable Arrow",
+//                )
+//            }
+//        )
     }
 }
