@@ -7,7 +7,6 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import com.compose.wanandroid.data.local.model.History
 import com.compose.wanandroid.data.repository.HistoryRepository
-import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.pageLoadingLocal
 import com.compose.wanandroid.ui.common.ViewAction
 import com.compose.wanandroid.ui.common.ViewEvent
@@ -24,7 +23,6 @@ class HistoryViewModel : ViewModel(), KoinComponent {
 
     val pager: Flow<PagingData<History>> by lazy {
         pageLoadingLocal {
-            Logger.w("mjw", "page-> $it")
             repo.find(it, 20)
         }
     }
