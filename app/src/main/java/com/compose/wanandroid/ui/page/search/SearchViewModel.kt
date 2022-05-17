@@ -10,6 +10,7 @@ import androidx.paging.*
 import com.compose.wanandroid.data.model.Article
 import com.compose.wanandroid.data.remote.ApiService
 import com.compose.wanandroid.logic.pageLoading
+import com.compose.wanandroid.logic.searchHistory
 import com.compose.wanandroid.ui.common.RefreshViewAction
 import com.compose.wanandroid.ui.common.SnackViewEvent
 import com.compose.wanandroid.ui.common.ViewAction
@@ -45,16 +46,17 @@ class SearchViewModel : ViewModel() {
         when (action) {
             is RefreshViewAction.FetchData -> fetchData()
             is SearchViewAction.Search -> search(action.key)
-            is SearchViewAction.ClearHistory -> viewState = viewState.copy(historyKeys = emptyList())
+            is SearchViewAction.ClearHistory -> clearHistory()
         }
     }
 
     private fun fetchData() {
         val hotKeys = ApiService.api.hotKey().map { it.data ?: emptyList() }
+        val historyKeys = searchHistory.map { it.split(",") }
         viewModelScope.launch {
-            hotKeys.collect { list ->
-                viewState = viewState.copy(hotKeys = list.map { it.name })
-            }
+            hotKeys.zip(historyKeys) { hot, history ->
+                viewState = viewState.copy(hotKeys = hot.map { it.name }, historyKeys = history.filter { it.isNotEmpty() })
+            }.collect()
         }
     }
 
@@ -67,7 +69,17 @@ class SearchViewModel : ViewModel() {
                 this@SearchViewModel.keyword = keyword
                 viewState = viewState.copy(historyKeys = (viewState.historyKeys + keyword).distinct())
                 _viewEvents.send(SearchViewEvent.Searching)
+
+                val history = viewState.historyKeys.joinToString(",")
+                searchHistory.update(history)
             }
+        }
+    }
+
+    private fun clearHistory() {
+        viewModelScope.launch {
+            viewState = viewState.copy(historyKeys = emptyList())
+            searchHistory.update("")
         }
     }
 }

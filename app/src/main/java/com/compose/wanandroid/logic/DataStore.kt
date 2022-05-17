@@ -129,3 +129,4 @@ object Pref : KoinComponent {
 }
 
 val darkMode: PreferenceItem<String> by Pref.dataStore(::stringPreferencesKey, "", "dark_mode")
+val searchHistory: PreferenceItem<String> by Pref.dataStore(::stringPreferencesKey, "", "search_history")
