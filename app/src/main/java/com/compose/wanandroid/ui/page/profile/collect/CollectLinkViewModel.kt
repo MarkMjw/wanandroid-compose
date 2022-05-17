@@ -2,7 +2,6 @@ package com.compose.wanandroid.ui.page.profile.collect
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.wanandroid.data.model.CollectLink
@@ -16,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class CollectLinkViewModel : ViewModel() {
 
-    private var _links: SnapshotStateList<CollectLink>? = null
+    private var _links = mutableStateListOf<CollectLink>()
 
     var viewState by mutableStateOf(CollectLinkViewState())
         private set
@@ -44,9 +43,9 @@ class CollectLinkViewModel : ViewModel() {
             }.onStart {
                 viewState = viewState.copy(pageState = PageState.Loading)
             }.onEach {
-                val links = it.toMutableStateList().apply { _links = this }
+                _links = it.toMutableStateList()
                 viewState = viewState.copy(
-                    data = links,
+                    data = _links,
                     pageState = PageState.Success(it.isEmpty())
                 )
             }.catch {
@@ -56,14 +55,12 @@ class CollectLinkViewModel : ViewModel() {
 
     private fun unCollect(link: CollectLink) {
         viewModelScope.launch {
-            _viewEvents.send(ProgressViewEvent(true))
             val result = collectRepo.unCollectLink(link.id)
             if (result.isSuccess) {
-                // TODO un collect success need remove from list
+                _links.remove(link)
             } else {
                 _viewEvents.send(SnackViewEvent("操作失败，请稍后重试~"))
             }
-            _viewEvents.send(ProgressViewEvent(false))
         }
     }
 }

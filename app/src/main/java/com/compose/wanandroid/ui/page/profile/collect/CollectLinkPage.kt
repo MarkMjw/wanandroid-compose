@@ -31,26 +31,15 @@ fun CollectLinkPage(
     val scope = rememberCoroutineScope()
     val viewState = viewModel.viewState
 
-    var showDialog by remember { mutableStateOf(false) }
-
     LaunchedEffect(Unit) {
         viewModel.viewEvents.collect { event ->
             when (event) {
                 is SnackViewEvent -> {
-                    showDialog = false
                     scope.launch {
                         scaffoldState.showSnackbar(message = event.message)
                     }
                 }
-
-                is ProgressViewEvent -> showDialog = event.show
             }
-        }
-    }
-
-    if (showDialog) {
-        ProgressDialog("加载中...") {
-            showDialog = false
         }
     }
 
@@ -69,6 +58,7 @@ fun CollectLinkPage(
         ) {
             viewState.data.forEachIndexed { position, link ->
                 item {
+                    val state = rememberRevealState()
                     RevealSwipe(
                         closeOnContentClick = true,
                         directions = setOf(RevealDirection.EndToStart),
@@ -77,12 +67,18 @@ fun CollectLinkPage(
                             ActionMenu(
                                 actionIconSize = 56.dp,
                                 onDelete = {
+                                    if (state.targetValue == RevealValue.FullyRevealedStart) {
+                                        scope.launch {
+                                            state.reset()
+                                        }
+                                    }
                                     viewModel.dispatch(CollectLinkViewAction.UnCollect(link))
                                 }
                             )
                         },
                         animateBackgroundCardColor = false,
-                        backgroundCardEndColor = AppTheme.colors.primary
+                        backgroundCardEndColor = AppTheme.colors.primary,
+                        state = state
                     ) {
                         LinkItem(
                             title = link.name,
