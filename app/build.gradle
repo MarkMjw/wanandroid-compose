@@ -69,10 +69,10 @@ dependencies {
     implementation 'androidx.webkit:webkit:1.4.0'
     implementation 'androidx.browser:browser:1.4.0'
 
-    def room_version = "2.4.2"
+    def room_version = "2.5.0-alpha01"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-paging:2.5.0-alpha01"
+    implementation "androidx.room:room-paging:$room_version"
     kapt("androidx.room:room-compiler:$room_version")
 
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
