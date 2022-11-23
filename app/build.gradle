@@ -4,7 +4,7 @@ plugins {
     id 'kotlin-android'
     id "kotlin-kapt"
     id "kotlin-parcelize"
-//    id "com.google.devtools.ksp" version "1.7.10-1.0.6"
+    id "com.google.devtools.ksp" version "1.7.10-1.0.6"
 }
 
 android {
@@ -75,7 +75,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-paging:$room_version"
-    kapt("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
