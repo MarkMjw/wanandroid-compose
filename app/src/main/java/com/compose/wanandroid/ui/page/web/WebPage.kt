@@ -1,15 +1,22 @@
 package com.compose.wanandroid.ui.page.web
 
 import android.net.Uri
+import android.os.Build
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.OpenInBrowser
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -19,8 +26,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
-import com.compose.wanandroid.data.repository.HistoryRepository
 import com.compose.wanandroid.data.model.Link
+import com.compose.wanandroid.data.repository.HistoryRepository
 import com.compose.wanandroid.logic.Logger
 import com.compose.wanandroid.logic.fromJson
 import com.compose.wanandroid.ui.common.AppScaffold
@@ -31,7 +38,7 @@ import com.compose.wanandroid.ui.theme.progress
 import com.compose.wanandroid.ui.widget.StatePageEmpty
 import com.google.accompanist.web.*
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.inject
+import org.koin.androidx.compose.get
 
 fun NavGraphBuilder.webGraph(onBack: () -> Unit) {
     composable(
@@ -56,7 +63,7 @@ fun WebPage(
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val historyRepo: HistoryRepository by inject()
+    val historyRepo: HistoryRepository = get()
 
     AppScaffold(
         topBar = {
@@ -110,7 +117,9 @@ fun WebPage(
                             defaultTextEncodingName = "UTF-8"
                             mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW // fix图片无法显示(https与http混合资源处理)
 
-                            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+                                WebSettingsCompat.setAlgorithmicDarkeningAllowed(this, isDark)
+                            } else if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                                 if (isDark) {
                                     WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_ON)
                                 } else {

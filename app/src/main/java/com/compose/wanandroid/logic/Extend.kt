@@ -60,27 +60,25 @@ fun String.removeAllBank(count: Int): String {
     return s
 }
 
-inline fun Modifier.rippleClickable(
+fun Modifier.rippleClickable(
     bounded: Boolean = true,
     radius: Dp = Dp.Unspecified,
     color: Color = Color.Unspecified,
-    crossinline onClick: () -> Unit
+    onClick: () -> Unit
 ): Modifier = composed {
     clickable(
         indication = rememberRipple(bounded, radius, color),
-        interactionSource = remember { MutableInteractionSource() }
-    ) {
-        onClick()
-    }
+        interactionSource = remember { MutableInteractionSource() },
+        onClick = onClick
+    )
 }
 
-inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
+fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
     clickable(
         indication = null,
-        interactionSource = remember { MutableInteractionSource() }
-    ) {
-        onClick()
-    }
+        interactionSource = remember { MutableInteractionSource() },
+        onClick = onClick
+    )
 }
 
 inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
